@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5th Grade ELA iReady Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#1a1625;--ink2:#2d2540;--plum:#6d28d9;--plum-lt:#ede9fe;
+    --amber:#d97706;--amber-lt:#fef3c7;--rose:#be123c;--rose-lt:#ffe4e6;
+    --teal:#0f766e;--teal-lt:#ccfbf1;--sky:#0284c7;--sky-lt:#e0f2fe;
+    --green:#15803d;--green-lt:#dcfce7;--slate:#64748b;--paper:#faf9f7;
+    --white:#ffffff;--card-shadow:0 2px 16px rgba(26,22,37,0.10);
+    --t1:#15803d;--t2:#d97706;--t3:#be123c;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Source Sans 3',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+  header{background:var(--ink);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 3px 20px rgba(0,0,0,.4);}
+  .header-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 32px;gap:20px;flex-wrap:wrap;}
+  .htitle h1{font-family:'Playfair Display',serif;font-size:1.4rem;letter-spacing:.2px;}
+  .htitle span{font-size:.72rem;color:#a78bfa;font-weight:600;letter-spacing:.9px;text-transform:uppercase;display:block;margin-top:2px;}
+  .cdown{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 18px;}
+  .cdown-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;color:#a78bfa;font-weight:700;}
+  .cdown-num{font-family:'Playfair Display',serif;font-size:2.2rem;line-height:1;color:#fbbf24;}
+  .cdown-sub{font-size:.62rem;color:#94a3b8;margin-top:1px;}
+  .cdown-date{font-size:.73rem;color:#fde68a;font-weight:600;}
+  .tab-nav{display:flex;background:var(--ink2);padding:0 32px;border-bottom:2px solid rgba(255,255,255,.06);overflow-x:auto;}
+  .tab-btn{background:none;border:none;color:#94a3b8;padding:10px 20px;font-family:'Source Sans 3',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;letter-spacing:.5px;text-transform:uppercase;}
+  .tab-btn:hover{color:#fff;}
+  .tab-btn.active{color:#c4b5fd;border-bottom-color:#7c3aed;}
+  main{padding:26px 32px;max-width:1600px;margin:0 auto;}
+  .tab-pane{display:none;animation:fadeUp .3s ease;}
+  .tab-pane.active{display:block;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .sec-title{font-family:'Playfair Display',serif;font-size:1.45rem;margin-bottom:5px;}
+  .sec-sub{font-size:.82rem;color:var(--slate);margin-bottom:22px;}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:26px;}
+  .stat-card{background:#fff;border-radius:12px;padding:16px 18px;box-shadow:var(--card-shadow);border-top:4px solid var(--acc,#7c3aed);}
+  .stat-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.8px;color:var(--slate);font-weight:700;margin-bottom:7px;}
+  .stat-val{font-family:'Playfair Display',serif;font-size:1.9rem;line-height:1;color:var(--acc,#7c3aed);margin-bottom:3px;}
+  .stat-det{font-size:.72rem;color:var(--slate);}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+  @media(max-width:900px){.two-col{grid-template-columns:1fr}}
+  .card{background:#fff;border-radius:14px;padding:20px 22px;box-shadow:var(--card-shadow);}
+  .card-title{font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:14px;display:flex;align-items:center;gap:9px;}
+  .cicon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;}
+  .pbar-wrap{margin-bottom:9px;}
+  .pbar-top{font-size:.73rem;font-weight:700;display:flex;justify-content:space-between;margin-bottom:3px;}
+  .pbar-bg{background:#e2e8f0;border-radius:5px;height:9px;overflow:hidden;}
+  .pbar-fill{height:100%;border-radius:5px;transition:width .8s ease;}
+  .dbar-wrap{display:flex;flex-direction:column;gap:9px;}
+  .dbar-row{}
+  .dbar-name{font-size:.72rem;font-weight:700;color:var(--slate);margin-bottom:2px;display:flex;justify-content:space-between;}
+  .dbar-bg{background:#e2e8f0;border-radius:5px;height:20px;position:relative;overflow:hidden;}
+  .dbar-fill{height:100%;border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;font-size:.63rem;color:#fff;font-weight:800;}
+  .dbar-bench{position:absolute;top:0;bottom:0;width:2px;background:#be123c;}
+  .stbl{width:100%;border-collapse:collapse;font-size:.76rem;}
+  .stbl th{background:var(--ink);color:#fff;padding:8px 11px;text-align:left;font-size:.68rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+  .stbl td{padding:7px 11px;border-bottom:1px solid #f1f5f9;vertical-align:top;}
+  .stbl tr:hover td{background:#fafaf9;}
+  .scode{font-family:monospace;font-size:.68rem;background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;white-space:nowrap;font-weight:700;}
+  .gpill{display:inline-block;padding:2px 7px;border-radius:20px;font-size:.63rem;font-weight:800;}
+  .ghi{background:#ffe4e6;color:#9f1239;}
+  .gmd{background:#fef3c7;color:#92400e;}
+  .glo{background:#bbf7d0;color:#14532d;}
+  .stbl-wrap{overflow-x:auto;}
+  .stbl2{width:100%;border-collapse:collapse;font-size:.75rem;}
+  .stbl2 th{background:var(--ink);color:#fff;padding:8px 10px;text-align:left;font-size:.67rem;text-transform:uppercase;font-weight:700;letter-spacing:.4px;white-space:nowrap;cursor:pointer;}
+  .stbl2 th:hover{background:#2d2540;}
+  .stbl2 td{padding:7px 10px;border-bottom:1px solid #f1f5f9;white-space:nowrap;}
+  .stbl2 tr:hover td{background:#f8f9fa;}
+  .ptag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.64rem;font-weight:800;}
+  .p-g6,.p-g7,.p-g8{background:#dbeafe;color:#1e3a8a;}
+  .p-l5{background:#bbf7d0;color:#14532d;}
+  .p-m5{background:#d1fae5;color:#065f46;}
+  .p-e5{background:#fef9c3;color:#713f12;}
+  .p-g4{background:#ffe4e6;color:#881337;}
+  .p-g3,.p-g2,.p-g1{background:#fce7f3;color:#701a75;}
+  .p-sp{background:#ede9fe;color:#4c1d95;}
+  .hr-tabs{display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:20px;flex-wrap:wrap;}
+  .hr-tab{padding:8px 18px;background:none;border:none;font-family:'Source Sans 3',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;color:var(--slate);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;}
+  .hr-tab.active{color:var(--plum);border-bottom-color:var(--plum);}
+  .hr-tab:hover{color:var(--ink);}
+  .srch-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+  .sinput{flex:1;min-width:200px;border:2px solid #e2e8f0;border-radius:10px;padding:9px 14px;font-family:'Source Sans 3',sans-serif;font-size:.86rem;outline:none;transition:border .2s;}
+  .sinput:focus{border-color:var(--plum);}
+  .sselect{border:2px solid #e2e8f0;border-radius:10px;padding:9px 12px;font-family:'Source Sans 3',sans-serif;font-size:.82rem;outline:none;background:#fff;cursor:pointer;}
+  .slist-item{padding:8px 11px;border-radius:7px;cursor:pointer;border:1px solid #e2e8f0;display:flex;align-items:center;gap:7px;transition:background .15s;background:#fff;}
+  .slist-item:hover{background:#f5f3ff;}
+  .no-sel{text-align:center;padding:60px 20px;color:var(--slate);}
+  .no-sel .big{font-size:2.5rem;margin-bottom:10px;}
+  .profile-wrap{background:#fff;border-radius:16px;padding:26px;box-shadow:var(--card-shadow);display:none;}
+  .prof-hd{display:flex;align-items:center;gap:18px;margin-bottom:22px;padding-bottom:18px;border-bottom:2px solid #f1f5f9;flex-wrap:wrap;}
+  .prof-av{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.5rem;color:#fff;flex-shrink:0;}
+  .prof-name{font-family:'Playfair Display',serif;font-size:1.4rem;}
+  .prof-meta{font-size:.78rem;color:var(--slate);margin-top:3px;}
+  .prof-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px;}
+  .pchip{padding:3px 11px;border-radius:20px;font-size:.7rem;font-weight:700;}
+  .pmet-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:18px;}
+  .pmet{background:#f8f9fa;border-radius:9px;padding:12px;text-align:center;}
+  .pm-lbl{font-size:.63rem;text-transform:uppercase;letter-spacing:.7px;color:var(--slate);font-weight:700;margin-bottom:5px;}
+  .pm-val{font-family:'Playfair Display',serif;font-size:1.5rem;line-height:1;}
+  .pm-sub{font-size:.65rem;color:var(--slate);margin-top:2px;}
+  .dom-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:18px;}
+  .dcard{background:#f8f9fa;border-radius:9px;padding:12px 14px;border-left:4px solid;}
+  .dc-title{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--slate);margin-bottom:5px;}
+  .dc-place{font-weight:700;font-size:.85rem;margin-bottom:3px;}
+  .dc-score{font-size:.72rem;color:var(--slate);}
+  .std-match-item{font-size:.68rem;padding:3px 0;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:6px;}
+  .gbr-row{display:flex;align-items:center;gap:11px;margin-bottom:9px;}
+  .gbr-lbl{font-size:.7rem;font-weight:700;width:130px;flex-shrink:0;color:var(--slate);}
+  .gbr-bg{flex:1;background:#e2e8f0;border-radius:5px;height:16px;position:relative;overflow:hidden;}
+  .gbr-fill{height:100%;border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:5px;font-size:.6rem;color:#fff;font-weight:800;}
+  .tier-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:22px;}
+  @media(max-width:880px){.tier-grid{grid-template-columns:1fr}}
+  .tcard{border-radius:13px;padding:18px 20px;box-shadow:var(--card-shadow);border-top:5px solid;}
+  .tcard.t1{background:#f0fdf4;border-color:var(--green);}
+  .tcard.t2{background:#fffbeb;border-color:var(--amber);}
+  .tcard.t3{background:#fff1f2;border-color:var(--rose);}
+  .t-hd{display:flex;align-items:center;gap:9px;margin-bottom:12px;}
+  .t-num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.95rem;color:#fff;flex-shrink:0;}
+  .tcard.t1 .t-num{background:var(--green);}
+  .tcard.t2 .t-num{background:var(--amber);}
+  .tcard.t3 .t-num{background:var(--rose);}
+  .t-title{font-family:'Playfair Display',serif;font-size:.95rem;}
+  .t-count{font-size:.75rem;color:var(--slate);margin-top:1px;}
+  .t-slist{list-style:none;display:flex;flex-direction:column;gap:7px;}
+  .t-student{background:#fff;border-radius:7px;padding:9px 12px;display:flex;align-items:flex-start;gap:8px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+  .t-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.68rem;color:#fff;flex-shrink:0;}
+  .t-info{flex:1;min-width:0;}
+  .t-sname{font-weight:800;font-size:.77rem;}
+  .t-room{font-size:.65rem;color:var(--slate);}
+  .t-gaps{margin-top:3px;display:flex;flex-wrap:wrap;gap:3px;}
+  .gtag{font-size:.6rem;padding:1px 5px;border-radius:3px;font-weight:700;}
+  .acard{background:#fff;border-radius:13px;padding:20px 22px;box-shadow:var(--card-shadow);margin-bottom:16px;border-left:5px solid;}
+  .acard.t3{border-color:var(--rose);}
+  .acard.t2{border-color:var(--amber);}
+  .acard.t1{border-color:var(--green);}
+  .a-hd{display:flex;align-items:center;gap:11px;margin-bottom:12px;}
+  .a-badge{padding:3px 11px;border-radius:20px;font-size:.7rem;font-weight:900;text-transform:uppercase;letter-spacing:.4px;}
+  .t3 .a-badge{background:var(--rose);color:#fff;}
+  .t2 .a-badge{background:var(--amber);color:#fff;}
+  .t1 .a-badge{background:var(--green);color:#fff;}
+  .a-title{font-family:'Playfair Display',serif;font-size:1.03rem;}
+  .a-body{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:760px){.a-body{grid-template-columns:1fr}}
+  .a-sec{font-size:.68rem;text-transform:uppercase;letter-spacing:.7px;font-weight:800;color:var(--slate);margin-bottom:7px;}
+  .a-list{list-style:none;display:flex;flex-direction:column;gap:5px;}
+  .a-list li{font-size:.76rem;display:flex;gap:7px;line-height:1.45;}
+  .a-list li::before{content:'▸';color:var(--plum);flex-shrink:0;margin-top:1px;}
+  .a-students{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px;}
+  .schip{background:var(--ink);color:#fff;border-radius:20px;padding:3px 10px;font-size:.68rem;font-weight:700;}
+  .leg-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px;}
+  .leg-item{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--slate);}
+  .leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:#f1f5f9;}
+  ::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="htitle">
+      <h1>5th Grade ELA iReady Dashboard</h1>
+      <span>YTD Diagnostic Analysis · Florida BEST Standards Alignment</span>
+    </div>
+    <div class="cdown">
+      <div>
+        <div class="cdown-lbl">FSA Countdown</div>
+        <div class="cdown-date">May 6, 2026</div>
+      </div>
+      <div style="display:flex;gap:9px;align-items:flex-end">
+        <div style="text-align:center">
+          <div class="cdown-num" id="cd-days">--</div>
+          <div class="cdown-sub">days</div>
+        </div>
+        <div style="text-align:center;opacity:.75">
+          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:#fbbf24;line-height:1" id="cd-hrs">--</div>
+          <div class="cdown-sub">hrs</div>
+        </div>
+        <div style="text-align:center;opacity:.75">
+          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:#fbbf24;line-height:1" id="cd-min">--</div>
+          <div class="cdown-sub">min</div>
+        </div>
+        <div style="text-align:center;opacity:.6">
+          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:#fbbf24;line-height:1" id="cd-sec">--</div>
+          <div class="cdown-sub">sec</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('overview',this)">📊 Overview</button>
+    <button class="tab-btn" onclick="showTab('class',this)">🏫 Class View</button>
+    <button class="tab-btn" onclick="showTab('standards',this)">📋 Standards & Gaps</button>
+    <button class="tab-btn" onclick="showTab('individual',this)">👤 Individual</button>
+    <button class="tab-btn" onclick="showTab('tiers',this)">🎯 Tier Placement</button>
+    <button class="tab-btn" onclick="showTab('action',this)">📝 Action Plan</button>
+  </nav>
+</header>
+
+<main>
+<div id="tab-overview" class="tab-pane active"></div>
+<div id="tab-class" class="tab-pane"></div>
+<div id="tab-standards" class="tab-pane"></div>
+<div id="tab-individual" class="tab-pane"></div>
+<div id="tab-tiers" class="tab-pane"></div>
+<div id="tab-action" class="tab-pane"></div>
+</main>
+
+<script>
+// ══════════════════ DATA ══════════════════
+const S = [{"name":"Jada A.","first":"Jada","homeroom":"Chin","overall_score":589,"baseline_score":565,"placement":"Early 5","percentile":59,"lexile":"965L","gain":24,"pct_typical":150.0,"pct_stretch":80.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":576,"vocab_placement":"Grade 4","comp_score":595,"comp_placement":"Early 5","comp_lit_score":632,"comp_lit_placement":"Late 5","comp_info_score":558,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Aadhya A.","first":"Aadhya","homeroom":"Santiso","overall_score":635,"baseline_score":627,"placement":"Late 5","percentile":90,"lexile":"1170L","gain":8,"pct_typical":114.0,"pct_stretch":44.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":617,"vocab_placement":"Mid 5","comp_score":645,"comp_placement":"Grade 6","comp_lit_score":651,"comp_lit_placement":"Grade 6","comp_info_score":639,"comp_info_placement":"Late 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Bruna A.","first":"Bruna","homeroom":"Chin","overall_score":592,"baseline_score":555,"placement":"Early 5","percentile":61,"lexile":"975L","gain":37,"pct_typical":231.0,"pct_stretch":123.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":591,"vocab_placement":"Early 5","comp_score":593,"comp_placement":"Early 5","comp_lit_score":610,"comp_lit_placement":"Mid 5","comp_info_score":575,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Kingston A.","first":"Kingston","homeroom":"Chin","overall_score":582,"baseline_score":580,"placement":"Early 5","percentile":53,"lexile":"930L","gain":2,"pct_typical":13.0,"pct_stretch":7.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":580,"vocab_placement":"Grade 4","comp_score":584,"comp_placement":"Early 5","comp_lit_score":565,"comp_lit_placement":"Grade 4","comp_info_score":603,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Ahmad A.","first":"Ahmad","homeroom":"Andrews","overall_score":632,"baseline_score":598,"placement":"Late 5","percentile":89,"lexile":"1160L","gain":34,"pct_typical":262.0,"pct_stretch":136.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":613,"vocab_placement":"Mid 5","comp_score":643,"comp_placement":"Grade 6","comp_lit_score":642,"comp_lit_placement":"Grade 6","comp_info_score":644,"comp_info_placement":"Grade 6","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Yasin B.","first":"Yasin","homeroom":"Andrews","overall_score":609,"baseline_score":578,"placement":"Mid 5","percentile":74,"lexile":"1055L","gain":31,"pct_typical":194.0,"pct_stretch":103.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":604,"vocab_placement":"Early 5","comp_score":612,"comp_placement":"Mid 5","comp_lit_score":614,"comp_lit_placement":"Mid 5","comp_info_score":610,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Chloe B.","first":"Chloe","homeroom":"Andrews","overall_score":582,"baseline_score":573,"placement":"Early 5","percentile":53,"lexile":"930L","gain":9,"pct_typical":56.0,"pct_stretch":30.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":576,"vocab_placement":"Grade 4","comp_score":586,"comp_placement":"Early 5","comp_lit_score":609,"comp_lit_placement":"Mid 5","comp_info_score":562,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Dhriti B.","first":"Dhriti","homeroom":"Santiso","overall_score":654,"baseline_score":619,"placement":"Grade 7","percentile":97,"lexile":"1260L","gain":35,"pct_typical":500.0,"pct_stretch":194.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":654,"vocab_placement":"Grade 7","comp_score":653,"comp_placement":"Grade 6","comp_lit_score":661,"comp_lit_placement":"Grade 7","comp_info_score":646,"comp_info_placement":"Grade 6","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Wyatt B.","first":"Wyatt","homeroom":"Andrews","overall_score":617,"baseline_score":596,"placement":"Mid 5","percentile":80,"lexile":"1090L","gain":21,"pct_typical":162.0,"pct_stretch":84.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":616,"vocab_placement":"Mid 5","comp_score":618,"comp_placement":"Mid 5","comp_lit_score":612,"comp_lit_placement":"Mid 5","comp_info_score":623,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"William B.","first":"William","homeroom":"Andrews","overall_score":557,"baseline_score":525,"placement":"Grade 4","percentile":36,"lexile":"820L","gain":32,"pct_typical":160.0,"pct_stretch":68.0,"typical_target":20,"stretch_target":47,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":549,"vocab_placement":"Grade 4","comp_score":561,"comp_placement":"Grade 4","comp_lit_score":542,"comp_lit_placement":"Grade 4","comp_info_score":580,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Jayden B.","first":"Jayden","homeroom":"Chin","overall_score":507,"baseline_score":544,"placement":"Grade 3","percentile":13,"lexile":"590L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":16,"stretch_target":30,"phonics_score":531,"phonics_placement":"Grade 3","vocab_score":548,"vocab_placement":"Grade 4","comp_score":475,"comp_placement":"Grade 1","comp_lit_score":481,"comp_lit_placement":"Grade 2","comp_info_score":470,"comp_info_placement":"Grade 1","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":1,"mid_grade_score":609},{"name":"MALAIYA C.","first":"MALAIYA","homeroom":"Andrews","overall_score":574,"baseline_score":575,"placement":"Grade 4","percentile":47,"lexile":"895L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":592,"vocab_placement":"Early 5","comp_score":565,"comp_placement":"Grade 4","comp_lit_score":547,"comp_lit_placement":"Grade 4","comp_info_score":582,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":4,"mid_grade_score":609},{"name":"Lailah C.","first":"Lailah","homeroom":"Andrews","overall_score":608,"baseline_score":552,"placement":"Early 5","percentile":73,"lexile":"1050L","gain":56,"pct_typical":350.0,"pct_stretch":187.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":600,"vocab_placement":"Early 5","comp_score":613,"comp_placement":"Mid 5","comp_lit_score":592,"comp_lit_placement":"Early 5","comp_info_score":636,"comp_info_placement":"Late 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Ashton C.","first":"Ashton","homeroom":"Santiso","overall_score":624,"baseline_score":605,"placement":"Mid 5","percentile":84,"lexile":"1120L","gain":19,"pct_typical":146.0,"pct_stretch":76.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":629,"vocab_placement":"Mid 5","comp_score":621,"comp_placement":"Mid 5","comp_lit_score":623,"comp_lit_placement":"Mid 5","comp_info_score":619,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Tyler C.","first":"Tyler","homeroom":"Chin","overall_score":575,"baseline_score":581,"placement":"Grade 4","percentile":48,"lexile":"900L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":581,"vocab_placement":"Early 5","comp_score":572,"comp_placement":"Grade 4","comp_lit_score":580,"comp_lit_placement":"Early 5","comp_info_score":564,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":4,"mid_grade_score":609},{"name":"Nicholas C.","first":"Nicholas","homeroom":"Santiso","overall_score":633,"baseline_score":626,"placement":"Late 5","percentile":89,"lexile":"1165L","gain":7,"pct_typical":100.0,"pct_stretch":39.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":671,"vocab_placement":"Grade 8","comp_score":612,"comp_placement":"Mid 5","comp_lit_score":624,"comp_lit_placement":"Mid 5","comp_info_score":600,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Matthew C.","first":"Matthew","homeroom":"Chin","overall_score":605,"baseline_score":578,"placement":"Early 5","percentile":71,"lexile":"1035L","gain":27,"pct_typical":169.0,"pct_stretch":90.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":606,"vocab_placement":"Early 5","comp_score":604,"comp_placement":"Early 5","comp_lit_score":621,"comp_lit_placement":"Mid 5","comp_info_score":586,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Simon C.","first":"Simon","homeroom":"Santiso","overall_score":611,"baseline_score":602,"placement":"Mid 5","percentile":76,"lexile":"1065L","gain":9,"pct_typical":69.0,"pct_stretch":36.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":616,"vocab_placement":"Mid 5","comp_score":609,"comp_placement":"Mid 5","comp_lit_score":604,"comp_lit_placement":"Mid 5","comp_info_score":614,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Olivia C.","first":"Olivia","homeroom":"Chin","overall_score":583,"baseline_score":568,"placement":"Early 5","percentile":54,"lexile":"935L","gain":15,"pct_typical":94.0,"pct_stretch":50.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":573,"vocab_placement":"Grade 4","comp_score":587,"comp_placement":"Early 5","comp_lit_score":586,"comp_lit_placement":"Early 5","comp_info_score":589,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Avaneesh Saharsh C.","first":"Avaneesh Saharsh","homeroom":"Santiso","overall_score":620,"baseline_score":601,"placement":"Mid 5","percentile":82,"lexile":"1105L","gain":19,"pct_typical":146.0,"pct_stretch":76.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":611,"vocab_placement":"Mid 5","comp_score":624,"comp_placement":"Mid 5","comp_lit_score":630,"comp_lit_placement":"Late 5","comp_info_score":617,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Juliana C.","first":"Juliana","homeroom":"Chin","overall_score":635,"baseline_score":606,"placement":"Late 5","percentile":90,"lexile":"1170L","gain":29,"pct_typical":223.0,"pct_stretch":116.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":645,"vocab_placement":"Grade 6","comp_score":630,"comp_placement":"Late 5","comp_lit_score":647,"comp_lit_placement":"Grade 6","comp_info_score":611,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Juan C.","first":"Juan","homeroom":"Santiso","overall_score":621,"baseline_score":601,"placement":"Mid 5","percentile":82,"lexile":"1110L","gain":20,"pct_typical":154.0,"pct_stretch":80.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":635,"vocab_placement":"Late 5","comp_score":614,"comp_placement":"Mid 5","comp_lit_score":610,"comp_lit_placement":"Mid 5","comp_info_score":618,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Hareeshwar C.","first":"Hareeshwar","homeroom":"Santiso","overall_score":630,"baseline_score":622,"placement":"Late 5","percentile":87,"lexile":"1150L","gain":8,"pct_typical":114.0,"pct_stretch":44.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":618,"vocab_placement":"Mid 5","comp_score":636,"comp_placement":"Late 5","comp_lit_score":648,"comp_lit_placement":"Grade 6","comp_info_score":625,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Joshua C.","first":"Joshua","homeroom":"Santiso","overall_score":652,"baseline_score":645,"placement":"Grade 6","percentile":96,"lexile":"1250L","gain":7,"pct_typical":100.0,"pct_stretch":39.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":664,"vocab_placement":"Grade 7","comp_score":646,"comp_placement":"Grade 6","comp_lit_score":648,"comp_lit_placement":"Grade 6","comp_info_score":644,"comp_info_placement":"Grade 6","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Erik C.","first":"Erik","homeroom":"Santiso","overall_score":660,"baseline_score":630,"placement":"Grade 7","percentile":98,"lexile":"1285L","gain":30,"pct_typical":429.0,"pct_stretch":167.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":630,"vocab_placement":"Late 5","comp_score":677,"comp_placement":"Grade 8","comp_lit_score":686,"comp_lit_placement":"Grade 8","comp_info_score":669,"comp_info_placement":"Grade 7","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Azariah C.","first":"Azariah","homeroom":"Chin","overall_score":595,"baseline_score":558,"placement":"Early 5","percentile":63,"lexile":"990L","gain":37,"pct_typical":231.0,"pct_stretch":123.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":584,"vocab_placement":"Early 5","comp_score":600,"comp_placement":"Early 5","comp_lit_score":628,"comp_lit_placement":"Mid 5","comp_info_score":573,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Murilo D.","first":"Murilo","homeroom":"Chin","overall_score":571,"baseline_score":573,"placement":"Grade 4","percentile":45,"lexile":"880L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":583,"vocab_placement":"Early 5","comp_score":565,"comp_placement":"Grade 4","comp_lit_score":545,"comp_lit_placement":"Grade 4","comp_info_score":582,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":4,"mid_grade_score":609},{"name":"Leanna D.","first":"Leanna","homeroom":"Chin","overall_score":584,"baseline_score":592,"placement":"Early 5","percentile":55,"lexile":"940L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":584,"vocab_placement":"Early 5","comp_score":584,"comp_placement":"Early 5","comp_lit_score":593,"comp_lit_placement":"Early 5","comp_info_score":573,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Vivaan E.","first":"Vivaan","homeroom":"Santiso","overall_score":614,"baseline_score":614,"placement":"Mid 5","percentile":78,"lexile":"1075L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":626,"vocab_placement":"Mid 5","comp_score":608,"comp_placement":"Mid 5","comp_lit_score":611,"comp_lit_placement":"Mid 5","comp_info_score":604,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Benjamin F.","first":"Benjamin","homeroom":"nan","overall_score":574,"baseline_score":null,"placement":"Grade 4","percentile":63,"lexile":"895L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":559,"vocab_placement":"Grade 4","comp_score":581,"comp_placement":"Early 5","comp_lit_score":602,"comp_lit_placement":"Early 5","comp_info_score":561,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Shamiso F.","first":"Shamiso","homeroom":"Chin","overall_score":600,"baseline_score":604,"placement":"Early 5","percentile":67,"lexile":"1015L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":580,"vocab_placement":"Grade 4","comp_score":611,"comp_placement":"Mid 5","comp_lit_score":613,"comp_lit_placement":"Mid 5","comp_info_score":610,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Ema G.","first":"Ema","homeroom":"Chin","overall_score":532,"baseline_score":509,"placement":"Grade 3","percentile":23,"lexile":"705L","gain":23,"pct_typical":115.0,"pct_stretch":49.0,"typical_target":20,"stretch_target":47,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":542,"vocab_placement":"Grade 4","comp_score":526,"comp_placement":"Grade 3","comp_lit_score":536,"comp_lit_placement":"Grade 3","comp_info_score":518,"comp_info_placement":"Grade 3","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Elizabeth G.","first":"Elizabeth","homeroom":"Andrews","overall_score":579,"baseline_score":567,"placement":"Grade 4","percentile":51,"lexile":"920L","gain":12,"pct_typical":75.0,"pct_stretch":40.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":561,"vocab_placement":"Grade 4","comp_score":589,"comp_placement":"Early 5","comp_lit_score":603,"comp_lit_placement":"Mid 5","comp_info_score":576,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Vivianna G.","first":"Vivianna","homeroom":"Andrews","overall_score":601,"baseline_score":561,"placement":"Early 5","percentile":68,"lexile":"1015L","gain":40,"pct_typical":250.0,"pct_stretch":133.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":601,"vocab_placement":"Early 5","comp_score":600,"comp_placement":"Early 5","comp_lit_score":578,"comp_lit_placement":"Early 5","comp_info_score":624,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Zenya G.","first":"Zenya","homeroom":"Andrews","overall_score":636,"baseline_score":615,"placement":"Late 5","percentile":91,"lexile":"1175L","gain":21,"pct_typical":300.0,"pct_stretch":117.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":654,"vocab_placement":"Grade 7","comp_score":626,"comp_placement":"Mid 5","comp_lit_score":609,"comp_lit_placement":"Mid 5","comp_info_score":640,"comp_info_placement":"Late 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Madison H.","first":"Madison","homeroom":"Andrews","overall_score":602,"baseline_score":607,"placement":"Early 5","percentile":69,"lexile":"1020L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":593,"vocab_placement":"Early 5","comp_score":605,"comp_placement":"Early 5","comp_lit_score":614,"comp_lit_placement":"Mid 5","comp_info_score":597,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Zarif H.","first":"Zarif","homeroom":"Santiso","overall_score":673,"baseline_score":639,"placement":"Grade 8","percentile":99,"lexile":"1345L","gain":34,"pct_typical":486.0,"pct_stretch":189.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":682,"vocab_placement":"Grade 8","comp_score":668,"comp_placement":"Grade 7","comp_lit_score":672,"comp_lit_placement":"Grade 8","comp_info_score":665,"comp_info_placement":"Grade 7","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Ava H.","first":"Ava","homeroom":"Santiso","overall_score":616,"baseline_score":578,"placement":"Mid 5","percentile":79,"lexile":"1085L","gain":38,"pct_typical":238.0,"pct_stretch":127.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":599,"vocab_placement":"Early 5","comp_score":624,"comp_placement":"Mid 5","comp_lit_score":634,"comp_lit_placement":"Late 5","comp_info_score":615,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Lillian H.","first":"Lillian","homeroom":"Andrews","overall_score":611,"baseline_score":566,"placement":"Mid 5","percentile":76,"lexile":"1065L","gain":45,"pct_typical":281.0,"pct_stretch":150.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":640,"vocab_placement":"Late 5","comp_score":595,"comp_placement":"Early 5","comp_lit_score":593,"comp_lit_placement":"Early 5","comp_info_score":597,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Harmonie I.","first":"Harmonie","homeroom":"Santiso","overall_score":619,"baseline_score":609,"placement":"Mid 5","percentile":81,"lexile":"1100L","gain":10,"pct_typical":143.0,"pct_stretch":56.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":638,"vocab_placement":"Late 5","comp_score":609,"comp_placement":"Mid 5","comp_lit_score":594,"comp_lit_placement":"Early 5","comp_info_score":624,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Omar I.","first":"Omar","homeroom":"Santiso","overall_score":618,"baseline_score":583,"placement":"Mid 5","percentile":80,"lexile":"1095L","gain":35,"pct_typical":269.0,"pct_stretch":140.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":601,"vocab_placement":"Early 5","comp_score":628,"comp_placement":"Mid 5","comp_lit_score":632,"comp_lit_placement":"Late 5","comp_info_score":623,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Miles J.","first":"Miles","homeroom":"Andrews","overall_score":611,"baseline_score":571,"placement":"Mid 5","percentile":76,"lexile":"1065L","gain":40,"pct_typical":250.0,"pct_stretch":133.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":610,"vocab_placement":"Mid 5","comp_score":611,"comp_placement":"Mid 5","comp_lit_score":598,"comp_lit_placement":"Early 5","comp_info_score":627,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Savannah J.","first":"Savannah","homeroom":"Andrews","overall_score":604,"baseline_score":597,"placement":"Early 5","percentile":70,"lexile":"1030L","gain":7,"pct_typical":54.0,"pct_stretch":28.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":594,"vocab_placement":"Early 5","comp_score":609,"comp_placement":"Mid 5","comp_lit_score":608,"comp_lit_placement":"Mid 5","comp_info_score":610,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Devakinandan K.","first":"Devakinandan","homeroom":"Santiso","overall_score":662,"baseline_score":636,"placement":"Grade 7","percentile":98,"lexile":"1295L","gain":26,"pct_typical":371.0,"pct_stretch":144.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":663,"vocab_placement":"Grade 7","comp_score":662,"comp_placement":"Grade 7","comp_lit_score":679,"comp_lit_placement":"Grade 8","comp_info_score":647,"comp_info_placement":"Grade 6","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Tatum K.","first":"Tatum","homeroom":"Andrews","overall_score":629,"baseline_score":579,"placement":"Mid 5","percentile":87,"lexile":"1145L","gain":50,"pct_typical":313.0,"pct_stretch":167.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":626,"vocab_placement":"Mid 5","comp_score":630,"comp_placement":"Late 5","comp_lit_score":645,"comp_lit_placement":"Grade 6","comp_info_score":615,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Logan L.","first":"Logan","homeroom":"Andrews","overall_score":609,"baseline_score":553,"placement":"Mid 5","percentile":74,"lexile":"1055L","gain":56,"pct_typical":350.0,"pct_stretch":187.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":612,"vocab_placement":"Mid 5","comp_score":607,"comp_placement":"Mid 5","comp_lit_score":615,"comp_lit_placement":"Mid 5","comp_info_score":599,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Neiko L.","first":"Neiko","homeroom":"Andrews","overall_score":588,"baseline_score":588,"placement":"Early 5","percentile":58,"lexile":"960L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":576,"vocab_placement":"Grade 4","comp_score":595,"comp_placement":"Early 5","comp_lit_score":574,"comp_lit_placement":"Grade 4","comp_info_score":619,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Enzo L.","first":"Enzo","homeroom":"Santiso","overall_score":617,"baseline_score":605,"placement":"Mid 5","percentile":80,"lexile":"1090L","gain":12,"pct_typical":92.0,"pct_stretch":48.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":596,"vocab_placement":"Early 5","comp_score":628,"comp_placement":"Mid 5","comp_lit_score":645,"comp_lit_placement":"Grade 6","comp_info_score":612,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Grace L.","first":"Grace","homeroom":"Chin","overall_score":558,"baseline_score":532,"placement":"Grade 4","percentile":37,"lexile":"820L","gain":26,"pct_typical":130.0,"pct_stretch":55.0,"typical_target":20,"stretch_target":47,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":539,"vocab_placement":"Grade 3","comp_score":568,"comp_placement":"Grade 4","comp_lit_score":581,"comp_lit_placement":"Early 5","comp_info_score":558,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Addison L.","first":"Addison","homeroom":"Andrews","overall_score":634,"baseline_score":618,"placement":"Late 5","percentile":90,"lexile":"1165L","gain":16,"pct_typical":229.0,"pct_stretch":89.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":607,"vocab_placement":"Early 5","comp_score":650,"comp_placement":"Grade 6","comp_lit_score":661,"comp_lit_placement":"Grade 7","comp_info_score":640,"comp_info_placement":"Late 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Eliyus M.","first":"Eliyus","homeroom":"Santiso","overall_score":608,"baseline_score":602,"placement":"Early 5","percentile":73,"lexile":"1050L","gain":6,"pct_typical":46.0,"pct_stretch":24.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":619,"vocab_placement":"Mid 5","comp_score":602,"comp_placement":"Early 5","comp_lit_score":593,"comp_lit_placement":"Early 5","comp_info_score":610,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Harrison M.","first":"Harrison","homeroom":"Andrews","overall_score":580,"baseline_score":591,"placement":"Grade 4","percentile":52,"lexile":"920L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":579,"vocab_placement":"Grade 4","comp_score":581,"comp_placement":"Early 5","comp_lit_score":594,"comp_lit_placement":"Early 5","comp_info_score":568,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Delaney M.","first":"Delaney","homeroom":"Chin","overall_score":578,"baseline_score":535,"placement":"Grade 4","percentile":50,"lexile":"915L","gain":43,"pct_typical":215.0,"pct_stretch":91.0,"typical_target":20,"stretch_target":47,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":577,"vocab_placement":"Grade 4","comp_score":578,"comp_placement":"Grade 4","comp_lit_score":559,"comp_lit_placement":"Grade 4","comp_info_score":598,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Sama M.","first":"Sama","homeroom":"nan","overall_score":632,"baseline_score":null,"placement":"Late 5","percentile":92,"lexile":"1160L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":631,"vocab_placement":"Late 5","comp_score":633,"comp_placement":"Late 5","comp_lit_score":655,"comp_lit_placement":"Grade 7","comp_info_score":611,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Krishav M.","first":"Krishav","homeroom":"Andrews","overall_score":618,"baseline_score":592,"placement":"Mid 5","percentile":80,"lexile":"1095L","gain":26,"pct_typical":200.0,"pct_stretch":104.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":622,"vocab_placement":"Mid 5","comp_score":615,"comp_placement":"Mid 5","comp_lit_score":606,"comp_lit_placement":"Mid 5","comp_info_score":625,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Deon O.","first":"Deon","homeroom":"Chin","overall_score":587,"baseline_score":558,"placement":"Early 5","percentile":57,"lexile":"955L","gain":29,"pct_typical":181.0,"pct_stretch":97.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":607,"vocab_placement":"Early 5","comp_score":576,"comp_placement":"Grade 4","comp_lit_score":593,"comp_lit_placement":"Early 5","comp_info_score":559,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":4,"mid_grade_score":609},{"name":"Ronald O.","first":"Ronald","homeroom":"Andrews","overall_score":590,"baseline_score":598,"placement":"Early 5","percentile":59,"lexile":"965L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":585,"vocab_placement":"Early 5","comp_score":592,"comp_placement":"Early 5","comp_lit_score":625,"comp_lit_placement":"Mid 5","comp_info_score":560,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Willow P.","first":"Willow","homeroom":"Chin","overall_score":536,"baseline_score":526,"placement":"Grade 3","percentile":25,"lexile":"720L","gain":10,"pct_typical":50.0,"pct_stretch":21.0,"typical_target":20,"stretch_target":47,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":542,"vocab_placement":"Grade 4","comp_score":532,"comp_placement":"Grade 3","comp_lit_score":536,"comp_lit_placement":"Grade 3","comp_info_score":528,"comp_info_placement":"Grade 3","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Spencer P.","first":"Spencer","homeroom":"Santiso","overall_score":625,"baseline_score":581,"placement":"Mid 5","percentile":85,"lexile":"1125L","gain":44,"pct_typical":338.0,"pct_stretch":176.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":620,"vocab_placement":"Mid 5","comp_score":628,"comp_placement":"Mid 5","comp_lit_score":634,"comp_lit_placement":"Late 5","comp_info_score":623,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Parker P.","first":"Parker","homeroom":"Andrews","overall_score":586,"baseline_score":592,"placement":"Early 5","percentile":56,"lexile":"950L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":609,"vocab_placement":"Mid 5","comp_score":576,"comp_placement":"Grade 4","comp_lit_score":570,"comp_lit_placement":"Grade 4","comp_info_score":582,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":4,"mid_grade_score":609},{"name":"Everett P.","first":"Everett","homeroom":"Chin","overall_score":596,"baseline_score":580,"placement":"Early 5","percentile":64,"lexile":"995L","gain":16,"pct_typical":100.0,"pct_stretch":53.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":587,"vocab_placement":"Early 5","comp_score":600,"comp_placement":"Early 5","comp_lit_score":610,"comp_lit_placement":"Mid 5","comp_info_score":590,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Anna R.","first":"Anna","homeroom":"Chin","overall_score":574,"baseline_score":494,"placement":"Grade 4","percentile":47,"lexile":"895L","gain":80,"pct_typical":308.0,"pct_stretch":131.0,"typical_target":26,"stretch_target":61,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":543,"vocab_placement":"Grade 4","comp_score":590,"comp_placement":"Early 5","comp_lit_score":604,"comp_lit_placement":"Mid 5","comp_info_score":578,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"John R.","first":"John","homeroom":"Santiso","overall_score":637,"baseline_score":612,"placement":"Late 5","percentile":91,"lexile":"1180L","gain":25,"pct_typical":357.0,"pct_stretch":139.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":645,"vocab_placement":"Grade 6","comp_score":633,"comp_placement":"Late 5","comp_lit_score":651,"comp_lit_placement":"Grade 6","comp_info_score":615,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Rylan R.","first":"Rylan","homeroom":"Santiso","overall_score":622,"baseline_score":602,"placement":"Mid 5","percentile":83,"lexile":"1115L","gain":20,"pct_typical":154.0,"pct_stretch":80.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":585,"vocab_placement":"Early 5","comp_score":643,"comp_placement":"Grade 6","comp_lit_score":643,"comp_lit_placement":"Grade 6","comp_info_score":644,"comp_info_placement":"Grade 6","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Jeremiah R.","first":"Jeremiah","homeroom":"Chin","overall_score":609,"baseline_score":586,"placement":"Mid 5","percentile":74,"lexile":"1055L","gain":23,"pct_typical":177.0,"pct_stretch":92.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":663,"vocab_placement":"Grade 7","comp_score":577,"comp_placement":"Grade 4","comp_lit_score":584,"comp_lit_placement":"Early 5","comp_info_score":570,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":4,"mid_grade_score":609},{"name":"Naomi R.","first":"Naomi","homeroom":"Santiso","overall_score":624,"baseline_score":590,"placement":"Mid 5","percentile":84,"lexile":"1120L","gain":34,"pct_typical":262.0,"pct_stretch":136.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":606,"vocab_placement":"Early 5","comp_score":632,"comp_placement":"Late 5","comp_lit_score":650,"comp_lit_placement":"Grade 6","comp_info_score":617,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Sofia R.","first":"Sofia","homeroom":"Andrews","overall_score":608,"baseline_score":589,"placement":"Early 5","percentile":73,"lexile":"1050L","gain":19,"pct_typical":146.0,"pct_stretch":76.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":608,"vocab_placement":"Early 5","comp_score":608,"comp_placement":"Mid 5","comp_lit_score":596,"comp_lit_placement":"Early 5","comp_info_score":619,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Emili S.","first":"Emili","homeroom":"Andrews","overall_score":634,"baseline_score":591,"placement":"Late 5","percentile":90,"lexile":"1165L","gain":43,"pct_typical":331.0,"pct_stretch":172.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":596,"vocab_placement":"Early 5","comp_score":654,"comp_placement":"Grade 7","comp_lit_score":634,"comp_lit_placement":"Late 5","comp_info_score":677,"comp_info_placement":"Grade 8","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Dylan thomas S.","first":"Dylan thomas","homeroom":"Andrews","overall_score":618,"baseline_score":632,"placement":"Mid 5","percentile":80,"lexile":"1095L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":634,"vocab_placement":"Late 5","comp_score":610,"comp_placement":"Mid 5","comp_lit_score":595,"comp_lit_placement":"Early 5","comp_info_score":627,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Zoie S.","first":"Zoie","homeroom":"Andrews","overall_score":639,"baseline_score":614,"placement":"Late 5","percentile":92,"lexile":"1190L","gain":25,"pct_typical":357.0,"pct_stretch":139.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":645,"vocab_placement":"Grade 6","comp_score":636,"comp_placement":"Late 5","comp_lit_score":656,"comp_lit_placement":"Grade 7","comp_info_score":614,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Siva S.","first":"Siva","homeroom":"Chin","overall_score":534,"baseline_score":515,"placement":"Grade 3","percentile":24,"lexile":"715L","gain":19,"pct_typical":95.0,"pct_stretch":40.0,"typical_target":20,"stretch_target":47,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":519,"vocab_placement":"Grade 3","comp_score":541,"comp_placement":"Grade 4","comp_lit_score":545,"comp_lit_placement":"Grade 4","comp_info_score":538,"comp_info_placement":"Grade 3","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Cadence S.","first":"Cadence","homeroom":"Chin","overall_score":577,"baseline_score":543,"placement":"Grade 4","percentile":50,"lexile":"910L","gain":34,"pct_typical":213.0,"pct_stretch":113.0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":574,"vocab_placement":"Grade 4","comp_score":579,"comp_placement":"Early 5","comp_lit_score":591,"comp_lit_placement":"Early 5","comp_info_score":566,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Jeremiah T.","first":"Jeremiah","homeroom":"Andrews","overall_score":627,"baseline_score":601,"placement":"Mid 5","percentile":86,"lexile":"1135L","gain":26,"pct_typical":200.0,"pct_stretch":104.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":630,"vocab_placement":"Late 5","comp_score":626,"comp_placement":"Mid 5","comp_lit_score":625,"comp_lit_placement":"Mid 5","comp_info_score":627,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Liam T.","first":"Liam","homeroom":"Chin","overall_score":580,"baseline_score":533,"placement":"Grade 4","percentile":52,"lexile":"920L","gain":47,"pct_typical":235.0,"pct_stretch":100.0,"typical_target":20,"stretch_target":47,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":575,"vocab_placement":"Grade 4","comp_score":581,"comp_placement":"Early 5","comp_lit_score":585,"comp_lit_placement":"Early 5","comp_info_score":577,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Demirah T.","first":"Demirah","homeroom":"Chin","overall_score":520,"baseline_score":537,"placement":"Grade 3","percentile":18,"lexile":"650L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":20,"stretch_target":47,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":494,"vocab_placement":"Grade 2","comp_score":533,"comp_placement":"Grade 3","comp_lit_score":529,"comp_lit_placement":"Grade 3","comp_info_score":537,"comp_info_placement":"Grade 3","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":3,"mid_grade_score":609},{"name":"Alekhya Y.","first":"Alekhya","homeroom":"Santiso","overall_score":657,"baseline_score":651,"placement":"Grade 7","percentile":97,"lexile":"1270L","gain":6,"pct_typical":86.0,"pct_stretch":33.0,"typical_target":7,"stretch_target":18,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":672,"vocab_placement":"Grade 8","comp_score":649,"comp_placement":"Grade 6","comp_lit_score":672,"comp_lit_placement":"Grade 8","comp_info_score":628,"comp_info_placement":"Mid 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Maxim Y.","first":"Maxim","homeroom":"Santiso","overall_score":603,"baseline_score":585,"placement":"Early 5","percentile":70,"lexile":"1025L","gain":18,"pct_typical":138.0,"pct_stretch":72.0,"typical_target":13,"stretch_target":25,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":614,"vocab_placement":"Mid 5","comp_score":598,"comp_placement":"Early 5","comp_lit_score":600,"comp_lit_placement":"Early 5","comp_info_score":596,"comp_info_placement":"Early 5","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":5,"mid_grade_score":609},{"name":"Gabriel Z.","first":"Gabriel","homeroom":"Chin","overall_score":551,"baseline_score":553,"placement":"Grade 4","percentile":33,"lexile":"790L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":16,"stretch_target":30,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":585,"vocab_placement":"Early 5","comp_score":532,"comp_placement":"Grade 3","comp_lit_score":553,"comp_lit_placement":"Grade 4","comp_info_score":511,"comp_info_placement":"Grade 3","hfw_placement":"Surpassed Level","reading_difficulty":"Not Provided","grouping":4,"mid_grade_score":609}];
+
+// ══════════════════ HELPERS ══════════════════
+const PCSS={'Grade 6':'p-g6','Grade 7':'p-g6','Grade 8':'p-g6','Late 5':'p-l5','Mid 5':'p-m5','Early 5':'p-e5','Grade 4':'p-g4','Grade 3':'p-g3','Grade 2':'p-g3','Grade 1':'p-g3','Surpassed Level':'p-sp','Max Score':'p-sp'};
+const RCOL={Andrews:'#0f766e',Chin:'#be123c',Santiso:'#6d28d9'};
+const RBCOL={Andrews:'#ccfbf1',Chin:'#ffe4e6',Santiso:'#ede9fe'};
+function getTier(s){
+  const below=['Grade 4','Grade 3','Grade 2','Grade 1','Grade K'].includes(s.placement);
+  if(below)return 3;
+  if(s.pct_typical<80||s.gain<10)return 2;
+  return 1;
+}
+function avg(arr,k){const v=arr.map(s=>s[k]).filter(x=>x!=null&&!isNaN(x));return v.length?Math.round(v.reduce((a,b)=>a+b)/v.length):0;}
+function pct(n,d){return d?Math.round(n/d*100):0;}
+function isBelowGrade(p){return['Grade 4','Grade 3','Grade 2','Grade 1','Grade K'].includes(p);}
+function isAboveGrade(p){return['Late 5','Grade 6','Grade 7','Grade 8'].includes(p);}
+function getInits(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+function hColor(s){const p=['#0f766e','#6d28d9','#0284c7','#b45309','#be123c','#1d4ed8','#065f46','#9333ea'];let h=0;for(let c of s)h=(h*31+c.charCodeAt(0))%p.length;return p[h];}
+function pBar(lbl,pv,col){return`<div class="pbar-wrap"><div class="pbar-top"><span>${lbl}</span><span style="color:${col}">${pv}%</span></div><div class="pbar-bg"><div class="pbar-fill" style="width:${pv}%;background:${col}"></div></div></div>`;}
+function tcol(t){return{1:'#15803d',2:'#d97706',3:'#be123c'}[t];}
+
+// COUNTDOWN
+function updateCd(){
+  const target=new Date('2026-05-06T08:00:00');
+  const now=new Date();
+  const diff=target-now;
+  if(diff<=0){
+    ['cd-days','cd-hrs','cd-min','cd-sec'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='0';});
+    return;
+  }
+  const days=Math.floor(diff/86400000);
+  const hrs=Math.floor((diff%86400000)/3600000);
+  const min=Math.floor((diff%3600000)/60000);
+  const sec=Math.floor((diff%60000)/1000);
+  const pad=n=>String(n).padStart(2,'0');
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
+  set('cd-days',days);set('cd-hrs',pad(hrs));set('cd-min',pad(min));set('cd-sec',pad(sec));
+}
+updateCd();
+setInterval(updateCd,1000);
+
+// TABS
+function showTab(id,btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(!document.getElementById('tab-'+id).dataset.rendered){renders[id]&&renders[id]();document.getElementById('tab-'+id).dataset.rendered='1';}
+}
+
+// ══════════════════ OVERVIEW ══════════════════
+function renderOverview(){
+  const el=document.getElementById('tab-overview');
+  const avgSc=avg(S,'overall_score'),avgGain=avg(S,'gain');
+  const avgTy=Math.round(avg(S.filter(x=>x.pct_typical>0),'pct_typical'));
+  const belowGL=S.filter(x=>isBelowGrade(x.placement)).length;
+  const aboveGL=S.filter(x=>isAboveGrade(x.placement)).length;
+  const t3=S.filter(x=>getTier(x)===3);
+  const zeroGain=S.filter(x=>x.gain===0).length;
+  const stats=[
+    {l:'Total Students',v:S.length,d:'3 homerooms',c:'#6d28d9'},
+    {l:'Avg Scale Score',v:avgSc,d:'Spring YTD',c:'#0284c7'},
+    {l:'Avg Gain',v:'+'+avgGain,d:'pts since baseline',c:'#15803d'},
+    {l:'Avg % Typical',v:avgTy+'%',d:'Growth progress',c:'#0f766e'},
+    {l:'Below Grade Level',v:belowGL,d:'Grade 4 or below',c:'#be123c'},
+    {l:'Above/At Grade Level',v:aboveGL,d:'Late 5 or higher',c:'#059669'},
+    {l:'Tier 3 Students',v:t3.length,d:'Intensive support',c:'#be123c'},
+    {l:'Zero Growth',v:zeroGain,d:'Students w/ 0 gain',c:'#d97706'},
+  ];
+  const placements=['Grade 6','Grade 7','Grade 8','Late 5','Mid 5','Early 5','Grade 4','Grade 3'];
+  const pc={};S.forEach(s=>{pc[s.placement]=(pc[s.placement]||0)+1;});
+  const pcols={'Grade 8':'#1d4ed8','Grade 7':'#1d4ed8','Grade 6':'#2563eb','Late 5':'#059669','Mid 5':'#10b981','Early 5':'#d97706','Grade 4':'#dc2626','Grade 3':'#9f1239'};
+  const stars=[...S].sort((a,b)=>b.gain-a.gain).slice(0,8);
+  const domains=[{n:'Vocabulary',k:'vocab_placement',i:'📖'},{n:'Comp: Overall',k:'comp_placement',i:'💡'},{n:'Comp: Literature',k:'comp_lit_placement',i:'📚'},{n:'Comp: Info Text',k:'comp_info_placement',i:'📰'},{n:'Phonics',k:'phonics_placement',i:'🔤'}];
+  const gainBuckets=[{l:'50+ pts (Outstanding)',min:50,max:999,c:'#15803d'},{l:'30–49 pts (Strong)',min:30,max:49,c:'#0f766e'},{l:'15–29 pts (Adequate)',min:15,max:29,c:'#0284c7'},{l:'1–14 pts (Minimal)',min:1,max:14,c:'#d97706'},{l:'0 pts (No Growth)',min:0,max:0,c:'#be123c'}];
+  el.innerHTML=`
+  <div class="sec-title">School Overview — 5th Grade ELA</div>
+  <div class="sec-sub">Spring YTD Diagnostic · All Homerooms · 78 students</div>
+  <div class="stat-grid">${stats.map(s=>`<div class="stat-card" style="--acc:${s.c}"><div class="stat-lbl">${s.l}</div><div class="stat-val">${s.v}</div><div class="stat-det">${s.d}</div></div>`).join('')}</div>
+  <div class="two-col">
+    <div class="card"><div class="card-title"><div class="cicon" style="background:#dbeafe">📊</div>Overall Placement Distribution</div>
+      ${placements.filter(p=>pc[p]).map(p=>pBar(p+` (${pc[p]||0})`,pct(pc[p]||0,S.length),pcols[p]||'#64748b')).join('')}</div>
+    <div class="card"><div class="card-title"><div class="cicon" style="background:#dcfce7">📈</div>Growth Distribution (Baseline→Spring)</div>
+      ${gainBuckets.map(b=>{const n=S.filter(x=>x.gain>=b.min&&x.gain<=b.max).length;return pBar(b.l+` (${n})`,pct(n,S.length),b.c);}).join('')}</div>
+  </div>
+  <div class="two-col">
+    <div class="card"><div class="card-title"><div class="cicon" style="background:#fef3c7">🎯</div>Domain Performance (% Mid 5 or Above)</div>
+      <div class="dbar-wrap">${domains.map(d=>{
+        const valid=S.filter(x=>x[d.k]&&x[d.k]!=='Not Assessed');
+        const onGL=valid.filter(x=>['Mid 5','Late 5','Grade 6','Grade 7','Grade 8'].includes(x[d.k])).length;
+        const pv=valid.length?pct(onGL,valid.length):0;
+        const c=pv>=60?'#15803d':pv>=40?'#d97706':'#be123c';
+        return`<div class="dbar-row"><div class="dbar-name"><span>${d.i} ${d.n}</span><span style="color:${c};font-weight:800">${pv}%</span></div>
+        <div class="dbar-bg"><div class="dbar-fill" style="width:${pv}%;background:${c}">${pv}%</div><div class="dbar-bench" style="left:60%"></div></div></div>`;
+      }).join('')}</div></div>
+    <div class="card"><div class="card-title"><div class="cicon" style="background:#ede9fe">⚡</div>Top Growth Stars</div>
+      ${stars.map(s=>`<div style="display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid #f1f5f9">
+        <div style="width:30px;height:30px;border-radius:50%;background:${hColor(s.name)};display:flex;align-items:center;justify-content:center;color:#fff;font-size:.68rem;font-weight:800;flex-shrink:0">${getInits(s.name)}</div>
+        <div style="flex:1"><div style="font-weight:800;font-size:.78rem">${s.name}</div><div style="font-size:.65rem;color:#64748b">${s.homeroom!='nan'?s.homeroom:'–'}</div></div>
+        <div style="text-align:right"><div style="font-weight:900;color:#15803d;font-family:'Playfair Display',serif;font-size:1.05rem">+${s.gain}</div><div style="font-size:.6rem;color:#64748b">pts</div></div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ══════════════════ CLASS VIEW ══════════════════
+function renderClass(){
+  const el=document.getElementById('tab-class');
+  const rooms=['Andrews','Chin','Santiso'];
+  el.innerHTML=`<div class="sec-title">Class View by Homeroom</div>
+  <div class="sec-sub">Compare performance across all three 5th grade classrooms</div>
+  <div class="hr-tabs">${rooms.map((r,i)=>`<button class="hr-tab ${i===0?'active':''}" onclick="showHR('${r}',this)">${r}</button>`).join('')}</div>
+  <div id="hr-body"></div>`;
+  showHRData('Andrews');
+}
+function showHR(room,btn){document.querySelectorAll('.hr-tab').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');showHRData(room);}
+function showHRData(room){
+  const rs=S.filter(s=>s.homeroom===room).sort((a,b)=>b.overall_score-a.overall_score);
+  const c=RCOL[room]||'#64748b';
+  const pc2={};rs.forEach(s=>{pc2[s.placement]=(pc2[s.placement]||0)+1;});
+  const pls=['Grade 6','Grade 7','Grade 8','Late 5','Mid 5','Early 5','Grade 4','Grade 3'];
+  const pcols2={'Grade 8':'#1d4ed8','Grade 7':'#1d4ed8','Grade 6':'#2563eb','Late 5':'#059669','Mid 5':'#10b981','Early 5':'#d97706','Grade 4':'#dc2626','Grade 3':'#9f1239'};
+  document.getElementById('hr-body').innerHTML=`
+  <div class="stat-grid">
+    ${[{l:'Students',v:rs.length,d:'in class'},{l:'Avg Score',v:avg(rs,'overall_score'),d:'scale score'},{l:'Avg Gain',v:'+'+avg(rs,'gain'),d:'pts growth'},{l:'Avg % Typical',v:Math.round(avg(rs.filter(x=>x.pct_typical>0),'pct_typical'))+'%',d:'growth progress'}]
+    .map(x=>`<div class="stat-card" style="--acc:${c}"><div class="stat-lbl">${x.l}</div><div class="stat-val">${x.v}</div><div class="stat-det">${x.d}</div></div>`).join('')}
+  </div>
+  <div class="two-col">
+    <div class="card"><div class="card-title"><div class="cicon" style="background:${RBCOL[room]||'#f1f5f9'}">📊</div>Placement Distribution</div>
+      ${pls.filter(p=>pc2[p]).map(p=>pBar(p+` (${pc2[p]||0})`,pct(pc2[p]||0,rs.length),pcols2[p]||'#64748b')).join('')}</div>
+    <div class="card"><div class="card-title"><div class="cicon" style="background:#fef3c7">🎯</div>Tier Breakdown</div>
+      ${[3,2,1].map(t=>{const n=rs.filter(s=>getTier(s)===t).length;const pv=pct(n,rs.length);const lbl={3:'Tier 3 – Intensive',2:'Tier 2 – Strategic',1:'Tier 1 – On Track'}[t];const tc={3:'#be123c',2:'#d97706',1:'#15803d'}[t];return pBar(lbl+` (${n})`,pv,tc);}).join('')}</div>
+  </div>
+  <div class="stbl-wrap">
+    <table class="stbl2">
+      <thead><tr><th>Student</th><th>Score</th><th>Placement</th><th>Gain</th><th>% Typical</th><th>Lexile</th><th>Vocabulary</th><th>Comprehension</th><th>Comp: Info</th><th>Tier</th></tr></thead>
+      <tbody>${rs.map(s=>{const t=getTier(s);const tc2=tcol(t);return`<tr>
+        <td style="font-weight:800">${s.name}</td>
+        <td style="font-weight:800">${s.overall_score}</td>
+        <td><span class="ptag ${PCSS[s.placement]||''}">${s.placement}</span></td>
+        <td style="font-weight:800;color:${s.gain>=30?'#15803d':s.gain>=15?'#d97706':'#be123c'}">${s.gain>0?'+':''}${s.gain}</td>
+        <td>${s.pct_typical>0?Math.round(s.pct_typical)+'%':'–'}</td>
+        <td>${s.lexile}</td>
+        <td><span class="ptag ${PCSS[s.vocab_placement]||''}">${s.vocab_placement}</span></td>
+        <td><span class="ptag ${PCSS[s.comp_placement]||''}">${s.comp_placement}</span></td>
+        <td><span class="ptag ${PCSS[s.comp_info_placement]||''}">${s.comp_info_placement}</span></td>
+        <td><span style="background:${tc2}22;color:${tc2};padding:2px 8px;border-radius:20px;font-size:.66rem;font-weight:900">T${t}</span></td>
+      </tr>`;}).join('')}</tbody>
+    </table>
+  </div>`;
+}
+
+// ══════════════════ STANDARDS ══════════════════
+const STDS=[
+  {dom:'Phonics',ir:'Phonics patterns, decoding',std:'ELA.5.F.1.3',desc:'Decode multisyllabic words including Latin/Greek roots and complex spelling patterns',pri:'Low',note:'Nearly all students at Surpassed Level — class strength across all homerooms'},
+  {dom:'High-Frequency Words',ir:'Sight word fluency & automaticity',std:'ELA.5.F.2.1',desc:'Read and spell grade-level high-frequency and irregularly-spelled words with automaticity',pri:'Low',note:'HFW not an area of concern; all students at surpassed level'},
+  {dom:'Vocabulary',ir:'Context clues, academic vocabulary',std:'ELA.5.R.3.1',desc:'Use context, including analogies and nuanced language, to determine meaning of unknown words',pri:'High',note:'CRITICAL: 17 students at Grade 4 vocabulary; 24 at Early 5 — most widespread gap'},
+  {dom:'Vocabulary',ir:'Morphology, roots & affixes',std:'ELA.5.L.3.1',desc:'Determine meaning using morphology, affixes, Greek/Latin roots, and reference materials',pri:'High',note:'Vocabulary gap affects comprehension across all domains'},
+  {dom:'Vocabulary',ir:'Domain-specific vocabulary',std:'ELA.5.R.3.2',desc:'Analyze figurative language and domain-specific vocabulary within informational contexts',pri:'Med',note:'Especially challenging in complex informational texts at grade level'},
+  {dom:'Comp: Literature',ir:'Theme, character, story structure',std:'ELA.5.R.1.1',desc:'Analyze how setting, character, and plot structure contribute to the theme of a text',pri:'Med',note:'Literature comprehension generally stronger; some Grade 4 placements persist'},
+  {dom:'Comp: Literature',ir:'Point of view, narrator perspective',std:'ELA.5.R.1.2',desc:'Explain how the author\'s point of view or narrator perspective influences meaning',pri:'Med',note:'Moderate gap; connected to inferencing and textual analysis skills'},
+  {dom:'Comp: Literature',ir:'Comparing texts, theme across genres',std:'ELA.5.R.1.3',desc:'Compare how authors of different genres address the same theme or topic',pri:'Med',note:'Higher-order synthesis skill needed for FSA extended response'},
+  {dom:'Comp: Informational',ir:'Main idea & key details',std:'ELA.5.R.2.1',desc:'Explain the main idea and how relevant details support it in multi-paragraph informational texts',pri:'High',note:'CRITICAL GAP: 17 students at Grade 4 in informational text; lowest domain overall'},
+  {dom:'Comp: Informational',ir:'Text structure, features, author\'s craft',std:'ELA.5.R.2.2',desc:'Analyze text structure and explain how it supports the author\'s purpose',pri:'High',note:'Text structure analysis — compare/contrast, cause/effect — heavily tested on FSA'},
+  {dom:'Comp: Informational',ir:"Author's purpose & argument",std:'ELA.5.R.2.3',desc:"Explain the author's purpose and evaluate how evidence supports the argument",pri:'High',note:'Critical FSA skill; author\'s argument and evidence analysis at 5th grade level'},
+  {dom:'Comp: Overall',ir:'Inferencing & textual evidence',std:'ELA.5.R.3.3',desc:'Cite text evidence explicitly and explain inferences drawn from the text',pri:'High',note:'Central FSA skill — 13 students at Grade 4 in overall comprehension'},
+  {dom:'Comp: Overall',ir:'Summarizing & central idea',std:'ELA.5.R.3.4',desc:'Identify and explain the central idea using specific, relevant text evidence',pri:'High',note:'Top priority for Tier 2–3 students before May 6th test'},
+  {dom:'Comp: Overall',ir:'Comparing multiple texts',std:'ELA.5.R.3.5',desc:'Compare and contrast information from two or more texts on the same topic or theme',pri:'Med',note:'Multi-text synthesis required at 5th grade; important for FSA extended response'},
+];
+function renderStandards(){
+  const el=document.getElementById('tab-standards');
+  const gaps=STDS.filter(s=>s.pri==='High');
+  const strs=STDS.filter(s=>s.pri==='Low');
+  el.innerHTML=`
+  <div class="sec-title">Florida BEST Standards Alignment & Gaps</div>
+  <div class="sec-sub">iReady domains mapped to Florida BEST ELA 5th Grade Standards · Red = high need area</div>
+  <div class="two-col" style="margin-bottom:18px">
+    <div class="card"><div class="card-title"><div class="cicon" style="background:#ffe4e6">⚠️</div>Critical Gap Areas</div>
+      ${gaps.map(s=>`<div style="padding:9px 0;border-bottom:1px solid #fecdd3;display:flex;gap:9px;align-items:flex-start">
+        <span class="scode">${s.std}</span>
+        <div><div style="font-weight:800;font-size:.77rem">${s.dom}</div><div style="font-size:.7rem;color:#64748b;margin-top:2px">${s.note}</div></div></div>`).join('')}
+    </div>
+    <div class="card"><div class="card-title"><div class="cicon" style="background:#dcfce7">✅</div>Strength Areas</div>
+      ${strs.map(s=>`<div style="padding:9px 0;border-bottom:1px solid #bbf7d0;display:flex;gap:9px;align-items:flex-start">
+        <span class="scode" style="background:#dcfce7;color:#166534">${s.std}</span>
+        <div><div style="font-weight:800;font-size:.77rem">${s.dom}</div><div style="font-size:.7rem;color:#64748b;margin-top:2px">${s.note}</div></div></div>`).join('')}
+    </div>
+  </div>
+  <div class="card"><div class="card-title"><div class="cicon" style="background:#dbeafe">📋</div>iReady Domain → Florida BEST Standards Mapping</div>
+    <div class="stbl-wrap"><table class="stbl">
+      <thead><tr><th>iReady Domain</th><th>Sub-skill</th><th>FL BEST Standard</th><th>Description</th><th>Gap Level</th><th>Notes</th></tr></thead>
+      <tbody>${STDS.map(s=>`<tr>
+        <td style="font-weight:800">${s.dom}</td>
+        <td style="color:#64748b">${s.ir}</td>
+        <td><span class="scode">${s.std}</span></td>
+        <td>${s.desc}</td>
+        <td><span class="gpill ${s.pri==='High'?'ghi':s.pri==='Med'?'gmd':'glo'}">${s.pri}</span></td>
+        <td style="color:#64748b;font-size:.7rem">${s.note}</td>
+      </tr>`).join('')}</tbody>
+    </table></div>
+  </div>`;
+}
+
+// ══════════════════ INDIVIDUAL ══════════════════
+let filtStu=[...S].sort((a,b)=>a.name.localeCompare(b.name));
+function renderIndividual(){
+  const el=document.getElementById('tab-individual');
+  el.innerHTML=`
+  <div class="sec-title">Individual Student Profile</div>
+  <div class="sec-sub">Search for a student to view detailed diagnostic data, growth, and Florida BEST standards gaps</div>
+  <div class="srch-bar">
+    <input class="sinput" id="ssearch" placeholder="🔍  Search student name..." oninput="filterStu()">
+    <select class="sselect" id="sroom" onchange="filterStu()">
+      <option value="">All Homerooms</option>
+      <option>Andrews</option><option>Chin</option><option>Santiso</option>
+    </select>
+    <select class="sselect" id="stier" onchange="filterStu()">
+      <option value="">All Tiers</option><option value="3">Tier 3</option><option value="2">Tier 2</option><option value="1">Tier 1</option>
+    </select>
+  </div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap">
+    <div style="width:250px;flex-shrink:0"><div class="card" style="padding:12px">
+      <div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#64748b;margin-bottom:9px">Students</div>
+      <div id="slist" style="max-height:500px;overflow-y:auto;display:flex;flex-direction:column;gap:3px"></div>
+    </div></div>
+    <div style="flex:1;min-width:0"><div id="sprofile"><div class="no-sel"><div class="big">👤</div>Select a student to view their full profile</div></div></div>
+  </div>`;
+  renderStuList();
+}
+function filterStu(){
+  const q=(document.getElementById('ssearch')||{}).value?.toLowerCase()||'';
+  const room=(document.getElementById('sroom')||{}).value||'';
+  const tier=parseInt((document.getElementById('stier')||{}).value)||0;
+  filtStu=S.filter(s=>{
+    const mq=s.name.toLowerCase().includes(q)||s.first.toLowerCase().includes(q);
+    const mr=!room||s.homeroom===room;
+    const mt=!tier||getTier(s)===tier;
+    return mq&&mr&&mt;
+  }).sort((a,b)=>a.name.localeCompare(b.name));
+  renderStuList();
+}
+function renderStuList(){
+  const el=document.getElementById('slist');if(!el)return;
+  const tc2={1:'#15803d',2:'#d97706',3:'#be123c'};
+  el.innerHTML=filtStu.map(s=>{
+    const t=getTier(s),c=tc2[t];
+    return`<div class="slist-item" onclick="showProfile('${s.name.replace(/'/g,"\\'")}')">
+      <div style="width:26px;height:26px;border-radius:50%;background:${hColor(s.name)};display:flex;align-items:center;justify-content:center;color:#fff;font-size:.63rem;font-weight:800;flex-shrink:0">${getInits(s.name)}</div>
+      <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</div>
+      <div style="font-size:.63rem;color:#64748b">${s.homeroom!='nan'?s.homeroom:'–'}</div></div>
+      <span style="background:${c}22;color:${c};padding:1px 6px;border-radius:12px;font-size:.63rem;font-weight:900;flex-shrink:0">T${t}</span>
+    </div>`;
+  }).join('');
+}
+function showProfile(name){
+  const s=S.find(x=>x.name===name);if(!s)return;
+  const t=getTier(s),c=hColor(s.name),tc2=tcol(t);
+  const tl={1:'Tier 1 – On Track',2:'Tier 2 – Strategic Support',3:'Tier 3 – Intensive Support'}[t];
+  const gainC=s.gain>=30?'#15803d':s.gain>=15?'#0284c7':'#be123c';
+  const domCards=[
+    {title:'Phonics',p:s.phonics_placement,sc:s.phonics_score,c:'#6d28d9'},
+    {title:'Vocabulary',p:s.vocab_placement,sc:s.vocab_score,c:'#0284c7'},
+    {title:'Comprehension',p:s.comp_placement,sc:s.comp_score,c:'#0f766e'},
+    {title:'Comp: Literature',p:s.comp_lit_placement,sc:s.comp_lit_score,c:'#b45309'},
+    {title:'Comp: Info Text',p:s.comp_info_placement,sc:s.comp_info_score,c:'#be123c'},
+    {title:'High-Freq Words',p:s.hfw_placement,sc:null,c:'#065f46'},
+  ];
+  const relStds=STDS.filter(std=>{
+    const dm=std.dom.toLowerCase();
+    return(dm.includes('vocabulary')&&(isBelowGrade(s.vocab_placement)||s.vocab_placement==='Early 5'))
+      ||(dm.includes('informational')&&(isBelowGrade(s.comp_info_placement)||s.comp_info_placement==='Early 5'))
+      ||(dm.includes('literature')&&(isBelowGrade(s.comp_lit_placement)||s.comp_lit_placement==='Early 5'))
+      ||(dm.includes('overall')&&isBelowGrade(s.comp_placement));
+  }).slice(0,5);
+  document.getElementById('sprofile').innerHTML=`<div class="profile-wrap" style="display:block">
+    <div class="prof-hd">
+      <div class="prof-av" style="background:${c}">${getInits(s.name)}</div>
+      <div style="flex:1">
+        <div class="prof-name">${s.name}</div>
+        <div class="prof-meta">Homeroom: ${s.homeroom!='nan'?s.homeroom:'Unassigned'} · Grade 5 ELA · Lexile: ${s.lexile}</div>
+        <div class="prof-chips">
+          <span class="pchip" style="background:${tc2}22;color:${tc2}">${tl}</span>
+          <span class="pchip" style="background:#f0f9ff;color:#0369a1">${s.placement}</span>
+          <span class="pchip" style="background:#f5f3ff;color:#6d28d9">${s.percentile}th percentile</span>
+        </div>
+      </div>
+    </div>
+    <div class="pmet-grid">
+      <div class="pmet"><div class="pm-lbl">Scale Score</div><div class="pm-val" style="color:#1a1625">${s.overall_score}</div><div class="pm-sub">Spring YTD</div></div>
+      ${s.baseline_score?`<div class="pmet"><div class="pm-lbl">Baseline</div><div class="pm-val" style="color:#64748b">${s.baseline_score}</div><div class="pm-sub">Start of Year</div></div>`:''}
+      <div class="pmet"><div class="pm-lbl">Gain</div><div class="pm-val" style="color:${gainC}">${s.gain>0?'+':''}${s.gain}</div><div class="pm-sub">pts growth</div></div>
+      <div class="pmet"><div class="pm-lbl">% Typical</div><div class="pm-val" style="color:${s.pct_typical>=100?'#15803d':'#d97706'}">${s.pct_typical>0?Math.round(s.pct_typical):0}%</div><div class="pm-sub">growth target</div></div>
+      <div class="pmet"><div class="pm-lbl">% Stretch</div><div class="pm-val" style="color:#6d28d9">${s.pct_stretch>0?Math.round(s.pct_stretch):0}%</div><div class="pm-sub">stretch target</div></div>
+      <div class="pmet"><div class="pm-lbl">Grouping</div><div class="pm-val" style="color:#64748b">${s.grouping||'–'}</div><div class="pm-sub">of 5</div></div>
+    </div>
+    <div class="card-title" style="margin-bottom:10px"><div class="cicon" style="background:#dbeafe">📊</div>Domain Performance</div>
+    <div class="dom-grid">${domCards.map(d=>`<div class="dcard" style="border-color:${d.c}"><div class="dc-title">${d.title}</div><div class="dc-place" style="color:${d.c}">${d.p}</div>${d.sc?`<div class="dc-score">Score: ${d.sc}</div>`:''}</div>`).join('')}</div>
+    <div class="two-col">
+      <div>
+        <div class="card-title" style="margin-bottom:9px"><div class="cicon" style="background:#fef3c7">📋</div>Priority Standards Gaps</div>
+        ${relStds.length?relStds.map(std=>`<div class="std-match-item"><span class="scode">${std.std}</span><span style="font-size:.66rem;color:#64748b;text-align:right">${std.desc.slice(0,50)}…</span></div>`).join(''):'<div style="font-size:.73rem;color:#64748b;padding:8px 0">No critical standards gaps identified</div>'}
+      </div>
+      <div>
+        <div class="card-title" style="margin-bottom:9px"><div class="cicon" style="background:#dcfce7">📈</div>Growth Toward Targets</div>
+        ${[{l:'Typical Growth Target',pv:Math.min(s.pct_typical||0,200),c:'#0f766e'},{l:'Stretch Growth Target',pv:Math.min(s.pct_stretch||0,200),c:'#6d28d9'}].map(b=>`
+          <div class="gbr-row"><div class="gbr-lbl">${b.l}</div>
+          <div class="gbr-bg"><div class="gbr-fill" style="width:${Math.min(b.pv,100)}%;background:${b.c}">${Math.round(b.l==='Typical Growth Target'?s.pct_typical||0:s.pct_stretch||0)}%</div></div></div>`).join('')}
+        <div style="font-size:.68rem;color:#64748b;margin-top:7px">📌 Typical: +${s.typical_target} pts · Stretch: +${s.stretch_target} pts</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ══════════════════ TIERS ══════════════════
+function renderTiers(){
+  const el=document.getElementById('tab-tiers');
+  const tier3=S.filter(s=>getTier(s)===3);
+  const tier2=S.filter(s=>getTier(s)===2);
+  const tier1=S.filter(s=>getTier(s)===1);
+  function gaps5(s){
+    const g=[];
+    if(isBelowGrade(s.vocab_placement)||s.vocab_placement==='Grade 4')g.push('Vocabulary');
+    if(isBelowGrade(s.comp_placement)||s.comp_placement==='Grade 4')g.push('Comprehension');
+    if(isBelowGrade(s.comp_info_placement)||s.comp_info_placement==='Grade 4')g.push('Info Text');
+    if(isBelowGrade(s.comp_lit_placement)||s.comp_lit_placement==='Grade 4')g.push('Literature');
+    if(s.pct_typical<50&&s.pct_typical>0)g.push('Low Growth');
+    if(s.gain===0)g.push('No Gain');
+    return g;
+  }
+  function stuList(arr){
+    return arr.map(s=>`<li class="t-student">
+      <div class="t-av" style="background:${hColor(s.name)}">${getInits(s.name)}</div>
+      <div class="t-info">
+        <div class="t-sname">${s.name}</div>
+        <div class="t-room">${s.homeroom!='nan'?s.homeroom:'–'} · ${s.placement} · ${s.overall_score}</div>
+        ${gaps5(s).length?`<div class="t-gaps">${gaps5(s).map(g=>`<span class="gtag" style="background:#fee2e2;color:#9f1239">${g}</span>`).join('')}</div>`:''}
+      </div>
+      <div style="text-align:right;flex-shrink:0"><div style="font-weight:900;font-size:.73rem;color:${s.gain>0?'#15803d':'#be123c'}">${s.gain>0?'+':''}${s.gain}</div><div style="font-size:.6rem;color:#64748b">pts</div></div>
+    </li>`).join('');
+  }
+  const rooms=['Andrews','Chin','Santiso'];
+  el.innerHTML=`
+  <div class="sec-title">Tiered Support Placement</div>
+  <div class="sec-sub">Students grouped by intervention need based on placement and growth · 78 students total</div>
+  <div class="leg-row">
+    <div class="leg-item"><div class="leg-dot" style="background:#15803d"></div><strong>Tier 1</strong> – On/Above grade, meets growth targets</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#d97706"></div><strong>Tier 2</strong> – Approaching grade level or below growth targets</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#be123c"></div><strong>Tier 3</strong> – Below grade level (Grade 4 or lower)</div>
+  </div>
+  <div class="tier-grid">
+    <div class="tcard t3"><div class="t-hd"><div class="t-num">3</div><div><div class="t-title">Intensive Support</div><div class="t-count">${tier3.length} students · Below grade level</div></div></div>
+      <ul class="t-slist">${stuList(tier3)}</ul></div>
+    <div class="tcard t2"><div class="t-hd"><div class="t-num">2</div><div><div class="t-title">Strategic Support</div><div class="t-count">${tier2.length} students · Below growth targets</div></div></div>
+      <ul class="t-slist">${stuList(tier2)}</ul></div>
+    <div class="tcard t1"><div class="t-hd"><div class="t-num">1</div><div><div class="t-title">On Track / Enrichment</div><div class="t-count">${tier1.length} students · Meeting/exceeding goals</div></div></div>
+      <ul class="t-slist" style="max-height:280px;overflow-y:auto">${stuList(tier1)}</ul></div>
+  </div>
+  <div class="card"><div class="card-title"><div class="cicon" style="background:#f0fdf4">📊</div>Tier Summary by Homeroom</div>
+    <table class="stbl2"><thead><tr><th>Homeroom</th><th>Total</th><th>Tier 1</th><th>Tier 2</th><th>Tier 3</th><th>Avg Score</th><th>Avg Gain</th></tr></thead>
+    <tbody>${rooms.map(r=>{const rs=S.filter(s=>s.homeroom===r);const t1c=rs.filter(s=>getTier(s)===1).length,t2c=rs.filter(s=>getTier(s)===2).length,t3c=rs.filter(s=>getTier(s)===3).length;
+      return`<tr>
+        <td style="font-weight:800"><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:${RCOL[r]};margin-right:5px;vertical-align:middle"></span>${r}</td>
+        <td>${rs.length}</td>
+        <td style="color:#15803d;font-weight:800">${t1c} (${pct(t1c,rs.length)}%)</td>
+        <td style="color:#d97706;font-weight:800">${t2c} (${pct(t2c,rs.length)}%)</td>
+        <td style="color:#be123c;font-weight:800">${t3c} (${pct(t3c,rs.length)}%)</td>
+        <td style="font-weight:800">${avg(rs,'overall_score')}</td>
+        <td style="font-weight:800;color:#15803d">+${avg(rs,'gain')}</td>
+      </tr>`;}).join('')}</tbody></table>
+  </div>`;
+}
+
+// ══════════════════ ACTION PLAN ══════════════════
+function renderAction(){
+  const el=document.getElementById('tab-action');
+  const tier3=S.filter(s=>getTier(s)===3);
+  const tier2=S.filter(s=>getTier(s)===2);
+  const tier1=S.filter(s=>getTier(s)===1);
+  const plans=[
+    {tier:3,title:'Tier 3 — Intensive Intervention (Daily, 30–45 min)',students:tier3,
+      focus:['ELA.5.R.2.1 – Main idea & supporting details (Informational)','ELA.5.R.3.3 – Citing text evidence for inferences','ELA.5.R.3.1 – Academic vocabulary in context','ELA.5.R.2.3 – Author\'s purpose & argument evaluation','Fluency development at 700–900L range for struggling readers'],
+      strategies:['Daily small group (2–3 students) with reading specialist or lead interventionist','Urgent priority: Jayden B. (Grade 3, Score 507, Grade 1 comprehension) — refer for ESE evaluation immediately','Structured literacy: explicit instruction for Jayden B. (phonics at Grade 3 level) and Demirah T. (Grade 3 vocab)','iReady daily lesson path at assigned Grouping (1–3); monitor completion, accuracy, and time-on-task','Close reading with teacher modeling: annotation, graphic organizers for main idea & key details','Targeted vocabulary: 5 academic words/week using Frayer Model at student instructional level','Frequent progress monitoring: teacher-made probes + bi-weekly iReady diagnostic check','Parent contact: weekly reading log, 20 min/night home reading at instructional Lexile level','Conferencing: set individual growth goals tied to % progress to typical growth target'],
+      resources:['iReady assigned lessons (Groupings 1–3)','FCRR intervention activities (comprehension focus)','Decodable/instructional readers 590–900L','Florida BEST: RI.5.1–5.3, RL.5.1–5.3']},
+    {tier:2,title:'Tier 2 — Strategic Support (3x/week, 20–30 min)',students:tier2,
+      focus:['ELA.5.R.2.1 – Informational text main idea & multi-paragraph analysis','ELA.5.R.2.2 – Text structure: compare/contrast, problem/solution, cause/effect','ELA.5.R.3.1 – Context clues & academic vocabulary in informational texts','ELA.5.R.3.3 – Citing explicit & implicit evidence from complex texts','ELA.5.R.3.4 – Central idea with relevant supporting evidence'],
+      strategies:['Small group (4–6) 3x/week during WIN/flex time','2x/week FSA-formatted practice passages with focus on informational text structures','Vocabulary: academic word wall, semantic mapping, and context clue frames','Annotation strategy: STOP & ANNOTATE during all independent reading','iReady: ensure 45+ min/week; use teacher dashboard to monitor lesson path completion','Growth goal check-ins: review % progress to typical growth target weekly','Monitor 0-gain students (Kingston A., Murilo D., Tyler C., etc.) — investigate engagement','Graphic organizers: Main Idea/Detail frame, TREE paragraph for text-based writing','Flexible regrouping bi-weekly based on ongoing progress data'],
+      resources:['iReady assigned lessons (Groupings 3–4)','Newsela (Lexile-adjusted informational texts 900–1000L)','ReadWorks.org paired passages','FCRR comprehension extension activities']},
+    {tier:1,title:'Tier 1 — Core Instruction + Enrichment (Daily + Extension)',students:tier1,
+      focus:['ELA.5.R.1.1–1.3 – Literary analysis at Grade 6+ complexity','ELA.5.R.2.1–2.3 – Complex informational text at 1100L+','ELA.5.R.3.3–3.5 – Synthesis across multiple texts & sources','Writing to sources: argument, informational, & narrative at grade level'],
+      strategies:['Complex whole-class text study with tiered discussion questions','Literature circles and independent reading at target Lexile (1050–1300L+)','Research-based projects using primary and secondary informational sources','iReady: maintain 45+ min/week; encourage stretch goal lessons for Grouping 5 students','Argument writing: analyze author\'s claim and evidence; students write counter-arguments','FSA test prep: multi-step inference questions, extended response using RACE or STEAL strategies','Peer tutoring: pair Tier 1 students with Tier 2 partners for fluency and vocabulary support','Gifted extension: Zarif H., Devakinandan K., Erik C. — advanced literary criticism and synthesis projects'],
+      resources:['iReady enrichment lessons (Grouping 5)','Epic! Books digital library (1100L+)','Florida BEST advanced standards','FCRR extension for above-grade readers']},
+  ];
+  el.innerHTML=`
+  <div class="sec-title">Action Plan — Tiered Supports</div>
+  <div class="sec-sub">Research-aligned intervention strategies mapped to Florida BEST ELA 5th Grade Standards · FSA: May 6, 2026</div>
+  ${plans.map(p=>`<div class="acard t${p.tier}">
+    <div class="a-hd"><span class="a-badge">Tier ${p.tier}</span><div class="a-title">${p.title}</div></div>
+    <div style="margin-bottom:12px">
+      <div class="a-sec">📌 Students in This Tier</div>
+      <div class="a-students">${p.students.map(s=>`<span class="schip" style="background:${hColor(s.name)}">${s.name}</span>`).join('')}</div>
+      <div style="font-size:.7rem;color:#64748b;margin-top:5px">Total: ${p.students.length} students</div>
+    </div>
+    <div class="a-body">
+      <div><div class="a-sec">🎯 Priority Standards Focus</div><ul class="a-list">${p.focus.map(f=>`<li>${f}</li>`).join('')}</ul></div>
+      <div><div class="a-sec">🛠 Intervention Strategies</div><ul class="a-list">${p.strategies.map(s=>`<li>${s}</li>`).join('')}</ul></div>
+    </div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid ${tcol(p.tier)}33">
+      <div class="a-sec">📚 Recommended Resources</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px">${p.resources.map(r=>`<span style="background:${tcol(p.tier)}15;color:${tcol(p.tier)};padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:700">${r}</span>`).join('')}</div>
+    </div>
+  </div>`).join('')}`;
+}
+
+// ══════════════════ INIT ══════════════════
+const renders={overview:renderOverview,class:renderClass,standards:renderStandards,individual:renderIndividual,tiers:renderTiers,action:renderAction};
+renderOverview();
+document.getElementById('tab-overview').dataset.rendered='1';
+</script>
+</body>
+</html>

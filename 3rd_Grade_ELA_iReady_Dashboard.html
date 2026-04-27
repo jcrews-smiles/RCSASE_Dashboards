@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3rd Grade ELA iReady Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1e3c;
+    --navy2: #162849;
+    --teal: #0d9488;
+    --teal-light: #5eead4;
+    --amber: #f59e0b;
+    --amber-light: #fde68a;
+    --rose: #e11d48;
+    --rose-light: #fecdd3;
+    --violet: #7c3aed;
+    --violet-light: #ddd6fe;
+    --sky: #0ea5e9;
+    --sky-light: #bae6fd;
+    --green: #10b981;
+    --green-light: #a7f3d0;
+    --slate: #64748b;
+    --cream: #f8f5f0;
+    --white: #ffffff;
+    --t1-color: #10b981;
+    --t2-color: #f59e0b;
+    --t3-color: #e11d48;
+    --card-shadow: 0 4px 24px rgba(15,30,60,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--navy);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,.35);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .header-title {
+    display: flex;
+    flex-direction: column;
+  }
+  .header-title h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.45rem;
+    letter-spacing: .3px;
+    line-height: 1.2;
+  }
+  .header-title span {
+    font-size: .75rem;
+    color: var(--teal-light);
+    font-weight: 500;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .countdown-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 10px;
+    padding: 10px 20px;
+  }
+  .countdown-label {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--teal-light);
+    font-weight: 600;
+  }
+  .countdown-days {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem;
+    line-height: 1;
+    color: var(--amber);
+  }
+  .countdown-sub {
+    font-size: .65rem;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+  .countdown-date {
+    font-size: .75rem;
+    color: var(--amber-light);
+    font-weight: 600;
+  }
+
+  /* ── NAV TABS ── */
+  .tab-nav {
+    display: flex;
+    gap: 0;
+    background: var(--navy2);
+    padding: 0 32px;
+    border-bottom: 2px solid rgba(255,255,255,.06);
+    overflow-x: auto;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    padding: 11px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .82rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all .2s;
+    white-space: nowrap;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+  }
+  .tab-btn:hover { color: var(--white); }
+  .tab-btn.active {
+    color: var(--teal-light);
+    border-bottom-color: var(--teal);
+  }
+
+  /* ── MAIN ── */
+  main { padding: 28px 32px; max-width: 1600px; margin: 0 auto; }
+  .tab-pane { display: none; animation: fadeIn .3s ease; }
+  .tab-pane.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: .82rem;
+    color: var(--slate);
+    margin-bottom: 22px;
+  }
+
+  /* ── STAT CARDS ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: var(--card-shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--accent, var(--teal));
+    border-radius: 12px 12px 0 0;
+  }
+  .stat-label {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: var(--slate);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .stat-detail { font-size: .75rem; color: var(--slate); }
+  .stat-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: .68rem;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+
+  /* ── GRID LAYOUTS ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  @media (max-width: 960px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 22px 24px;
+    box-shadow: var(--card-shadow);
+  }
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .85rem;
+    flex-shrink: 0;
+  }
+
+  /* ── PLACEMENT BAR ── */
+  .placement-bar-wrap { margin-bottom: 10px; }
+  .placement-label { font-size: .75rem; font-weight: 600; margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .placement-bar-bg { background: #e2e8f0; border-radius: 6px; height: 10px; overflow: hidden; }
+  .placement-bar-fill { height: 100%; border-radius: 6px; transition: width .8s ease; }
+
+  /* ── DOMAIN RADAR / BARS ── */
+  .domain-bars { display: flex; flex-direction: column; gap: 10px; }
+  .domain-row { }
+  .domain-name { font-size: .75rem; font-weight: 600; color: var(--slate); margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .domain-bar-bg { background: #e2e8f0; border-radius: 6px; height: 22px; position: relative; overflow: hidden; }
+  .domain-bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: .65rem; color: white; font-weight: 700; transition: width .8s; }
+  .domain-bar-benchmark { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--rose); }
+
+  /* ── STANDARDS TABLE ── */
+  .standards-table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+  .standards-table th {
+    background: var(--navy);
+    color: white;
+    padding: 9px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: .7rem;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+  .standards-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+  .standards-table tr:hover td { background: #f8fafc; }
+  .std-code {
+    font-family: monospace;
+    font-size: .7rem;
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-weight: 700;
+  }
+  .gap-pill {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-size: .65rem;
+    font-weight: 700;
+  }
+  .gap-high { background: #fecdd3; color: #be123c; }
+  .gap-med { background: #fde68a; color: #92400e; }
+  .gap-low { background: #bbf7d0; color: #065f46; }
+
+  /* ── STUDENT TABLE ── */
+  .student-table-wrap { overflow-x: auto; }
+  .student-table { width: 100%; border-collapse: collapse; font-size: .76rem; }
+  .student-table th {
+    background: var(--navy);
+    color: var(--white);
+    padding: 9px 11px;
+    text-align: left;
+    font-size: .68rem;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+  .student-table th:hover { background: #1e3a5f; }
+  .student-table td { padding: 8px 11px; border-bottom: 1px solid #f1f5f9; white-space: nowrap; }
+  .student-table tr:hover td { background: #f8fafc; }
+  .placement-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: .66rem;
+    font-weight: 700;
+  }
+  .pt-g4 { background: #dbeafe; color: #1e40af; }
+  .pt-l3 { background: #bbf7d0; color: #065f46; }
+  .pt-m3 { background: #d1fae5; color: #065f46; }
+  .pt-e3 { background: #fef9c3; color: #854d0e; }
+  .pt-g2 { background: #ffe4e6; color: #9f1239; }
+  .pt-g1 { background: #fce7f3; color: #831843; }
+  .pt-sp { background: #e0e7ff; color: #3730a3; }
+
+  /* ── GROWTH BAR ── */
+  .growth-bar { display: inline-flex; align-items: center; gap: 5px; }
+  .growth-fill { height: 8px; border-radius: 4px; background: var(--teal); }
+  .growth-pct { font-size: .68rem; font-weight: 700; color: var(--slate); }
+
+  /* ── TIER SECTION ── */
+  .tier-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 24px; }
+  @media (max-width: 900px) { .tier-grid { grid-template-columns: 1fr; } }
+  .tier-card {
+    border-radius: 14px;
+    padding: 20px 22px;
+    box-shadow: var(--card-shadow);
+    border-top: 5px solid;
+  }
+  .tier-card.t1 { background: #f0fdf4; border-color: var(--green); }
+  .tier-card.t2 { background: #fffbeb; border-color: var(--amber); }
+  .tier-card.t3 { background: #fff1f2; border-color: var(--rose); }
+  .tier-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .tier-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .t1 .tier-num { background: var(--green); color: white; }
+  .t2 .tier-num { background: var(--amber); color: white; }
+  .t3 .tier-num { background: var(--rose); color: white; }
+  .tier-title { font-family: 'DM Serif Display', serif; font-size: 1rem; }
+  .tier-count { font-size: .8rem; color: var(--slate); margin-top: 1px; }
+
+  .tier-student-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .tier-student {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .tier-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: .82rem;
+    flex-shrink: 0;
+    color: white;
+  }
+  .tier-info { flex: 1; min-width: 0; }
+  .tier-sname { font-weight: 700; font-size: .8rem; }
+  .tier-room { font-size: .68rem; color: var(--slate); }
+  .tier-gaps { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .gap-tag {
+    font-size: .62rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  /* ── ACTION PLAN ── */
+  .action-card {
+    background: white;
+    border-radius: 14px;
+    padding: 22px 24px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 18px;
+    border-left: 5px solid;
+  }
+  .action-card.t3 { border-color: var(--rose); }
+  .action-card.t2 { border-color: var(--amber); }
+  .action-card.t1 { border-color: var(--green); }
+  .action-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .action-tier-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+  }
+  .t3 .action-tier-badge { background: var(--rose); color: white; }
+  .t2 .action-tier-badge { background: var(--amber); color: white; }
+  .t1 .action-tier-badge { background: var(--green); color: white; }
+  .action-title { font-family: 'DM Serif Display', serif; font-size: 1.08rem; }
+  .action-body { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 800px) { .action-body { grid-template-columns: 1fr; } }
+  .action-section-title {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    font-weight: 700;
+    color: var(--slate);
+    margin-bottom: 8px;
+  }
+  .action-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .action-list li {
+    font-size: .78rem;
+    display: flex;
+    gap: 8px;
+    line-height: 1.4;
+  }
+  .action-list li::before {
+    content: '▸';
+    color: var(--teal);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .action-students { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .student-chip {
+    background: var(--navy);
+    color: white;
+    border-radius: 20px;
+    padding: 4px 11px;
+    font-size: .7rem;
+    font-weight: 600;
+  }
+
+  /* ── INDIVIDUAL STUDENT ── */
+  .student-search-wrap { margin-bottom: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .search-input {
+    flex: 1; min-width: 220px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .88rem;
+    outline: none;
+    transition: border .2s;
+  }
+  .search-input:focus { border-color: var(--teal); }
+  .filter-select {
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    outline: none;
+    background: white;
+    cursor: pointer;
+  }
+  .student-profile {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: var(--card-shadow);
+    display: none;
+  }
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f1f5f9;
+    flex-wrap: wrap;
+  }
+  .profile-avatar {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: white;
+    flex-shrink: 0;
+  }
+  .profile-name { font-family: 'DM Serif Display', serif; font-size: 1.5rem; }
+  .profile-meta { font-size: .8rem; color: var(--slate); margin-top: 4px; }
+  .profile-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .profile-chip {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: .72rem;
+    font-weight: 700;
+  }
+
+  .profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .profile-metric {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .pm-label { font-size: .65rem; text-transform: uppercase; letter-spacing: .7px; color: var(--slate); font-weight: 600; margin-bottom: 6px; }
+  .pm-value { font-family: 'DM Serif Display', serif; font-size: 1.6rem; line-height: 1; }
+  .pm-sub { font-size: .68rem; color: var(--slate); margin-top: 3px; }
+
+  .domain-profile { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  @media (max-width: 700px) { .domain-profile { grid-template-columns: 1fr; } }
+  .domain-pcard {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 14px 16px;
+    border-left: 4px solid;
+  }
+  .dp-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--slate); margin-bottom: 6px; }
+  .dp-placement { font-weight: 700; font-size: .88rem; margin-bottom: 4px; }
+  .dp-score { font-size: .75rem; color: var(--slate); }
+
+  .standards-match { margin-top: 6px; }
+  .std-match-item { font-size: .7rem; padding: 3px 0; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+
+  .growth-chart-wrap { margin-bottom: 20px; }
+  .growth-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .gbr-label { font-size: .72rem; font-weight: 600; width: 140px; flex-shrink: 0; color: var(--slate); }
+  .gbr-bar-wrap { flex: 1; }
+  .gbr-bg { background: #e2e8f0; border-radius: 6px; height: 18px; position: relative; overflow: hidden; }
+  .gbr-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; font-size: .62rem; color: white; font-weight: 700; }
+  .gbr-target { position: absolute; top: 0; bottom: 0; width: 2px; background: #334155; }
+
+  .no-selection {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--slate);
+    font-size: .9rem;
+  }
+  .no-selection .big { font-size: 2.5rem; margin-bottom: 10px; }
+
+  /* ── FILTER CONTROLS ── */
+  .controls-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; align-items: center; }
+  .ctrl-label { font-size: .75rem; font-weight: 600; color: var(--slate); }
+
+  /* ── RESPONSIVE TABLE ── */
+  .rtable-wrap { overflow-x: auto; border-radius: 12px; box-shadow: var(--card-shadow); }
+
+  /* ── HOMEROOM VIEW ── */
+  .homeroom-tabs { display: flex; gap: 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 22px; flex-wrap: wrap; }
+  .hr-tab {
+    padding: 9px 20px;
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .8rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--slate);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all .2s;
+  }
+  .hr-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+  .hr-tab:hover { color: var(--navy); }
+
+  /* Progress arc */
+  .arc-wrap { position: relative; width: 90px; height: 90px; margin: 0 auto; }
+  .arc-svg { transform: rotate(-90deg); }
+  .arc-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; }
+  .arc-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+  .arc-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .arc-pct { font-family: 'DM Serif Display', serif; font-size: 1.2rem; line-height: 1; }
+  .arc-label { font-size: .55rem; font-weight: 700; text-transform: uppercase; color: var(--slate); letter-spacing: .5px; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+
+  .legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: .72rem; color: var(--slate); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-title">
+      <h1>3rd Grade ELA iReady Dashboard</h1>
+      <span>YTD Diagnostic Analysis · Florida BEST Standards Alignment</span>
+    </div>
+    <div class="countdown-box">
+      <div>
+        <div class="countdown-label">Days Until FSA</div>
+        <div class="countdown-date">May 1, 2026</div>
+      </div>
+      <div>
+        <div class="countdown-days" id="cdown-days">--</div>
+        <div class="countdown-sub">days remaining</div>
+      </div>
+    </div>
+  </div>
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('overview')">📊 Overview</button>
+    <button class="tab-btn" onclick="showTab('class')">🏫 Class View</button>
+    <button class="tab-btn" onclick="showTab('standards')">📋 Standards & Gaps</button>
+    <button class="tab-btn" onclick="showTab('individual')">👤 Individual</button>
+    <button class="tab-btn" onclick="showTab('tiers')">🎯 Tier Placement</button>
+    <button class="tab-btn" onclick="showTab('action')">📝 Action Plan</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ═══════════════ OVERVIEW ═══════════════ -->
+<div id="tab-overview" class="tab-pane active">
+  <div class="section-title">School Overview</div>
+  <div class="section-sub">3rd Grade · All Homerooms · YTD Spring Diagnostic Results (83 students)</div>
+
+  <div class="stat-grid" id="overview-stats"></div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#dbeafe">📊</div> Overall Placement Distribution</div>
+      <div id="placement-dist"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#d1fae5">📈</div> Growth Summary (Baseline → Spring)</div>
+      <div id="growth-summary"></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#fef3c7">🎯</div> Domain Performance (% At/Above Grade)</div>
+      <div class="domain-bars" id="domain-overview"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#ede9fe">⚡</div> Top Growth Stars (Gain Points)</div>
+      <div id="growth-stars"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CLASS VIEW ═══════════════ -->
+<div id="tab-class" class="tab-pane">
+  <div class="section-title">Class View by Homeroom</div>
+  <div class="section-sub">Compare performance across all four 3rd grade classrooms</div>
+  <div class="homeroom-tabs" id="hr-tabs"></div>
+  <div id="hr-content"></div>
+</div>
+
+<!-- ═══════════════ STANDARDS ═══════════════ -->
+<div id="tab-standards" class="tab-pane">
+  <div class="section-title">Florida BEST Standards Alignment & Gaps</div>
+  <div class="section-sub">iReady domains mapped to Florida BEST ELA standards (LAFS.3) · Red = high need</div>
+
+  <div class="two-col" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#ffe4e6">⚠️</div> Critical Gap Areas</div>
+      <div id="gap-summary"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#dcfce7">✅</div> Strength Areas</div>
+      <div id="strength-summary"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon" style="background:#dbeafe">📋</div> iReady Domain → Florida BEST Standards Mapping</div>
+    <div class="student-table-wrap">
+      <table class="standards-table" id="standards-table"></table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ INDIVIDUAL ═══════════════ -->
+<div id="tab-individual" class="tab-pane">
+  <div class="section-title">Individual Student Profile</div>
+  <div class="section-sub">Search for a student to view detailed diagnostic data, growth, and standards gaps</div>
+  <div class="student-search-wrap">
+    <input type="text" class="search-input" id="student-search" placeholder="🔍  Search student name..." oninput="filterStudentList()">
+    <select class="filter-select" id="room-filter" onchange="filterStudentList()">
+      <option value="">All Homerooms</option>
+      <option>Fortun</option>
+      <option>Osborne</option>
+      <option>Rodriguez</option>
+      <option>Brown</option>
+    </select>
+    <select class="filter-select" id="tier-filter" onchange="filterStudentList()">
+      <option value="">All Tiers</option>
+      <option value="3">Tier 3</option>
+      <option value="2">Tier 2</option>
+      <option value="1">Tier 1</option>
+    </select>
+  </div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;">
+    <div style="width:260px;flex-shrink:0;">
+      <div class="card" style="padding:14px;">
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--slate);margin-bottom:10px;">Students</div>
+        <div id="student-list" style="max-height:520px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;"></div>
+      </div>
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div id="student-profile-wrap">
+        <div class="no-selection">
+          <div class="big">👤</div>
+          Select a student to view their full profile
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ TIERS ═══════════════ -->
+<div id="tab-tiers" class="tab-pane">
+  <div class="section-title">Tiered Support Placement</div>
+  <div class="section-sub">Students grouped by intervention need based on placement, growth, and reading difficulty indicators</div>
+  <div class="legend-row">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div><strong>Tier 1</strong> – On/Above grade, meets growth targets</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div><strong>Tier 2</strong> – Approaching grade level or below growth targets</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--rose)"></div><strong>Tier 3</strong> – Below grade level, reading difficulty flagged</div>
+  </div>
+  <div class="tier-grid" id="tier-grid"></div>
+  <div class="card" style="margin-top:8px;">
+    <div class="card-title"><div class="icon" style="background:#f0fdf4">📊</div> Tier Summary by Homeroom</div>
+    <div id="tier-by-room"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ ACTION PLAN ═══════════════ -->
+<div id="tab-action" class="tab-pane">
+  <div class="section-title">Action Plan — Tiered Supports</div>
+  <div class="section-sub">Research-aligned intervention strategies mapped to Florida BEST standards · Test Date: May 1, 2026</div>
+  <div id="action-plan"></div>
+</div>
+
+</main>
+
+<script>
+// ══════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════
+const STUDENTS = [{"name":"Inaaya A.","first":"Inaaya","homeroom":"Fortun","overall_score":553,"baseline_score":495,"placement":"Mid 3","percentile":67,"lexile":"800L","gain":58,"pct_typical":223.0,"pct_stretch":145.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":553,"vocab_placement":"Mid 3","comp_score":553,"comp_placement":"Mid 3","comp_lit_score":570,"comp_lit_placement":"Late 3","comp_info_score":535,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Sai Dhruva A.","first":"Sai Dhruva","homeroom":"Osborne","overall_score":619,"baseline_score":581,"placement":"Grade 4","percentile":98,"lexile":"1100L","gain":38,"pct_typical":224.0,"pct_stretch":181.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":619,"vocab_placement":"Grade 4","comp_score":620,"comp_placement":"Grade 4","comp_lit_score":613,"comp_lit_placement":"Grade 4","comp_info_score":627,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Abigail A.","first":"Abigail","homeroom":"Fortun","overall_score":487,"baseline_score":420,"placement":"Grade 2","percentile":25,"lexile":"500L","gain":67,"pct_typical":203.0,"pct_stretch":106.0,"typical_target":33,"stretch_target":63,"phonics_score":464,"phonics_placement":"Grade 1","vocab_score":522,"vocab_placement":"Early 3","comp_score":479,"comp_placement":"Grade 2","comp_lit_score":481,"comp_lit_placement":"Grade 2","comp_info_score":476,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"Y","grouping":2,"mid_grade_score":545},{"name":"Kowsar A.","first":"Kowsar","homeroom":"Fortun","overall_score":532,"baseline_score":512,"placement":"Early 3","percentile":52,"lexile":"705L","gain":20,"pct_typical":91.0,"pct_stretch":51.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":529,"vocab_placement":"Early 3","comp_score":534,"comp_placement":"Early 3","comp_lit_score":558,"comp_lit_placement":"Mid 3","comp_info_score":511,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Oliver B.","first":"Oliver","homeroom":"Fortun","overall_score":589,"baseline_score":551,"placement":"Late 3","percentile":89,"lexile":"965L","gain":38,"pct_typical":224.0,"pct_stretch":181.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":548,"vocab_placement":"Mid 3","comp_score":610,"comp_placement":"Grade 4","comp_lit_score":598,"comp_lit_placement":"Late 3","comp_info_score":620,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Gideon B.","first":"Gideon","homeroom":"Rodriguez","overall_score":582,"baseline_score":491,"placement":"Late 3","percentile":86,"lexile":"930L","gain":91,"pct_typical":350.0,"pct_stretch":228.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":578,"vocab_placement":"Late 3","comp_score":584,"comp_placement":"Late 3","comp_lit_score":588,"comp_lit_placement":"Late 3","comp_info_score":579,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Kavin C.","first":"Kavin","homeroom":"Fortun","overall_score":549,"baseline_score":566,"placement":"Mid 3","percentile":65,"lexile":"780L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":591,"vocab_placement":"Late 3","comp_score":529,"comp_placement":"Early 3","comp_lit_score":535,"comp_lit_placement":"Early 3","comp_info_score":524,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Sophia C.","first":"Sophia","homeroom":"Fortun","overall_score":547,"baseline_score":505,"placement":"Mid 3","percentile":63,"lexile":"770L","gain":42,"pct_typical":162.0,"pct_stretch":105.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":543,"vocab_placement":"Early 3","comp_score":549,"comp_placement":"Mid 3","comp_lit_score":575,"comp_lit_placement":"Late 3","comp_info_score":523,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Srikarthikeya C.","first":"Srikarthikeya","homeroom":"Osborne","overall_score":557,"baseline_score":512,"placement":"Mid 3","percentile":70,"lexile":"820L","gain":45,"pct_typical":205.0,"pct_stretch":115.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":604,"vocab_placement":"Grade 4","comp_score":530,"comp_placement":"Early 3","comp_lit_score":542,"comp_lit_placement":"Mid 3","comp_info_score":519,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Abraham D.","first":"Abraham","homeroom":"Rodriguez","overall_score":626,"baseline_score":566,"placement":"Grade 4","percentile":98,"lexile":"1130L","gain":60,"pct_typical":353.0,"pct_stretch":286.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":614,"vocab_placement":"Grade 4","comp_score":632,"comp_placement":"Grade 5","comp_lit_score":640,"comp_lit_placement":"Grade 5","comp_info_score":624,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Harlow D.","first":"Harlow","homeroom":"Osborne","overall_score":573,"baseline_score":530,"placement":"Late 3","percentile":81,"lexile":"890L","gain":43,"pct_typical":195.0,"pct_stretch":110.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":555,"vocab_placement":"Mid 3","comp_score":580,"comp_placement":"Late 3","comp_lit_score":554,"comp_lit_placement":"Mid 3","comp_info_score":611,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Harbor D.","first":"Harbor","homeroom":"Rodriguez","overall_score":562,"baseline_score":514,"placement":"Late 3","percentile":73,"lexile":"840L","gain":48,"pct_typical":218.0,"pct_stretch":123.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":574,"vocab_placement":"Late 3","comp_score":557,"comp_placement":"Mid 3","comp_lit_score":581,"comp_lit_placement":"Late 3","comp_info_score":530,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Braydon D.","first":"Braydon","homeroom":"Fortun","overall_score":530,"baseline_score":491,"placement":"Early 3","percentile":50,"lexile":"695L","gain":39,"pct_typical":150.0,"pct_stretch":98.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":543,"vocab_placement":"Early 3","comp_score":523,"comp_placement":"Early 3","comp_lit_score":534,"comp_lit_placement":"Early 3","comp_info_score":513,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Asim E.","first":"Asim","homeroom":"Osborne","overall_score":599,"baseline_score":541,"placement":"Late 3","percentile":93,"lexile":"1010L","gain":58,"pct_typical":264.0,"pct_stretch":149.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":600,"vocab_placement":"Late 3","comp_score":599,"comp_placement":"Late 3","comp_lit_score":614,"comp_lit_placement":"Grade 4","comp_info_score":582,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Aiden F.","first":"Aiden","homeroom":"Brown","overall_score":575,"baseline_score":565,"placement":"Late 3","percentile":82,"lexile":"900L","gain":10,"pct_typical":59.0,"pct_stretch":48.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":576,"vocab_placement":"Late 3","comp_score":574,"comp_placement":"Late 3","comp_lit_score":619,"comp_lit_placement":"Grade 4","comp_info_score":521,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Lavínia F.","first":"Lavínia","homeroom":"Fortun","overall_score":557,"baseline_score":469,"placement":"Mid 3","percentile":70,"lexile":"820L","gain":88,"pct_typical":267.0,"pct_stretch":140.0,"typical_target":33,"stretch_target":63,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":599,"vocab_placement":"Late 3","comp_score":537,"comp_placement":"Early 3","comp_lit_score":530,"comp_lit_placement":"Early 3","comp_info_score":542,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Elizabeth F.","first":"Elizabeth","homeroom":"Brown","overall_score":594,"baseline_score":603,"placement":"Late 3","percentile":91,"lexile":"985L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":588,"vocab_placement":"Late 3","comp_score":598,"comp_placement":"Late 3","comp_lit_score":596,"comp_lit_placement":"Late 3","comp_info_score":600,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Vincenzo F.","first":"Vincenzo","homeroom":"Fortun","overall_score":572,"baseline_score":503,"placement":"Late 3","percentile":80,"lexile":"885L","gain":69,"pct_typical":265.0,"pct_stretch":173.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":567,"vocab_placement":"Late 3","comp_score":574,"comp_placement":"Late 3","comp_lit_score":572,"comp_lit_placement":"Late 3","comp_info_score":576,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Perola G.","first":"Perola","homeroom":"Rodriguez","overall_score":499,"baseline_score":492,"placement":"Grade 2","percentile":30,"lexile":"555L","gain":7,"pct_typical":27.0,"pct_stretch":18.0,"typical_target":26,"stretch_target":40,"phonics_score":523,"phonics_placement":"Early 3","vocab_score":527,"vocab_placement":"Early 3","comp_score":475,"comp_placement":"Grade 1","comp_lit_score":476,"comp_lit_placement":"Grade 2","comp_info_score":474,"comp_info_placement":"Grade 1","hfw_placement":"Surpassed Level","reading_difficulty":"Y","grouping":4,"mid_grade_score":545},{"name":"Sammy G.","first":"Sammy","homeroom":"Brown","overall_score":516,"baseline_score":489,"placement":"Early 3","percentile":39,"lexile":"630L","gain":27,"pct_typical":104.0,"pct_stretch":68.0,"typical_target":26,"stretch_target":40,"phonics_score":551,"phonics_placement":"Max Score","vocab_score":550,"vocab_placement":"Mid 3","comp_score":485,"comp_placement":"Grade 2","comp_lit_score":485,"comp_lit_placement":"Grade 2","comp_info_score":486,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":4,"mid_grade_score":545},{"name":"Miel G.","first":"Miel","homeroom":"Brown","overall_score":529,"baseline_score":513,"placement":"Early 3","percentile":50,"lexile":"690L","gain":16,"pct_typical":73.0,"pct_stretch":41.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":548,"vocab_placement":"Mid 3","comp_score":519,"comp_placement":"Early 3","comp_lit_score":515,"comp_lit_placement":"Early 3","comp_info_score":522,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Ilyas G.","first":"Ilyas","homeroom":"Brown","overall_score":575,"baseline_score":534,"placement":"Late 3","percentile":82,"lexile":"900L","gain":41,"pct_typical":186.0,"pct_stretch":105.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":548,"vocab_placement":"Mid 3","comp_score":589,"comp_placement":"Late 3","comp_lit_score":593,"comp_lit_placement":"Late 3","comp_info_score":586,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Riaan H.","first":"Riaan","homeroom":"Osborne","overall_score":568,"baseline_score":551,"placement":"Late 3","percentile":78,"lexile":"870L","gain":17,"pct_typical":100.0,"pct_stretch":81.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":554,"vocab_placement":"Mid 3","comp_score":576,"comp_placement":"Late 3","comp_lit_score":564,"comp_lit_placement":"Late 3","comp_info_score":589,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Lucille H.","first":"Lucille","homeroom":"Fortun","overall_score":542,"baseline_score":507,"placement":"Early 3","percentile":59,"lexile":"750L","gain":35,"pct_typical":135.0,"pct_stretch":88.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":565,"vocab_placement":"Late 3","comp_score":529,"comp_placement":"Early 3","comp_lit_score":521,"comp_lit_placement":"Early 3","comp_info_score":537,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Noor I.","first":"Noor","homeroom":"Osborne","overall_score":609,"baseline_score":541,"placement":"Grade 4","percentile":96,"lexile":"1055L","gain":68,"pct_typical":309.0,"pct_stretch":174.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":587,"vocab_placement":"Late 3","comp_score":621,"comp_placement":"Grade 4","comp_lit_score":618,"comp_lit_placement":"Grade 4","comp_info_score":623,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Cree J.","first":"Cree","homeroom":"Osborne","overall_score":568,"baseline_score":553,"placement":"Late 3","percentile":78,"lexile":"870L","gain":15,"pct_typical":88.0,"pct_stretch":71.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":568,"vocab_placement":"Late 3","comp_score":568,"comp_placement":"Late 3","comp_lit_score":574,"comp_lit_placement":"Late 3","comp_info_score":562,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Joshnika K.","first":"Joshnika","homeroom":"Osborne","overall_score":556,"baseline_score":515,"placement":"Mid 3","percentile":69,"lexile":"815L","gain":41,"pct_typical":186.0,"pct_stretch":105.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":553,"vocab_placement":"Mid 3","comp_score":557,"comp_placement":"Mid 3","comp_lit_score":545,"comp_lit_placement":"Mid 3","comp_info_score":568,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Suhaas K.","first":"Suhaas","homeroom":"Brown","overall_score":552,"baseline_score":513,"placement":"Mid 3","percentile":66,"lexile":"795L","gain":39,"pct_typical":177.0,"pct_stretch":100.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":564,"vocab_placement":"Late 3","comp_score":545,"comp_placement":"Mid 3","comp_lit_score":524,"comp_lit_placement":"Early 3","comp_info_score":564,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Agen K.","first":"Agen","homeroom":"Rodriguez","overall_score":535,"baseline_score":459,"placement":"Early 3","percentile":54,"lexile":"720L","gain":76,"pct_typical":230.0,"pct_stretch":121.0,"typical_target":33,"stretch_target":63,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":501,"vocab_placement":"Grade 2","comp_score":553,"comp_placement":"Mid 3","comp_lit_score":551,"comp_lit_placement":"Mid 3","comp_info_score":555,"comp_info_placement":"Mid 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":3,"mid_grade_score":545},{"name":"Nalan K.","first":"Nalan","homeroom":"Osborne","overall_score":593,"baseline_score":585,"placement":"Late 3","percentile":91,"lexile":"980L","gain":8,"pct_typical":47.0,"pct_stretch":38.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":583,"vocab_placement":"Late 3","comp_score":599,"comp_placement":"Late 3","comp_lit_score":613,"comp_lit_placement":"Grade 4","comp_info_score":585,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Leu K.","first":"Leu","homeroom":"Osborne","overall_score":539,"baseline_score":511,"placement":"Early 3","percentile":57,"lexile":"735L","gain":28,"pct_typical":127.0,"pct_stretch":72.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":537,"vocab_placement":"Early 3","comp_score":539,"comp_placement":"Early 3","comp_lit_score":547,"comp_lit_placement":"Mid 3","comp_info_score":532,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Arnav L.","first":"Arnav","homeroom":"Brown","overall_score":580,"baseline_score":519,"placement":"Late 3","percentile":85,"lexile":"920L","gain":61,"pct_typical":277.0,"pct_stretch":156.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":575,"vocab_placement":"Late 3","comp_score":583,"comp_placement":"Late 3","comp_lit_score":565,"comp_lit_placement":"Late 3","comp_info_score":601,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Tatum L.","first":"Tatum","homeroom":"Brown","overall_score":598,"baseline_score":539,"placement":"Late 3","percentile":93,"lexile":"1005L","gain":59,"pct_typical":268.0,"pct_stretch":151.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":595,"vocab_placement":"Late 3","comp_score":600,"comp_placement":"Late 3","comp_lit_score":603,"comp_lit_placement":"Grade 4","comp_info_score":597,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Austin L.","first":"Austin","homeroom":"Rodriguez","overall_score":567,"baseline_score":510,"placement":"Late 3","percentile":77,"lexile":"865L","gain":57,"pct_typical":219.0,"pct_stretch":143.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":569,"vocab_placement":"Late 3","comp_score":566,"comp_placement":"Late 3","comp_lit_score":585,"comp_lit_placement":"Late 3","comp_info_score":547,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"William L.","first":"William","homeroom":"Rodriguez","overall_score":574,"baseline_score":540,"placement":"Late 3","percentile":82,"lexile":"895L","gain":34,"pct_typical":155.0,"pct_stretch":87.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":569,"vocab_placement":"Late 3","comp_score":577,"comp_placement":"Late 3","comp_lit_score":605,"comp_lit_placement":"Grade 4","comp_info_score":548,"comp_info_placement":"Mid 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Sanaa L.","first":"Sanaa","homeroom":"Fortun","overall_score":578,"baseline_score":541,"placement":"Late 3","percentile":84,"lexile":"915L","gain":37,"pct_typical":168.0,"pct_stretch":95.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":560,"vocab_placement":"Mid 3","comp_score":587,"comp_placement":"Late 3","comp_lit_score":585,"comp_lit_placement":"Late 3","comp_info_score":590,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Harrison L.","first":"Harrison","homeroom":"Brown","overall_score":603,"baseline_score":542,"placement":"Grade 4","percentile":94,"lexile":"1025L","gain":61,"pct_typical":277.0,"pct_stretch":156.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":553,"vocab_placement":"Mid 3","comp_score":635,"comp_placement":"Grade 5","comp_lit_score":623,"comp_lit_placement":"Grade 4","comp_info_score":643,"comp_info_placement":"Grade 6","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Enzo M.","first":"Enzo","homeroom":"Rodriguez","overall_score":512,"baseline_score":422,"placement":"Early 3","percentile":36,"lexile":"615L","gain":90,"pct_typical":273.0,"pct_stretch":143.0,"typical_target":33,"stretch_target":63,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":527,"vocab_placement":"Early 3","comp_score":505,"comp_placement":"Grade 2","comp_lit_score":520,"comp_lit_placement":"Early 3","comp_info_score":490,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":4,"mid_grade_score":545},{"name":"Delilah M.","first":"Delilah","homeroom":"Rodriguez","overall_score":589,"baseline_score":509,"placement":"Late 3","percentile":89,"lexile":"965L","gain":80,"pct_typical":308.0,"pct_stretch":200.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":580,"vocab_placement":"Late 3","comp_score":594,"comp_placement":"Late 3","comp_lit_score":602,"comp_lit_placement":"Late 3","comp_info_score":585,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Amelia M.","first":"Amelia","homeroom":"Fortun","overall_score":575,"baseline_score":555,"placement":"Late 3","percentile":82,"lexile":"900L","gain":20,"pct_typical":118.0,"pct_stretch":95.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":551,"vocab_placement":"Mid 3","comp_score":587,"comp_placement":"Late 3","comp_lit_score":573,"comp_lit_placement":"Late 3","comp_info_score":601,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Caua M.","first":"Caua","homeroom":"Brown","overall_score":552,"baseline_score":520,"placement":"Mid 3","percentile":66,"lexile":"795L","gain":32,"pct_typical":145.0,"pct_stretch":82.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":565,"vocab_placement":"Late 3","comp_score":547,"comp_placement":"Mid 3","comp_lit_score":539,"comp_lit_placement":"Early 3","comp_info_score":554,"comp_info_placement":"Mid 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Zaha M.","first":"Zaha","homeroom":"Osborne","overall_score":629,"baseline_score":582,"placement":"Grade 4","percentile":99,"lexile":"1145L","gain":47,"pct_typical":276.0,"pct_stretch":224.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":604,"vocab_placement":"Grade 4","comp_score":643,"comp_placement":"Grade 6","comp_lit_score":656,"comp_lit_placement":"Grade 6","comp_info_score":632,"comp_info_placement":"Grade 5","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Abbie N.","first":"Abbie","homeroom":"Brown","overall_score":532,"baseline_score":572,"placement":"Early 3","percentile":52,"lexile":"705L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":499,"vocab_placement":"Grade 2","comp_score":549,"comp_placement":"Mid 3","comp_lit_score":531,"comp_lit_placement":"Early 3","comp_info_score":568,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":3,"mid_grade_score":545},{"name":"Arthur O.","first":"Arthur","homeroom":"Fortun","overall_score":555,"baseline_score":517,"placement":"Mid 3","percentile":69,"lexile":"810L","gain":38,"pct_typical":173.0,"pct_stretch":97.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":562,"vocab_placement":"Late 3","comp_score":551,"comp_placement":"Mid 3","comp_lit_score":561,"comp_lit_placement":"Late 3","comp_info_score":541,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Sebastian P.","first":"Sebastian","homeroom":"Osborne","overall_score":610,"baseline_score":568,"placement":"Grade 4","percentile":96,"lexile":"1060L","gain":42,"pct_typical":247.0,"pct_stretch":200.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":603,"vocab_placement":"Grade 4","comp_score":613,"comp_placement":"Grade 4","comp_lit_score":622,"comp_lit_placement":"Grade 4","comp_info_score":605,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Nina P.","first":"Nina","homeroom":"Rodriguez","overall_score":508,"baseline_score":441,"placement":"Grade 2","percentile":34,"lexile":"595L","gain":67,"pct_typical":203.0,"pct_stretch":106.0,"typical_target":33,"stretch_target":63,"phonics_score":532,"phonics_placement":"Mid 3","vocab_score":519,"vocab_placement":"Early 3","comp_score":494,"comp_placement":"Grade 2","comp_lit_score":503,"comp_lit_placement":"Grade 2","comp_info_score":485,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":4,"mid_grade_score":545},{"name":"Meenakshi P.","first":"Meenakshi","homeroom":"Brown","overall_score":579,"baseline_score":586,"placement":"Late 3","percentile":84,"lexile":"920L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":572,"vocab_placement":"Late 3","comp_score":582,"comp_placement":"Late 3","comp_lit_score":567,"comp_lit_placement":"Late 3","comp_info_score":598,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Aarya P.","first":"Aarya","homeroom":"Osborne","overall_score":550,"baseline_score":526,"placement":"Mid 3","percentile":65,"lexile":"785L","gain":24,"pct_typical":109.0,"pct_stretch":62.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":561,"vocab_placement":"Late 3","comp_score":544,"comp_placement":"Early 3","comp_lit_score":545,"comp_lit_placement":"Mid 3","comp_info_score":542,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Ella P.","first":"Ella","homeroom":"Fortun","overall_score":562,"baseline_score":517,"placement":"Late 3","percentile":73,"lexile":"840L","gain":45,"pct_typical":205.0,"pct_stretch":115.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":579,"vocab_placement":"Late 3","comp_score":552,"comp_placement":"Mid 3","comp_lit_score":564,"comp_lit_placement":"Late 3","comp_info_score":541,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Ava P.","first":"Ava","homeroom":"Osborne","overall_score":599,"baseline_score":583,"placement":"Late 3","percentile":93,"lexile":"1010L","gain":16,"pct_typical":94.0,"pct_stretch":76.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":558,"vocab_placement":"Mid 3","comp_score":622,"comp_placement":"Grade 4","comp_lit_score":653,"comp_lit_placement":"Grade 6","comp_info_score":603,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Razwan P.","first":"Razwan","homeroom":"Fortun","overall_score":475,"baseline_score":423,"placement":"Grade 2","percentile":20,"lexile":"445L","gain":52,"pct_typical":158.0,"pct_stretch":83.0,"typical_target":33,"stretch_target":63,"phonics_score":501,"phonics_placement":"Grade 2","vocab_score":500,"vocab_placement":"Grade 2","comp_score":454,"comp_placement":"Grade 1","comp_lit_score":419,"comp_lit_placement":"Grade 1","comp_info_score":480,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"Y","grouping":1,"mid_grade_score":545},{"name":"DeJari P.","first":"DeJari","homeroom":"Fortun","overall_score":609,"baseline_score":554,"placement":"Grade 4","percentile":96,"lexile":"1055L","gain":55,"pct_typical":324.0,"pct_stretch":262.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":596,"vocab_placement":"Late 3","comp_score":616,"comp_placement":"Grade 4","comp_lit_score":619,"comp_lit_placement":"Grade 4","comp_info_score":613,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Aiden R.","first":"Aiden","homeroom":"Brown","overall_score":578,"baseline_score":543,"placement":"Late 3","percentile":84,"lexile":"915L","gain":35,"pct_typical":159.0,"pct_stretch":90.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":577,"vocab_placement":"Late 3","comp_score":579,"comp_placement":"Late 3","comp_lit_score":597,"comp_lit_placement":"Late 3","comp_info_score":561,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Chloe R.","first":"Chloe","homeroom":"Brown","overall_score":571,"baseline_score":557,"placement":"Late 3","percentile":80,"lexile":"880L","gain":14,"pct_typical":82.0,"pct_stretch":67.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":571,"vocab_placement":"Late 3","comp_score":570,"comp_placement":"Late 3","comp_lit_score":542,"comp_lit_placement":"Mid 3","comp_info_score":598,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Anderson R.","first":"Anderson","homeroom":"Rodriguez","overall_score":544,"baseline_score":479,"placement":"Early 3","percentile":61,"lexile":"760L","gain":65,"pct_typical":250.0,"pct_stretch":163.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":569,"vocab_placement":"Late 3","comp_score":531,"comp_placement":"Early 3","comp_lit_score":541,"comp_lit_placement":"Early 3","comp_info_score":522,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Oliver R.","first":"Oliver","homeroom":"Osborne","overall_score":626,"baseline_score":582,"placement":"Grade 4","percentile":98,"lexile":"1130L","gain":44,"pct_typical":259.0,"pct_stretch":210.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":617,"vocab_placement":"Grade 4","comp_score":631,"comp_placement":"Grade 5","comp_lit_score":635,"comp_lit_placement":"Grade 5","comp_info_score":627,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Rory R.","first":"Rory","homeroom":"Brown","overall_score":579,"baseline_score":579,"placement":"Late 3","percentile":84,"lexile":"920L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":570,"vocab_placement":"Late 3","comp_score":584,"comp_placement":"Late 3","comp_lit_score":582,"comp_lit_placement":"Late 3","comp_info_score":586,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"David R.","first":"David","homeroom":"Brown","overall_score":491,"baseline_score":489,"placement":"Grade 2","percentile":26,"lexile":"520L","gain":2,"pct_typical":8.0,"pct_stretch":5.0,"typical_target":26,"stretch_target":40,"phonics_score":502,"phonics_placement":"Grade 2","vocab_score":503,"vocab_placement":"Grade 2","comp_score":482,"comp_placement":"Grade 2","comp_lit_score":490,"comp_lit_placement":"Grade 2","comp_info_score":474,"comp_info_placement":"Grade 1","hfw_placement":"Surpassed Level","reading_difficulty":"Y","grouping":1,"mid_grade_score":545},{"name":"Leonidas R.","first":"Leonidas","homeroom":"Rodriguez","overall_score":537,"baseline_score":480,"placement":"Early 3","percentile":55,"lexile":"725L","gain":57,"pct_typical":219.0,"pct_stretch":143.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":550,"vocab_placement":"Mid 3","comp_score":530,"comp_placement":"Early 3","comp_lit_score":544,"comp_lit_placement":"Mid 3","comp_info_score":516,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Beatriz R.","first":"Beatriz","homeroom":"Brown","overall_score":581,"baseline_score":537,"placement":"Late 3","percentile":86,"lexile":"925L","gain":44,"pct_typical":200.0,"pct_stretch":113.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":557,"vocab_placement":"Mid 3","comp_score":594,"comp_placement":"Late 3","comp_lit_score":605,"comp_lit_placement":"Grade 4","comp_info_score":584,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Evanka S.","first":"Evanka","homeroom":"Rodriguez","overall_score":504,"baseline_score":439,"placement":"Grade 2","percentile":32,"lexile":"575L","gain":65,"pct_typical":197.0,"pct_stretch":103.0,"typical_target":33,"stretch_target":63,"phonics_score":515,"phonics_placement":"Early 3","vocab_score":484,"vocab_placement":"Grade 2","comp_score":510,"comp_placement":"Grade 2","comp_lit_score":545,"comp_lit_placement":"Mid 3","comp_info_score":478,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"Y","grouping":3,"mid_grade_score":545},{"name":"Kaan S.","first":"Kaan","homeroom":"Brown","overall_score":551,"baseline_score":520,"placement":"Mid 3","percentile":66,"lexile":"790L","gain":31,"pct_typical":141.0,"pct_stretch":79.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":563,"vocab_placement":"Late 3","comp_score":545,"comp_placement":"Mid 3","comp_lit_score":533,"comp_lit_placement":"Early 3","comp_info_score":555,"comp_info_placement":"Mid 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Olivia S.","first":"Olivia","homeroom":"Brown","overall_score":514,"baseline_score":519,"placement":"Early 3","percentile":38,"lexile":"620L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":500,"vocab_placement":"Grade 2","comp_score":520,"comp_placement":"Early 3","comp_lit_score":530,"comp_lit_placement":"Early 3","comp_info_score":511,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":3,"mid_grade_score":545},{"name":"Nora S.","first":"Nora","homeroom":"Osborne","overall_score":614,"baseline_score":586,"placement":"Grade 4","percentile":97,"lexile":"1075L","gain":28,"pct_typical":165.0,"pct_stretch":133.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":599,"vocab_placement":"Late 3","comp_score":622,"comp_placement":"Grade 4","comp_lit_score":617,"comp_lit_placement":"Grade 4","comp_info_score":629,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Elena S.","first":"Elena","homeroom":"Rodriguez","overall_score":536,"baseline_score":482,"placement":"Early 3","percentile":55,"lexile":"720L","gain":54,"pct_typical":208.0,"pct_stretch":135.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":549,"vocab_placement":"Mid 3","comp_score":530,"comp_placement":"Early 3","comp_lit_score":517,"comp_lit_placement":"Early 3","comp_info_score":542,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Kushagra S.","first":"Kushagra","homeroom":"Brown","overall_score":579,"baseline_score":579,"placement":"Late 3","percentile":84,"lexile":"920L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":561,"vocab_placement":"Late 3","comp_score":589,"comp_placement":"Late 3","comp_lit_score":592,"comp_lit_placement":"Late 3","comp_info_score":587,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Garrett S.","first":"Garrett","homeroom":"Brown","overall_score":511,"baseline_score":492,"placement":"Early 3","percentile":35,"lexile":"610L","gain":19,"pct_typical":73.0,"pct_stretch":48.0,"typical_target":26,"stretch_target":40,"phonics_score":548,"phonics_placement":"Max Score","vocab_score":532,"vocab_placement":"Early 3","comp_score":488,"comp_placement":"Grade 2","comp_lit_score":485,"comp_lit_placement":"Grade 2","comp_info_score":489,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":4,"mid_grade_score":545},{"name":"Jordana S.","first":"Jordana","homeroom":"Osborne","overall_score":604,"baseline_score":564,"placement":"Grade 4","percentile":95,"lexile":"1030L","gain":40,"pct_typical":235.0,"pct_stretch":190.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":588,"vocab_placement":"Late 3","comp_score":612,"comp_placement":"Grade 4","comp_lit_score":618,"comp_lit_placement":"Grade 4","comp_info_score":607,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Xavier S.","first":"Xavier","homeroom":"Brown","overall_score":558,"baseline_score":552,"placement":"Mid 3","percentile":71,"lexile":"820L","gain":6,"pct_typical":35.0,"pct_stretch":29.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":567,"vocab_placement":"Late 3","comp_score":553,"comp_placement":"Mid 3","comp_lit_score":572,"comp_lit_placement":"Late 3","comp_info_score":534,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Mukhtar S.","first":"Mukhtar","homeroom":"Rodriguez","overall_score":519,"baseline_score":483,"placement":"Early 3","percentile":42,"lexile":"645L","gain":36,"pct_typical":138.0,"pct_stretch":90.0,"typical_target":26,"stretch_target":40,"phonics_score":559,"phonics_placement":"Max Score","vocab_score":516,"vocab_placement":"Early 3","comp_score":509,"comp_placement":"Grade 2","comp_lit_score":527,"comp_lit_placement":"Early 3","comp_info_score":489,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":4,"mid_grade_score":545},{"name":"Ezekiel T.","first":"Ezekiel","homeroom":"Brown","overall_score":512,"baseline_score":525,"placement":"Early 3","percentile":36,"lexile":"615L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":526,"vocab_placement":"Early 3","comp_score":506,"comp_placement":"Grade 2","comp_lit_score":524,"comp_lit_placement":"Early 3","comp_info_score":486,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":4,"mid_grade_score":545},{"name":"Liliyti T.","first":"Liliyti","homeroom":"Rodriguez","overall_score":576,"baseline_score":536,"placement":"Late 3","percentile":83,"lexile":"905L","gain":40,"pct_typical":182.0,"pct_stretch":103.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":567,"vocab_placement":"Late 3","comp_score":580,"comp_placement":"Late 3","comp_lit_score":581,"comp_lit_placement":"Late 3","comp_info_score":580,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Skylar T.","first":"Skylar","homeroom":"nan","overall_score":591,"baseline_score":null,"placement":"Late 3","percentile":98,"lexile":"970L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":600,"vocab_placement":"Late 3","comp_score":586,"comp_placement":"Late 3","comp_lit_score":611,"comp_lit_placement":"Grade 4","comp_info_score":559,"comp_info_placement":"Mid 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Lucas T.","first":"Lucas","homeroom":"Osborne","overall_score":602,"baseline_score":574,"placement":"Late 3","percentile":94,"lexile":"1020L","gain":28,"pct_typical":165.0,"pct_stretch":133.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":587,"vocab_placement":"Late 3","comp_score":609,"comp_placement":"Grade 4","comp_lit_score":618,"comp_lit_placement":"Grade 4","comp_info_score":602,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Jonathan T.","first":"Jonathan","homeroom":"Fortun","overall_score":542,"baseline_score":475,"placement":"Early 3","percentile":59,"lexile":"750L","gain":67,"pct_typical":258.0,"pct_stretch":168.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":568,"vocab_placement":"Late 3","comp_score":530,"comp_placement":"Early 3","comp_lit_score":507,"comp_lit_placement":"Grade 2","comp_info_score":548,"comp_info_placement":"Mid 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Akira V.","first":"Akira","homeroom":"Osborne","overall_score":607,"baseline_score":572,"placement":"Grade 4","percentile":95,"lexile":"1045L","gain":35,"pct_typical":206.0,"pct_stretch":167.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":595,"vocab_placement":"Late 3","comp_score":613,"comp_placement":"Grade 4","comp_lit_score":620,"comp_lit_placement":"Grade 4","comp_info_score":605,"comp_info_placement":"Grade 4","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Huxley V.","first":"Huxley","homeroom":"Osborne","overall_score":574,"baseline_score":533,"placement":"Late 3","percentile":82,"lexile":"895L","gain":41,"pct_typical":186.0,"pct_stretch":105.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":558,"vocab_placement":"Mid 3","comp_score":582,"comp_placement":"Late 3","comp_lit_score":591,"comp_lit_placement":"Late 3","comp_info_score":574,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Benjamin V.","first":"Benjamin","homeroom":"Rodriguez","overall_score":551,"baseline_score":520,"placement":"Mid 3","percentile":66,"lexile":"790L","gain":31,"pct_typical":141.0,"pct_stretch":79.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":553,"vocab_placement":"Mid 3","comp_score":550,"comp_placement":"Mid 3","comp_lit_score":538,"comp_lit_placement":"Early 3","comp_info_score":561,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Jayashwika V.","first":"Jayashwika","homeroom":"Rodriguez","overall_score":532,"baseline_score":485,"placement":"Early 3","percentile":52,"lexile":"705L","gain":47,"pct_typical":181.0,"pct_stretch":118.0,"typical_target":26,"stretch_target":40,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":541,"vocab_placement":"Early 3","comp_score":528,"comp_placement":"Early 3","comp_lit_score":544,"comp_lit_placement":"Mid 3","comp_info_score":511,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Gemma W.","first":"Gemma","homeroom":"Osborne","overall_score":569,"baseline_score":588,"placement":"Late 3","percentile":78,"lexile":"870L","gain":0,"pct_typical":0,"pct_stretch":0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":559,"vocab_placement":"Mid 3","comp_score":575,"comp_placement":"Late 3","comp_lit_score":604,"comp_lit_placement":"Grade 4","comp_info_score":547,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Charleston W.","first":"Charleston","homeroom":"Rodriguez","overall_score":547,"baseline_score":521,"placement":"Mid 3","percentile":63,"lexile":"770L","gain":26,"pct_typical":118.0,"pct_stretch":67.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":555,"vocab_placement":"Mid 3","comp_score":543,"comp_placement":"Early 3","comp_lit_score":567,"comp_lit_placement":"Late 3","comp_info_score":517,"comp_info_placement":"Early 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Lucas W.","first":"Lucas","homeroom":"Fortun","overall_score":589,"baseline_score":577,"placement":"Late 3","percentile":89,"lexile":"965L","gain":12,"pct_typical":71.0,"pct_stretch":57.0,"typical_target":17,"stretch_target":21,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":601,"vocab_placement":"Late 3","comp_score":583,"comp_placement":"Late 3","comp_lit_score":597,"comp_lit_placement":"Late 3","comp_info_score":567,"comp_info_placement":"Late 3","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545},{"name":"Ruby Z.","first":"Ruby","homeroom":"Fortun","overall_score":549,"baseline_score":523,"placement":"Mid 3","percentile":65,"lexile":"780L","gain":26,"pct_typical":118.0,"pct_stretch":67.0,"typical_target":22,"stretch_target":39,"phonics_score":null,"phonics_placement":"Surpassed Level","vocab_score":560,"vocab_placement":"Mid 3","comp_score":543,"comp_placement":"Early 3","comp_lit_score":572,"comp_lit_placement":"Late 3","comp_info_score":511,"comp_info_placement":"Grade 2","hfw_placement":"Surpassed Level","reading_difficulty":"N","grouping":5,"mid_grade_score":545}];
+
+// ──────────────────────────────────────
+// HELPERS
+// ──────────────────────────────────────
+const PLACEMENT_ORDER = {'Grade K':0,'Grade 1':1,'Grade 2':2,'Early 3':3,'Mid 3':4,'Late 3':5,'Grade 4':6,'Grade 5':7,'Grade 6':8,'Surpassed Level':7,'Max Score':7};
+const PLACEMENT_COLORS = {
+  'Grade 4':'#1d4ed8','Grade 5':'#1d4ed8','Grade 6':'#1d4ed8',
+  'Late 3':'#065f46','Mid 3':'#047857','Early 3':'#a16207',
+  'Grade 2':'#be123c','Grade 1':'#831843','Grade K':'#831843',
+  'Surpassed Level':'#1d4ed8','Max Score':'#1d4ed8'
+};
+const PLACEMENT_CSS = {
+  'Grade 4':'pt-g4','Grade 5':'pt-g4','Grade 6':'pt-g4',
+  'Late 3':'pt-l3','Mid 3':'pt-m3','Early 3':'pt-e3',
+  'Grade 2':'pt-g2','Grade 1':'pt-g1','Grade K':'pt-g1',
+  'Surpassed Level':'pt-sp','Max Score':'pt-sp'
+};
+const ROOM_COLORS = {Fortun:'#7c3aed',Osborne:'#0d9488',Rodriguez:'#0369a1',Brown:'#b45309'};
+const ROOM_BG = {Fortun:'#ede9fe',Osborne:'#ccfbf1',Rodriguez:'#dbeafe',Brown:'#fef3c7'};
+
+function getTier(s) {
+  if (s.placement === 'Grade 2' || s.placement === 'Grade 1' || s.placement === 'Grade K' || s.reading_difficulty === 'Y') return 3;
+  if (s.pct_typical < 80 || s.gain < 15) return 2;
+  return 1;
+}
+function avg(arr, key) { const v = arr.map(s=>s[key]).filter(x=>x!=null&&!isNaN(x)); return v.length ? Math.round(v.reduce((a,b)=>a+b,0)/v.length) : 0; }
+function pct(n,d) { return d===0?0:Math.round(n/d*100); }
+function isAboveGrade(p) { return ['Late 3','Grade 4','Grade 5','Grade 6'].includes(p); }
+function isBelowGrade(p) { return ['Grade 2','Grade 1','Grade K'].includes(p); }
+function placementBar(label, pctVal, color) {
+  return `<div class="placement-bar-wrap"><div class="placement-label"><span>${label}</span><span style="color:${color};font-weight:700">${pctVal}%</span></div><div class="placement-bar-bg"><div class="placement-bar-fill" style="width:${pctVal}%;background:${color}"></div></div></div>`;
+}
+function tierColor(t) { return t===3?'var(--rose)':t===2?'var(--amber)':'var(--green)'; }
+function getInitials(name) { return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
+function hashColor(str) {
+  const palette = ['#0d9488','#7c3aed','#0369a1','#b45309','#be123c','#065f46','#1d4ed8','#6b21a8'];
+  let h=0; for(let c of str) h=(h*31+c.charCodeAt(0))%palette.length;
+  return palette[h];
+}
+
+// ──────────────────────────────────────
+// COUNTDOWN
+// ──────────────────────────────────────
+function updateCountdown() {
+  const target = new Date('2026-05-01T00:00:00');
+  const now = new Date();
+  const diff = Math.ceil((target - now) / 86400000);
+  const el = document.getElementById('cdown-days');
+  if (el) el.textContent = diff > 0 ? diff : 0;
+}
+updateCountdown();
+
+// ──────────────────────────────────────
+// TABS
+// ──────────────────────────────────────
+function showTab(id) {
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ══════════════════════════════════════
+// OVERVIEW
+// ══════════════════════════════════════
+function renderOverview() {
+  const s = STUDENTS;
+  const withBaseline = s.filter(x=>x.baseline_score && x.overall_score);
+  const avgGain = avg(s,'gain');
+  const avgScore = avg(s,'overall_score');
+  const pctTypical = Math.round(avg(s.filter(x=>x.pct_typical>0),'pct_typical'));
+  const belowGL = s.filter(x=>isBelowGrade(x.placement)).length;
+  const aboveGL = s.filter(x=>isAboveGrade(x.placement)).length;
+  const t3 = s.filter(x=>getTier(x)===3);
+  const rdFlag = s.filter(x=>x.reading_difficulty==='Y').length;
+
+  const statsHTML = [
+    {label:'Total Students',value:s.length,detail:'Across 4 homerooms',color:'var(--teal)',badge:null},
+    {label:'Avg Scale Score',value:avgScore,detail:'Spring YTD',color:'var(--sky)',badge:null},
+    {label:'Avg Gain',value:'+'+avgGain,detail:'pts since baseline',color:'var(--green)',badge:null},
+    {label:'% Typical Growth',value:pctTypical+'%',detail:'Avg progress to goal',color:'var(--violet)',badge:null},
+    {label:'Below Grade Level',value:belowGL,detail:'students (Grade 2 or below)',color:'var(--rose)',badge:null},
+    {label:'Above Grade Level',value:aboveGL,detail:'Late 3 or higher',color:'#059669',badge:null},
+    {label:'Tier 3 Students',value:t3.length,detail:'Intensive support needed',color:'var(--rose)',badge:null},
+    {label:'Reading Difficulty',value:rdFlag,detail:'Flagged by iReady',color:'var(--amber)',badge:null},
+  ].map(({label,value,detail,color})=>`
+    <div class="stat-card" style="--accent:${color}">
+      <div class="stat-label">${label}</div>
+      <div class="stat-value" style="color:${color}">${value}</div>
+      <div class="stat-detail">${detail}</div>
+    </div>`).join('');
+  document.getElementById('overview-stats').innerHTML = statsHTML;
+
+  // Placement distribution
+  const placements = ['Grade 4','Late 3','Mid 3','Early 3','Grade 2','Grade 1'];
+  const placeCounts = {};
+  s.forEach(x=>{placements.forEach(p=>{if(!placeCounts[p])placeCounts[p]=0;});placeCounts[x.placement]=(placeCounts[x.placement]||0)+1;});
+  const placeColors = {'Grade 4':'#1d4ed8','Late 3':'#059669','Mid 3':'#10b981','Early 3':'#d97706','Grade 2':'#dc2626','Grade 1':'#be123c'};
+  let distHTML = placements.filter(p=>placeCounts[p]>0).map(p=>{
+    const n=placeCounts[p]||0, pv=pct(n,s.length);
+    return placementBar(p+` (${n})`, pv, placeColors[p]||'#64748b');
+  }).join('');
+  document.getElementById('placement-dist').innerHTML = distHTML;
+
+  // Growth summary
+  const gainBuckets = [
+    {label:'60+ pts (Exceptional)',min:60,max:999,color:'#10b981'},
+    {label:'40–59 pts (Strong)',min:40,max:59,color:'#0d9488'},
+    {label:'20–39 pts (Adequate)',min:20,max:39,color:'#0ea5e9'},
+    {label:'1–19 pts (Minimal)',min:1,max:19,color:'#f59e0b'},
+    {label:'0 pts (No Growth)',min:0,max:0,color:'#e11d48'},
+  ];
+  let gHTML = gainBuckets.map(b=>{
+    const n=s.filter(x=>x.gain>=b.min&&x.gain<=b.max).length;
+    const pv=pct(n,s.length);
+    return placementBar(b.label+` (${n})`,pv,b.color);
+  }).join('');
+  document.getElementById('growth-summary').innerHTML = gHTML;
+
+  // Domain overview
+  const domains = [
+    {name:'Phonics', key:'phonics_placement', icon:'🔤'},
+    {name:'Vocabulary', key:'vocab_placement', icon:'📚'},
+    {name:'Comprehension: Overall', key:'comp_placement', icon:'💡'},
+    {name:'Comp: Literature', key:'comp_lit_placement', icon:'📖'},
+    {name:'Comp: Informational', key:'comp_info_placement', icon:'📰'},
+  ];
+  let domHTML = domains.map(d=>{
+    const valid = s.filter(x=>x[d.key]&&x[d.key]!=='Not Assessed');
+    const above = valid.filter(x=>['Late 3','Mid 3','Early 3','Grade 4','Grade 5','Grade 6','Surpassed Level','Max Score'].includes(x[d.key])).length;
+    const gradeLevel = valid.filter(x=>['Mid 3','Late 3','Grade 4','Grade 5','Grade 6'].includes(x[d.key])).length;
+    const pv = valid.length>0?pct(gradeLevel,valid.length):0;
+    const color = pv>=70?'var(--green)':pv>=50?'var(--amber)':'var(--rose)';
+    return `<div class="domain-row">
+      <div class="domain-name"><span>${d.icon} ${d.name}</span><span style="font-weight:700;color:${color}">${pv}%</span></div>
+      <div class="domain-bar-bg"><div class="domain-bar-fill" style="width:${pv}%;background:${color}">${pv}%</div><div class="domain-bar-benchmark" style="left:70%"></div></div>
+    </div>`;
+  }).join('');
+  document.getElementById('domain-overview').innerHTML = domHTML;
+
+  // Growth stars
+  const stars = [...s].sort((a,b)=>b.gain-a.gain).slice(0,8);
+  let starsHTML = stars.map(st=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #f1f5f9;">
+      <div style="width:32px;height:32px;border-radius:50%;background:${hashColor(st.name)};display:flex;align-items:center;justify-content:center;color:white;font-size:.7rem;font-weight:700;flex-shrink:0">${getInitials(st.name)}</div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:.8rem">${st.name}</div>
+        <div style="font-size:.68rem;color:var(--slate)">${st.homeroom}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:800;color:var(--green);font-family:'DM Serif Display',serif;font-size:1.1rem">+${st.gain}</div>
+        <div style="font-size:.62rem;color:var(--slate)">pts</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('growth-stars').innerHTML = starsHTML;
+}
+
+// ══════════════════════════════════════
+// CLASS VIEW
+// ══════════════════════════════════════
+function renderClassView() {
+  const homerooms = ['Fortun','Osborne','Rodriguez','Brown'];
+  const tabsEl = document.getElementById('hr-tabs');
+  tabsEl.innerHTML = homerooms.map((r,i)=>`<button class="hr-tab ${i===0?'active':''}" onclick="showHomeroom('${r}',this)">${r}</button>`).join('');
+  showHomeroomData('Fortun');
+}
+function showHomeroom(room, btn) {
+  document.querySelectorAll('.hr-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  showHomeroomData(room);
+}
+function showHomeroomData(room) {
+  const students = STUDENTS.filter(s=>s.homeroom===room).sort((a,b)=>b.overall_score-a.overall_score);
+  const avgScore = avg(students,'overall_score');
+  const avgGain = avg(students,'gain');
+  const avgTyp = Math.round(avg(students.filter(x=>x.pct_typical>0),'pct_typical'));
+  const color = ROOM_COLORS[room]||'#64748b';
+
+  const placements = ['Grade 4','Late 3','Mid 3','Early 3','Grade 2','Grade 1'];
+  const placeCounts = {};
+  students.forEach(s=>{placeCounts[s.placement]=(placeCounts[s.placement]||0)+1;});
+
+  const html = `
+    <div class="stat-grid">
+      ${[{l:'Students',v:students.length,d:'in class'},{l:'Avg Score',v:avgScore,d:'scale score'},{l:'Avg Gain',v:'+'+avgGain,d:'pts growth'},{l:'Avg % Typical',v:avgTyp+'%',d:'growth progress'}]
+        .map(({l,v,d})=>`<div class="stat-card" style="--accent:${color}"><div class="stat-label">${l}</div><div class="stat-value" style="color:${color}">${v}</div><div class="stat-detail">${d}</div></div>`).join('')}
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><div class="icon" style="background:${ROOM_BG[room]}">📊</div> Placement Distribution</div>
+        ${placements.filter(p=>placeCounts[p]).map(p=>{
+          const n=placeCounts[p]||0, pv=pct(n,students.length);
+          const c={'Grade 4':'#1d4ed8','Late 3':'#059669','Mid 3':'#10b981','Early 3':'#d97706','Grade 2':'#dc2626','Grade 1':'#be123c'}[p]||'#64748b';
+          return placementBar(p+` (${n})`,pv,c);
+        }).join('')}
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="icon" style="background:#fef3c7">⚡</div> Tier Breakdown</div>
+        ${[3,2,1].map(t=>{
+          const n=students.filter(s=>getTier(s)===t).length;
+          const pv=pct(n,students.length);
+          const labels={3:'Tier 3 – Intensive',2:'Tier 2 – Strategic',1:'Tier 1 – On Track'};
+          const colors={3:'var(--rose)',2:'var(--amber)',1:'var(--green)'};
+          return placementBar(labels[t]+` (${n})`,pv,colors[t]);
+        }).join('')}
+      </div>
+    </div>
+    <div class="rtable-wrap">
+      <table class="student-table">
+        <thead><tr>
+          <th onclick="sortTable(this,0)">Student ↕</th>
+          <th onclick="sortTable(this,1)">Score ↕</th>
+          <th onclick="sortTable(this,2)">Placement ↕</th>
+          <th onclick="sortTable(this,3)">Gain ↕</th>
+          <th onclick="sortTable(this,4)">% Typical ↕</th>
+          <th>Lexile</th>
+          <th>Vocabulary</th>
+          <th>Comprehension</th>
+          <th>Comp: Info</th>
+          <th>Tier</th>
+        </tr></thead>
+        <tbody>
+          ${students.map(s=>{
+            const t=getTier(s);
+            const tc={1:'#10b981',2:'#f59e0b',3:'#e11d48'}[t];
+            return `<tr>
+              <td><span style="font-weight:700">${s.name}</span></td>
+              <td style="font-weight:700">${s.overall_score}</td>
+              <td><span class="placement-tag ${PLACEMENT_CSS[s.placement]||''}">${s.placement}</span></td>
+              <td style="font-weight:700;color:${s.gain>=40?'var(--green)':s.gain>=20?'var(--amber)':'var(--rose)'}">${s.gain>0?'+':''}${s.gain}</td>
+              <td>${s.pct_typical>0?Math.round(s.pct_typical)+'%':'–'}</td>
+              <td>${s.lexile}</td>
+              <td><span class="placement-tag ${PLACEMENT_CSS[s.vocab_placement]||''}">${s.vocab_placement}</span></td>
+              <td><span class="placement-tag ${PLACEMENT_CSS[s.comp_placement]||''}">${s.comp_placement}</span></td>
+              <td><span class="placement-tag ${PLACEMENT_CSS[s.comp_info_placement]||''}">${s.comp_info_placement}</span></td>
+              <td><span style="background:${tc}22;color:${tc};padding:2px 9px;border-radius:20px;font-size:.68rem;font-weight:800">T${t}</span></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  document.getElementById('hr-content').innerHTML = html;
+}
+
+// ══════════════════════════════════════
+// STANDARDS
+// ══════════════════════════════════════
+const STANDARDS = [
+  {domain:'Phonics',iready:'Decoding multisyllabic words, phonics patterns',standard:'ELA.3.F.1.3','desc':'Decode multisyllabic words with common patterns: prefixes, suffixes, base words',priority:'Low',note:'74 of 83 surpassed phonics level; not a gap area'},
+  {domain:'Phonics',iready:'Grade-level phonics skills',standard:'ELA.3.F.1.4','desc':'Read 3rd-grade-level decodable texts with accuracy and automaticity',priority:'Low',note:'Class strength – majority at or above level'},
+  {domain:'High-Frequency Words',iready:'Sight word automaticity',standard:'ELA.3.F.2.1','desc':'Read and spell grade-level high-frequency words and irregularly spelled words',priority:'Low',note:'Nearly all students surpassed HFW level'},
+  {domain:'Vocabulary',iready:'Context clues, word relationships',standard:'ELA.3.R.3.1','desc':'Use context clues to determine meaning of unknown and multiple-meaning words',priority:'High',note:'6 students at Grade 2 vocabulary; 12 Early 3 – impacts comprehension'},
+  {domain:'Vocabulary',iready:'Vocabulary acquisition',standard:'ELA.3.L.3.1','desc':'Determine meaning using context, affixes, and reference materials',priority:'High',note:'Key gap: 18 students below Mid 3 in vocabulary'},
+  {domain:'Vocabulary',iready:'Domain-specific vocabulary',standard:'ELA.3.R.3.2','desc':'Use text context and morphology to determine meaning of academic vocabulary',priority:'Med',note:'Informational text vocabulary consistently lower'},
+  {domain:'Comprehension: Literature',iready:'Story elements, theme, character',standard:'ELA.3.R.1.1','desc':'Explain how dialogue, description, and plot advance the story',priority:'Med',note:'Class averages Late 3 in Lit; some students at Grade 2'},
+  {domain:'Comprehension: Literature',iready:'Character motivation & theme',standard:'ELA.3.R.1.2','desc':'Describe the main theme and how character actions contribute',priority:'Med',note:'Common gap: theme identification across multiple texts'},
+  {domain:'Comprehension: Literature',iready:'Point of view, narrator',standard:'ELA.3.R.1.3','desc':'Identify point of view; compare perspectives of characters',priority:'Med',note:'Moderate gap area; connected to inferencing skills'},
+  {domain:'Comprehension: Informational',iready:'Main idea & key details',standard:'ELA.3.R.2.1','desc':'Explain the main idea and relevant supporting details of an informational text',priority:'High',note:'CRITICAL GAP: 9 students at Grade 2 in informational text; class average lower than literature'},
+  {domain:'Comprehension: Informational',iready:'Text structure & features',standard:'ELA.3.R.2.2','desc':'Identify text structure features and explain their purpose',priority:'High',note:'Informational comprehension trails literature by ~15 scale score points on average'},
+  {domain:'Comprehension: Informational',iready:'Author\'s purpose, facts vs. opinions',standard:'ELA.3.R.2.3','desc':'Explain the author\'s purpose and distinguish fact from opinion',priority:'High',note:'High-priority for FSA preparation – heavily tested'},
+  {domain:'Comprehension: Overall',iready:'Making inferences, asking questions',standard:'ELA.3.R.3.3','desc':'Use evidence from text to support responses and make inferences',priority:'High',note:'Critical FSA skill; 9 students at Grade 2 overall comprehension'},
+  {domain:'Comprehension: Overall',iready:'Summarizing & synthesizing',standard:'ELA.3.R.3.4','desc':'Identify and explain the central idea using textual evidence',priority:'High',note:'Prioritize for all tiers before May 1st test'},
+];
+
+function renderStandards() {
+  const gaps = STANDARDS.filter(s=>s.priority==='High');
+  const strengths = STANDARDS.filter(s=>s.priority==='Low');
+
+  document.getElementById('gap-summary').innerHTML = gaps.map(s=>`
+    <div style="padding:10px 0;border-bottom:1px solid #fecdd3;display:flex;gap:10px;align-items:flex-start">
+      <span class="std-code">${s.standard}</span>
+      <div>
+        <div style="font-weight:700;font-size:.78rem">${s.domain}</div>
+        <div style="font-size:.72rem;color:var(--slate);margin-top:2px">${s.note}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('strength-summary').innerHTML = strengths.map(s=>`
+    <div style="padding:10px 0;border-bottom:1px solid #bbf7d0;display:flex;gap:10px;align-items:flex-start">
+      <span class="std-code" style="background:#dcfce7;color:#166534">${s.standard}</span>
+      <div>
+        <div style="font-weight:700;font-size:.78rem">${s.domain}</div>
+        <div style="font-size:.72rem;color:var(--slate);margin-top:2px">${s.note}</div>
+      </div>
+    </div>`).join('');
+
+  const tbl = document.getElementById('standards-table');
+  tbl.innerHTML = `<thead><tr>
+    <th>iReady Domain</th>
+    <th>iReady Sub-skill</th>
+    <th>FL BEST Standard</th>
+    <th>Standard Description</th>
+    <th>Gap Level</th>
+    <th>Notes</th>
+  </tr></thead><tbody>${STANDARDS.map(s=>`
+    <tr>
+      <td style="font-weight:700">${s.domain}</td>
+      <td style="color:var(--slate)">${s.iready}</td>
+      <td><span class="std-code">${s.standard}</span></td>
+      <td>${s.desc}</td>
+      <td><span class="gap-pill ${s.priority==='High'?'gap-high':s.priority==='Med'?'gap-med':'gap-low'}">${s.priority}</span></td>
+      <td style="color:var(--slate);font-size:.72rem">${s.note}</td>
+    </tr>`).join('')}</tbody>`;
+}
+
+// ══════════════════════════════════════
+// INDIVIDUAL
+// ══════════════════════════════════════
+let filteredStudents = [...STUDENTS].sort((a,b)=>a.name.localeCompare(b.name));
+
+function filterStudentList() {
+  const q = document.getElementById('student-search').value.toLowerCase();
+  const room = document.getElementById('room-filter').value;
+  const tier = document.getElementById('tier-filter').value;
+  filteredStudents = STUDENTS.filter(s=>{
+    const matchQ = s.name.toLowerCase().includes(q)||s.first.toLowerCase().includes(q);
+    const matchR = !room||s.homeroom===room;
+    const matchT = !tier||getTier(s)===parseInt(tier);
+    return matchQ&&matchR&&matchT;
+  }).sort((a,b)=>a.name.localeCompare(b.name));
+  renderStudentList();
+}
+
+function renderStudentList() {
+  const el = document.getElementById('student-list');
+  el.innerHTML = filteredStudents.map(s=>{
+    const t = getTier(s);
+    const tc = {1:'var(--green)',2:'var(--amber)',3:'var(--rose)'}[t];
+    return `<div onclick="showStudentProfile('${s.name}')" style="padding:9px 12px;border-radius:8px;cursor:pointer;border:1px solid #e2e8f0;display:flex;align-items:center;gap:8px;transition:all .15s" onmouseover="this.style.background='#f0f9ff'" onmouseout="this.style.background='white'">
+      <div style="width:28px;height:28px;border-radius:50%;background:${hashColor(s.name)};display:flex;align-items:center;justify-content:center;color:white;font-size:.65rem;font-weight:700;flex-shrink:0">${getInitials(s.name)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</div>
+        <div style="font-size:.65rem;color:var(--slate)">${s.homeroom!='nan'?s.homeroom:'–'}</div>
+      </div>
+      <span style="background:${tc}22;color:${tc};padding:1px 7px;border-radius:12px;font-size:.65rem;font-weight:800;flex-shrink:0">T${t}</span>
+    </div>`;
+  }).join('');
+}
+
+function showStudentProfile(name) {
+  const s = STUDENTS.find(x=>x.name===name);
+  if(!s) return;
+  const t = getTier(s);
+  const tc = {1:'var(--green)',2:'var(--amber)',3:'var(--rose)'}[t];
+  const tLabel = {1:'Tier 1 – On Track',2:'Tier 2 – Strategic Support',3:'Tier 3 – Intensive Support'}[t];
+  const color = hashColor(s.name);
+  const gainColor = s.gain>=40?'var(--green)':s.gain>=20?'var(--sky)':'var(--rose)';
+
+  // Domain cards
+  const domCards = [
+    {title:'Phonics',placement:s.phonics_placement,score:s.phonics_score,color:'#7c3aed',bg:'#ede9fe'},
+    {title:'Vocabulary',placement:s.vocab_placement,score:s.vocab_score,color:'#0369a1',bg:'#dbeafe'},
+    {title:'Comprehension',placement:s.comp_placement,score:s.comp_score,color:'#0d9488',bg:'#ccfbf1'},
+    {title:'Comp: Literature',placement:s.comp_lit_placement,score:s.comp_lit_score,color:'#b45309',bg:'#fef3c7'},
+    {title:'Comp: Informational',placement:s.comp_info_placement,score:s.comp_info_score,color:'#be123c',bg:'#ffe4e6'},
+    {title:'High-Freq Words',placement:s.hfw_placement,score:null,color:'#065f46',bg:'#dcfce7'},
+  ].map(d=>`
+    <div class="domain-pcard" style="border-color:${d.color}">
+      <div class="dp-title">${d.title}</div>
+      <div class="dp-placement" style="color:${d.color}">${d.placement}</div>
+      ${d.score?`<div class="dp-score">Score: ${d.score}</div>`:''}
+    </div>`).join('');
+
+  // Related standards
+  const studentStds = STANDARDS.filter(std=>{
+    const dom = std.domain.toLowerCase();
+    return (dom.includes('vocabulary')&&(isBelowGrade(s.vocab_placement)||s.vocab_placement==='Early 3'))
+      ||(dom.includes('informational')&&(isBelowGrade(s.comp_info_placement)||s.comp_info_placement==='Early 3'))
+      ||(dom.includes('literature')&&(isBelowGrade(s.comp_lit_placement)||s.comp_lit_placement==='Early 3'))
+      ||(dom.includes('overall')&&(isBelowGrade(s.comp_placement)));
+  }).slice(0,5);
+
+  const stdsHTML = studentStds.length ? studentStds.map(std=>`
+    <div class="std-match-item">
+      <span class="std-code">${std.standard}</span>
+      <span style="font-size:.68rem;color:var(--slate);max-width:60%;text-align:right">${std.desc.slice(0,50)}…</span>
+    </div>`).join('') : '<div style="font-size:.75rem;color:var(--slate);padding:8px 0">No critical standards gaps identified</div>';
+
+  const html = `<div class="student-profile" style="display:block">
+    <div class="profile-header">
+      <div class="profile-avatar" style="background:${color}">${getInitials(s.name)}</div>
+      <div style="flex:1">
+        <div class="profile-name">${s.name}</div>
+        <div class="profile-meta">Homeroom: ${s.homeroom!='nan'?s.homeroom:'Unassigned'} · Grade 3 ELA · Lexile: ${s.lexile}</div>
+        <div class="profile-chips">
+          <span class="profile-chip" style="background:${tc}22;color:${tc}">${tLabel}</span>
+          <span class="profile-chip" style="background:#f0f9ff;color:#0369a1">${s.placement}</span>
+          ${s.reading_difficulty==='Y'?'<span class="profile-chip" style="background:#ffe4e6;color:#be123c">⚠ Reading Difficulty</span>':''}
+          <span class="profile-chip" style="background:#f5f3ff;color:#6d28d9">${s.percentile}th percentile</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="profile-metric"><div class="pm-label">Scale Score</div><div class="pm-value" style="color:var(--navy)">${s.overall_score}</div><div class="pm-sub">Spring YTD</div></div>
+      ${s.baseline_score?`<div class="profile-metric"><div class="pm-label">Baseline</div><div class="pm-value" style="color:var(--slate)">${s.baseline_score}</div><div class="pm-sub">Start of Year</div></div>`:''}
+      <div class="profile-metric"><div class="pm-label">Gain</div><div class="pm-value" style="color:${gainColor}">${s.gain>0?'+':''}${s.gain}</div><div class="pm-sub">pts growth</div></div>
+      <div class="profile-metric"><div class="pm-label">% Typical</div><div class="pm-value" style="color:${s.pct_typical>=100?'var(--green)':'var(--amber)'}">${s.pct_typical>0?Math.round(s.pct_typical):0}%</div><div class="pm-sub">growth target</div></div>
+      <div class="profile-metric"><div class="pm-label">% Stretch</div><div class="pm-value" style="color:var(--violet)">${s.pct_stretch>0?Math.round(s.pct_stretch):0}%</div><div class="pm-sub">stretch target</div></div>
+      <div class="profile-metric"><div class="pm-label">Grouping</div><div class="pm-value" style="color:var(--slate)">${s.grouping||'–'}</div><div class="pm-sub">of 5</div></div>
+    </div>
+
+    <div class="card-title" style="margin-bottom:12px"><div class="icon" style="background:#dbeafe">📊</div> Domain Performance</div>
+    <div class="domain-profile">${domCards}</div>
+
+    <div class="two-col">
+      <div>
+        <div class="card-title" style="margin-bottom:10px"><div class="icon" style="background:#fef3c7">📋</div> Priority Standards Gaps</div>
+        <div class="standards-match">${stdsHTML}</div>
+      </div>
+      <div>
+        <div class="card-title" style="margin-bottom:10px"><div class="icon" style="background:#dcfce7">🎯</div> Growth Toward Targets</div>
+        ${[{l:'Typical Growth Target',val:Math.min(s.pct_typical||0,200),max:200,color:'var(--teal)'},{l:'Stretch Growth Target',val:Math.min(s.pct_stretch||0,200),max:200,color:'var(--violet)'}].map(b=>`
+          <div class="growth-bar-row" style="margin-bottom:10px">
+            <div class="gbr-label">${b.l}</div>
+            <div class="gbr-bar-wrap">
+              <div class="gbr-bg">
+                <div class="gbr-fill" style="width:${Math.min(b.val,100)}%;background:${b.color}">${Math.round(s[b.l==='Typical Growth Target'?'pct_typical':'pct_stretch']||0)}%</div>
+                <div class="gbr-target" style="left:50%"></div>
+              </div>
+            </div>
+          </div>`).join('')}
+        <div style="font-size:.7rem;color:var(--slate);margin-top:8px">📌 Typical target: +${s.typical_target} pts · Stretch target: +${s.stretch_target} pts</div>
+      </div>
+    </div>
+  </div>`;
+
+  document.getElementById('student-profile-wrap').innerHTML = html;
+}
+
+function renderIndividual() {
+  renderStudentList();
+}
+
+// ══════════════════════════════════════
+// TIERS
+// ══════════════════════════════════════
+function renderTiers() {
+  const tier3 = STUDENTS.filter(s=>getTier(s)===3);
+  const tier2 = STUDENTS.filter(s=>getTier(s)===2);
+  const tier1 = STUDENTS.filter(s=>getTier(s)===1);
+
+  function getGaps(s) {
+    const gaps = [];
+    if (isBelowGrade(s.vocab_placement)||s.vocab_placement==='Grade 2') gaps.push('Vocabulary');
+    if (isBelowGrade(s.comp_placement)||s.comp_placement==='Grade 2') gaps.push('Comprehension');
+    if (isBelowGrade(s.comp_info_placement)||s.comp_info_placement==='Grade 2') gaps.push('Info Text');
+    if (s.phonics_placement&&!['Surpassed Level','Max Score'].includes(s.phonics_placement)&&isBelowGrade(s.phonics_placement)) gaps.push('Phonics');
+    if (s.pct_typical<50&&s.pct_typical>0) gaps.push('Low Growth');
+    return gaps;
+  }
+
+  function renderTierList(students) {
+    return students.map(s=>{
+      const gaps = getGaps(s);
+      const color = hashColor(s.name);
+      return `<li class="tier-student">
+        <div class="tier-avatar" style="background:${color}">${getInitials(s.name)}</div>
+        <div class="tier-info">
+          <div class="tier-sname">${s.name}</div>
+          <div class="tier-room">${s.homeroom!='nan'?s.homeroom:'–'} · ${s.placement} · Score: ${s.overall_score}</div>
+          ${gaps.length?`<div class="tier-gaps">${gaps.map(g=>`<span class="gap-tag" style="background:#fee2e2;color:#9f1239">${g}</span>`).join('')}</div>`:''}
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-weight:700;font-size:.75rem;color:${s.gain>0?'var(--green)':'var(--rose)'}">${s.gain>0?'+':''}${s.gain}</div>
+          <div style="font-size:.62rem;color:var(--slate)">pts</div>
+        </div>
+      </li>`;
+    }).join('');
+  }
+
+  document.getElementById('tier-grid').innerHTML = `
+    <div class="tier-card t3">
+      <div class="tier-head"><div class="tier-num">3</div><div><div class="tier-title">Intensive Support</div><div class="tier-count">${tier3.length} students · Below grade level</div></div></div>
+      <ul class="tier-student-list">${renderTierList(tier3)}</ul>
+    </div>
+    <div class="tier-card t2">
+      <div class="tier-head"><div class="tier-num">2</div><div><div class="tier-title">Strategic Support</div><div class="tier-count">${tier2.length} students · Below growth targets</div></div></div>
+      <ul class="tier-student-list">${renderTierList(tier2)}</ul>
+    </div>
+    <div class="tier-card t1">
+      <div class="tier-head"><div class="tier-num">1</div><div><div class="tier-title">On Track / Enrichment</div><div class="tier-count">${tier1.length} students · Meeting/exceeding targets</div></div></div>
+      <ul class="tier-student-list" style="max-height:300px;overflow-y:auto">${renderTierList(tier1)}</ul>
+    </div>`;
+
+  // Tier by room
+  const rooms = ['Fortun','Osborne','Rodriguez','Brown'];
+  let roomHTML = `<table class="student-table" style="font-size:.78rem"><thead><tr><th>Homeroom</th><th>Total</th><th>Tier 1</th><th>Tier 2</th><th>Tier 3</th><th>Avg Score</th><th>Avg Gain</th></tr></thead><tbody>`;
+  rooms.forEach(r=>{
+    const rs = STUDENTS.filter(s=>s.homeroom===r);
+    const t1c=rs.filter(s=>getTier(s)===1).length, t2c=rs.filter(s=>getTier(s)===2).length, t3c=rs.filter(s=>getTier(s)===3).length;
+    roomHTML += `<tr>
+      <td style="font-weight:700"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${ROOM_COLORS[r]};margin-right:6px;vertical-align:middle"></span>${r}</td>
+      <td>${rs.length}</td>
+      <td style="color:var(--green);font-weight:700">${t1c} (${pct(t1c,rs.length)}%)</td>
+      <td style="color:var(--amber);font-weight:700">${t2c} (${pct(t2c,rs.length)}%)</td>
+      <td style="color:var(--rose);font-weight:700">${t3c} (${pct(t3c,rs.length)}%)</td>
+      <td style="font-weight:700">${avg(rs,'overall_score')}</td>
+      <td style="font-weight:700;color:var(--green)">+${avg(rs,'gain')}</td>
+    </tr>`;
+  });
+  roomHTML += '</tbody></table>';
+  document.getElementById('tier-by-room').innerHTML = roomHTML;
+}
+
+// ══════════════════════════════════════
+// ACTION PLAN
+// ══════════════════════════════════════
+function renderActionPlan() {
+  const tier3 = STUDENTS.filter(s=>getTier(s)===3);
+  const tier2 = STUDENTS.filter(s=>getTier(s)===2);
+  const tier1 = STUDENTS.filter(s=>getTier(s)===1);
+
+  const plans = [
+    {
+      tier: 3,
+      title: 'Tier 3 — Intensive Intervention (Daily, 30–45 min)',
+      students: tier3,
+      focus: ['ELA.3.R.2.1 – Main idea & key details (Informational)', 'ELA.3.R.3.3 – Inference & text evidence', 'ELA.3.R.3.1 – Context clues / vocabulary', 'ELA.3.F.1.3 – Word decoding (Razwan & Abigail)'],
+      strategies: [
+        'Daily 1:1 or small group (2–3 students) with reading specialist',
+        'Structured literacy approach: explicit phonics for Razwan, Abigail (Grade 1–2 phonics gaps)',
+        'iReady lessons: Focus on assigned lessons in Comprehension domain (Grouping 1–2)',
+        'Close reading protocol with graphic organizers for main idea/details',
+        'Partner reading with grade-level decodable books at student Lexile range (445L–595L)',
+        'Vocabulary pre-teaching: 5 words per week using Frayer Model',
+        'Progress monitor weekly with iReady and teacher-created probes',
+        'Parent communication: weekly reading log, home reading 20 min/night at instructional level',
+        'Refer Razwan P. and David R. for reading specialist/ESE evaluation (minimal gain, difficulty flag)',
+      ],
+      resources: ['iReady assigned lesson path (Groupings 1–2)', 'Decodable readers 400–600L', 'FCRR Comprehension activities', 'Florida BEST alignment: RL.3.1–3.3, RI.3.1–3.3']
+    },
+    {
+      tier: 2,
+      title: 'Tier 2 — Strategic Support (3x/week, 20–30 min)',
+      students: tier2,
+      focus: ['ELA.3.R.2.1 – Informational text main idea', 'ELA.3.R.2.3 – Author\'s purpose, fact vs. opinion', 'ELA.3.R.3.1 – Vocabulary in context', 'ELA.3.R.3.4 – Central idea with evidence'],
+      strategies: [
+        'Small group instruction (4–6 students) 3x per week during WIN/Flex time',
+        'Focused strategy: "Read, Stop, Think" for comprehension monitoring during informational text',
+        'Vocabulary: 3-read protocol and semantic mapping with academic vocabulary',
+        'FSA-formatted practice passages 2x per week (focus on informational text)',
+        'iReady: Complete assigned lessons; ensure 45 min/week iReady usage',
+        'Graphic organizers: Main Idea/Detail T-chart, Summary frames',
+        'Growth conferences: Review % progress to typical growth goal weekly',
+        'Monitor students with 0 gain scores (Kavin, Elizabeth, Abbie, Meenakshi, etc.) — re-assess engagement',
+        'Flexible regrouping based on bi-weekly data check',
+      ],
+      resources: ['iReady assigned lesson path (Groupings 3–4)', 'FCRR fluency & comprehension activities', 'ReadWorks.org (informational paired passages)', 'Newsela (Lexile-adjusted informational texts)']
+    },
+    {
+      tier: 1,
+      title: 'Tier 1 — Core Instruction + Enrichment (Daily whole class + extension)',
+      students: tier1,
+      focus: ['ELA.3.R.1.1–1.3 – Literary analysis at Grade 4+ complexity', 'ELA.3.R.2.1–2.3 – Complex informational texts', 'ELA.3.R.3.1–3.4 – Synthesis across multiple texts', 'Writing to sources: argument and informational'],
+      strategies: [
+        'Differentiated Socratic Seminars using complex Grade 4–5 texts',
+        'Literature circles with student-selected books above grade level (800–1100L+)',
+        'Research projects using primary source informational texts (address RI.3 standards)',
+        'iReady: Maintain 45+ min/week; encourage stretch goal lessons',
+        'Independent reading challenge: 2 books/month within target Lexile range',
+        'Writing response to literature and informational texts using RACE strategy',
+        'Peer tutoring: Pair advanced students with Tier 2 students for fluency work',
+        'ELA extension: Author study, comparing multiple texts on same topic',
+        'FSA preparation: Practice annotating complex passages, multi-step questions',
+      ],
+      resources: ['iReady extension lessons (Grouping 5)', 'Epic! Books (digital library)', 'Florida BEST Literacy Instructional Materials', 'FCRR extension activities for advanced readers']
+    }
+  ];
+
+  document.getElementById('action-plan').innerHTML = plans.map(p=>{
+    const tc = {1:'var(--green)',2:'var(--amber)',3:'var(--rose)'}[p.tier];
+    return `<div class="action-card t${p.tier}">
+      <div class="action-header">
+        <span class="action-tier-badge">Tier ${p.tier}</span>
+        <div class="action-title">${p.title}</div>
+      </div>
+      <div style="margin-bottom:14px">
+        <div class="action-section-title">📌 Priority Students</div>
+        <div class="action-students">${p.students.map(s=>`<span class="student-chip" style="background:${hashColor(s.name)}">${s.name}</span>`).join('')}</div>
+        <div style="font-size:.73rem;color:var(--slate);margin-top:6px">Total: ${p.students.length} students</div>
+      </div>
+      <div class="action-body">
+        <div>
+          <div class="action-section-title">🎯 Priority Standards Focus</div>
+          <ul class="action-list">${p.focus.map(f=>`<li>${f}</li>`).join('')}</ul>
+        </div>
+        <div>
+          <div class="action-section-title">🛠 Intervention Strategies</div>
+          <ul class="action-list">${p.strategies.map(s=>`<li>${s}</li>`).join('')}</ul>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid ${tc}33">
+        <div class="action-section-title">📚 Recommended Resources</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${p.resources.map(r=>`<span style="background:${tc}15;color:${tc};padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:600">${r}</span>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+renderOverview();
+renderClassView();
+renderStandards();
+renderIndividual();
+renderTiers();
+renderActionPlan();
+</script>
+</body>
+</html>

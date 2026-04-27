@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3rd Grade Math iReady Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f172a;
+    --ink2: #1e293b;
+    --plum: #6d28d9;
+    --plum-lt: #ede9fe;
+    --amber: #d97706;
+    --amber-lt: #fef3c7;
+    --rose: #be123c;
+    --rose-lt: #ffe4e6;
+    --teal: #0f766e;
+    --teal-lt: #ccfbf1;
+    --sky: #0284c7;
+    --sky-lt: #e0f2fe;
+    --green: #15803d;
+    --green-lt: #dcfce7;
+    --slate: #64748b;
+    --paper: #faf9f7;
+    --white: #ffffff;
+    --card-shadow: 0 2px 16px rgba(15,23,42,0.10);
+    --t1: #15803d; --t2: #d97706; --t3: #be123c;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Source Sans 3',sans-serif; background:var(--paper); color:var(--ink); min-height:100vh; }
+
+  /* HEADER */
+  header { background:var(--ink); color:#fff; position:sticky; top:0; z-index:100; box-shadow:0 3px 20px rgba(0,0,0,.4); }
+  .header-inner { display:flex; align-items:center; justify-content:space-between; padding:12px 32px; gap:20px; flex-wrap:wrap; }
+  .htitle h1 { font-family:'Playfair Display',serif; font-size:1.4rem; letter-spacing:.2px; }
+  .htitle span { font-size:.72rem; color:#a78bfa; font-weight:600; letter-spacing:.9px; text-transform:uppercase; display:block; margin-top:2px; }
+  .test-badge { display:flex; align-items:center; gap:14px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1); border-radius:10px; padding:10px 18px; }
+  .test-lbl { font-size:.68rem; text-transform:uppercase; letter-spacing:1px; color:#a78bfa; font-weight:700; }
+  .test-name { font-family:'Playfair Display',serif; font-size:1.05rem; color:#fbbf24; line-height:1.15; }
+  .test-date { font-size:.73rem; color:#fde68a; font-weight:600; margin-top:2px; }
+
+  /* COUNTDOWN */
+  .countdown { display:flex; align-items:center; gap:10px; background:linear-gradient(135deg,#be123c,#7c3aed); border-radius:10px; padding:10px 16px; border:1px solid rgba(255,255,255,.2); }
+  .cd-icon { font-size:1.6rem; }
+  .cd-body { display:flex; flex-direction:column; }
+  .cd-lbl { font-size:.62rem; text-transform:uppercase; letter-spacing:1px; color:#fde68a; font-weight:800; }
+  .cd-grid { display:flex; gap:8px; margin-top:3px; }
+  .cd-unit { display:flex; flex-direction:column; align-items:center; min-width:34px; }
+  .cd-val { font-family:'Playfair Display',serif; font-size:1.25rem; color:#fff; font-weight:700; line-height:1; }
+  .cd-lbl-small { font-size:.55rem; color:#e9d5ff; text-transform:uppercase; letter-spacing:.5px; font-weight:700; margin-top:2px; }
+
+  .tab-nav { display:flex; background:var(--ink2); padding:0 32px; border-bottom:2px solid rgba(255,255,255,.06); overflow-x:auto; }
+  .tab-btn { background:none; border:none; color:#94a3b8; padding:10px 20px; font-family:'Source Sans 3',sans-serif; font-size:.8rem; font-weight:700; cursor:pointer; border-bottom:3px solid transparent; transition:all .2s; white-space:nowrap; letter-spacing:.5px; text-transform:uppercase; }
+  .tab-btn:hover { color:#fff; }
+  .tab-btn.active { color:#c4b5fd; border-bottom-color:#7c3aed; }
+
+  /* MAIN */
+  main { padding:26px 32px; max-width:1600px; margin:0 auto; }
+  .tab-pane { display:none; animation:fadeUp .3s ease; }
+  .tab-pane.active { display:block; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .sec-title { font-family:'Playfair Display',serif; font-size:1.45rem; margin-bottom:5px; }
+  .sec-sub { font-size:.82rem; color:var(--slate); margin-bottom:22px; }
+
+  /* STAT CARDS */
+  .stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:26px; }
+  .stat-card { background:#fff; border-radius:12px; padding:16px 18px; box-shadow:var(--card-shadow); border-top:4px solid var(--acc,#7c3aed); }
+  .stat-lbl { font-size:.68rem; text-transform:uppercase; letter-spacing:.8px; color:var(--slate); font-weight:700; margin-bottom:7px; }
+  .stat-val { font-family:'Playfair Display',serif; font-size:1.9rem; line-height:1; color:var(--acc,#7c3aed); margin-bottom:3px; }
+  .stat-det { font-size:.72rem; color:var(--slate); }
+
+  /* LAYOUTS */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; margin-bottom:18px; }
+  @media(max-width:900px){.two-col,.three-col{grid-template-columns:1fr}}
+
+  /* CARD */
+  .card { background:#fff; border-radius:14px; padding:20px 22px; box-shadow:var(--card-shadow); }
+  .card-title { font-family:'Playfair Display',serif; font-size:1rem; margin-bottom:14px; display:flex; align-items:center; gap:9px; }
+  .cicon { width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:.8rem; flex-shrink:0; }
+
+  /* BARS */
+  .pbar-wrap { margin-bottom:9px; }
+  .pbar-top { font-size:.73rem; font-weight:700; display:flex; justify-content:space-between; margin-bottom:3px; }
+  .pbar-bg { background:#e2e8f0; border-radius:5px; height:9px; overflow:hidden; }
+  .pbar-fill { height:100%; border-radius:5px; transition:width .8s ease; }
+  .dbar-wrap { display:flex; flex-direction:column; gap:9px; }
+  .dbar-name { font-size:.72rem; font-weight:700; color:var(--slate); margin-bottom:2px; display:flex; justify-content:space-between; }
+  .dbar-bg { position:relative; background:#e2e8f0; border-radius:5px; height:18px; overflow:hidden; }
+  .dbar-fill { height:100%; border-radius:5px; display:flex; align-items:center; justify-content:flex-end; padding-right:6px; font-size:.65rem; color:#fff; font-weight:800; transition:width .8s ease; }
+  .dbar-bench { position:absolute; top:0; height:100%; width:2px; background:#1e293b; }
+
+  /* FAST INFO CALLOUT */
+  .fast-cal { background:linear-gradient(135deg,#fef3c7 0%,#fde68a 100%); border-radius:12px; padding:14px 18px; margin-bottom:18px; border-left:5px solid #d97706; display:flex; gap:12px; align-items:flex-start; }
+  .fast-cal-icon { font-size:1.5rem; flex-shrink:0; }
+  .fast-cal-title { font-weight:800; font-size:.82rem; color:#78350f; margin-bottom:3px; }
+  .fast-cal-txt { font-size:.72rem; color:#78350f; line-height:1.5; }
+
+  /* CLASS CARD */
+  .class-card { background:#fff; border-radius:12px; padding:16px 18px; box-shadow:var(--card-shadow); border-left:5px solid var(--acc); margin-bottom:14px; }
+  .cc-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:10px; }
+  .cc-name { font-family:'Playfair Display',serif; font-size:1.15rem; }
+  .cc-teacher { font-size:.72rem; color:var(--slate); margin-top:2px; }
+  .cc-count { padding:4px 11px; border-radius:16px; background:var(--acc); color:#fff; font-size:.68rem; font-weight:800; }
+  .cc-metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:12px; margin-bottom:10px; }
+  .ccm { text-align:center; background:#f8fafc; border-radius:8px; padding:9px 6px; }
+  .ccm-val { font-family:'Playfair Display',serif; font-size:1.25rem; color:var(--acc); line-height:1; }
+  .ccm-lbl { font-size:.6rem; text-transform:uppercase; letter-spacing:.6px; color:var(--slate); font-weight:700; margin-top:3px; }
+
+  /* TABLE */
+  table { width:100%; border-collapse:collapse; font-size:.73rem; }
+  th { background:#f1f5f9; padding:9px 10px; text-align:left; font-weight:800; color:var(--slate); text-transform:uppercase; font-size:.64rem; letter-spacing:.6px; border-bottom:2px solid #cbd5e1; }
+  td { padding:8px 10px; border-bottom:1px solid #e2e8f0; }
+  tr:hover { background:#f8fafc; }
+  .place-chip { display:inline-block; padding:2px 8px; border-radius:11px; font-size:.63rem; font-weight:800; color:#fff; }
+
+  /* TIERS */
+  .tier-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:22px; }
+  @media(max-width:880px){.tier-grid{grid-template-columns:1fr}}
+  .tcard { border-radius:13px; padding:18px 20px; box-shadow:var(--card-shadow); border-top:5px solid; }
+  .tcard.t1 { background:#f0fdf4; border-color:var(--green); }
+  .tcard.t2 { background:#fffbeb; border-color:var(--amber); }
+  .tcard.t3 { background:#fff1f2; border-color:var(--rose); }
+  .t-hd { display:flex; align-items:center; gap:9px; margin-bottom:12px; }
+  .t-num { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:.95rem; color:#fff; flex-shrink:0; }
+  .tcard.t1 .t-num { background:var(--green); }
+  .tcard.t2 .t-num { background:var(--amber); }
+  .tcard.t3 .t-num { background:var(--rose); }
+  .t-title { font-family:'Playfair Display',serif; font-size:1.05rem; line-height:1.15; }
+  .t-count { font-size:.68rem; color:var(--slate); margin-top:2px; }
+  .t-sec { margin-bottom:13px; }
+  .t-sec-title { font-size:.68rem; text-transform:uppercase; letter-spacing:.7px; font-weight:800; color:var(--slate); margin-bottom:7px; }
+  .t-list { list-style:none; padding-left:0; }
+  .t-list li { font-size:.72rem; line-height:1.45; padding:4px 0 4px 16px; position:relative; color:var(--ink); }
+  .t-list li:before { content:"▸"; position:absolute; left:0; color:var(--slate); font-weight:800; }
+
+  /* INDIVIDUAL */
+  .stu-search { width:100%; padding:11px 15px; font-size:.85rem; border:2px solid #e2e8f0; border-radius:9px; font-family:'Source Sans 3',sans-serif; margin-bottom:12px; }
+  .stu-search:focus { outline:none; border-color:var(--plum); }
+  .filter-bar { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .fbtn { padding:6px 14px; font-size:.7rem; font-weight:700; border:2px solid #e2e8f0; background:#fff; border-radius:18px; cursor:pointer; color:var(--slate); text-transform:uppercase; letter-spacing:.5px; transition:all .15s; }
+  .fbtn:hover { border-color:#cbd5e1; }
+  .fbtn.active { background:var(--plum); color:#fff; border-color:var(--plum); }
+
+  .stu-card { background:#fff; border-radius:14px; padding:22px 26px; box-shadow:var(--card-shadow); margin-bottom:18px; border-left:6px solid var(--acc); }
+  .stu-hd { display:flex; align-items:center; gap:15px; margin-bottom:18px; flex-wrap:wrap; }
+  .stu-avatar { width:55px; height:55px; border-radius:50%; background:var(--acc); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:1.5rem; color:#fff; flex-shrink:0; }
+  .stu-name { font-family:'Playfair Display',serif; font-size:1.4rem; }
+  .stu-meta { font-size:.78rem; color:var(--slate); margin-top:3px; }
+  .stu-chips { display:flex; gap:7px; flex-wrap:wrap; margin-top:7px; }
+  .pchip { padding:3px 11px; border-radius:20px; font-size:.7rem; font-weight:700; }
+  .pmet-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin-bottom:18px; }
+  .pmet { background:#f8f9fa; border-radius:9px; padding:12px; text-align:center; }
+  .pm-lbl { font-size:.63rem; text-transform:uppercase; letter-spacing:.7px; color:var(--slate); font-weight:700; margin-bottom:5px; }
+  .pm-val { font-family:'Playfair Display',serif; font-size:1.5rem; line-height:1; }
+  .pm-sub { font-size:.65rem; color:var(--slate); margin-top:2px; }
+  .dom-grid { display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-bottom:18px; }
+  @media(max-width:680px){.dom-grid{grid-template-columns:1fr}}
+  .dcard { background:#f8f9fa; border-radius:9px; padding:12px 14px; border-left:4px solid; }
+  .dc-title { font-size:.68rem; font-weight:800; text-transform:uppercase; letter-spacing:.6px; color:var(--slate); margin-bottom:5px; }
+  .dc-place { font-weight:700; font-size:.85rem; margin-bottom:3px; }
+  .dc-score { font-size:.72rem; color:var(--slate); }
+  .std-match-item { font-size:.68rem; padding:3px 0; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; gap:6px; }
+  .gbr-row { display:flex; align-items:center; gap:11px; margin-bottom:9px; }
+  .gbr-lbl { font-size:.7rem; font-weight:700; width:140px; flex-shrink:0; color:var(--slate); }
+  .gbr-bg { flex:1; background:#e2e8f0; border-radius:5px; height:16px; position:relative; overflow:hidden; }
+  .gbr-fill { height:100%; border-radius:5px; display:flex; align-items:center; justify-content:flex-end; padding-right:5px; font-size:.6rem; color:#fff; font-weight:800; }
+
+  /* ACTION PLAN */
+  .ap-phase { background:#fff; border-radius:13px; padding:20px 22px; box-shadow:var(--card-shadow); margin-bottom:18px; border-left:6px solid var(--acc); }
+  .ap-hd { display:flex; align-items:center; gap:13px; margin-bottom:13px; flex-wrap:wrap; }
+  .ap-num { width:44px; height:44px; border-radius:50%; background:var(--acc); color:#fff; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:1.2rem; flex-shrink:0; }
+  .ap-title { font-family:'Playfair Display',serif; font-size:1.2rem; }
+  .ap-dates { font-size:.72rem; color:var(--slate); margin-top:2px; }
+  .ap-countdown { margin-left:auto; padding:4px 12px; border-radius:16px; background:#fef3c7; color:#92400e; font-size:.7rem; font-weight:800; }
+  .ap-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:880px){.ap-grid{grid-template-columns:1fr}}
+  .ap-box { background:#f8fafc; border-radius:9px; padding:13px 15px; }
+  .ap-box-title { font-size:.72rem; text-transform:uppercase; letter-spacing:.7px; font-weight:800; color:var(--slate); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .ap-list { list-style:none; padding-left:0; }
+  .ap-list li { font-size:.74rem; line-height:1.5; padding:4px 0 4px 17px; position:relative; }
+  .ap-list li:before { content:"✓"; position:absolute; left:0; color:var(--green); font-weight:800; }
+
+  /* STANDARDS */
+  .std-card { background:#fff; border-radius:12px; padding:16px 18px; box-shadow:var(--card-shadow); margin-bottom:12px; border-left:5px solid var(--acc); }
+  .std-hd { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:7px; flex-wrap:wrap; }
+  .std-code { font-family:'Playfair Display',serif; font-size:.95rem; color:var(--acc); font-weight:700; }
+  .std-dom { font-size:.66rem; text-transform:uppercase; letter-spacing:.8px; color:var(--slate); font-weight:800; margin-top:2px; }
+  .std-pri { padding:3px 10px; border-radius:12px; font-size:.62rem; font-weight:800; text-transform:uppercase; color:#fff; letter-spacing:.5px; }
+  .std-desc { font-size:.78rem; color:var(--ink); line-height:1.45; margin-bottom:7px; }
+  .std-ir { font-size:.7rem; color:var(--slate); padding:6px 10px; background:#f1f5f9; border-radius:7px; margin-bottom:7px; }
+  .std-note { font-size:.7rem; color:var(--ink); line-height:1.4; padding:6px 10px; background:#fef3c7; border-radius:7px; border-left:3px solid #d97706; }
+
+  /* FAST BADGES */
+  .fast-badges { display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
+  .fastbadge { padding:6px 14px; border-radius:18px; font-size:.68rem; font-weight:800; text-transform:uppercase; letter-spacing:.5px; }
+
+  ::-webkit-scrollbar { width:5px; height:5px; }
+  ::-webkit-scrollbar-track { background:#f1f5f9; }
+  ::-webkit-scrollbar-thumb { background:#94a3b8; border-radius:3px; }
+
+  @media print {
+    header { position:static; }
+    .tab-btn { display:none; }
+    .tab-pane { display:block !important; page-break-after:always; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="htitle">
+      <h1>3rd Grade Math iReady Dashboard</h1>
+      <span>YTD Diagnostic Analysis &middot; Florida B.E.S.T. Standards Alignment</span>
+    </div>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+      <div class="test-badge">
+        <div style="font-size:1.8rem">&#128221;</div>
+        <div>
+          <div class="test-lbl">Upcoming Assessment</div>
+          <div class="test-name">FAST Math PM3</div>
+          <div class="test-date">May 11, 2026</div>
+        </div>
+      </div>
+      <div class="countdown">
+        <div class="cd-icon">&#9203;</div>
+        <div class="cd-body">
+          <div class="cd-lbl">Time to Test</div>
+          <div class="cd-grid" id="cd-grid">
+            <div class="cd-unit"><div class="cd-val" id="cd-days">--</div><div class="cd-lbl-small">Days</div></div>
+            <div class="cd-unit"><div class="cd-val" id="cd-hours">--</div><div class="cd-lbl-small">Hrs</div></div>
+            <div class="cd-unit"><div class="cd-val" id="cd-mins">--</div><div class="cd-lbl-small">Min</div></div>
+            <div class="cd-unit"><div class="cd-val" id="cd-secs">--</div><div class="cd-lbl-small">Sec</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('overview',this)">&#128200; Overview</button>
+    <button class="tab-btn" onclick="showTab('class',this)">&#127979; Class View</button>
+    <button class="tab-btn" onclick="showTab('standards',this)">&#128203; Standards &amp; Gaps</button>
+    <button class="tab-btn" onclick="showTab('individual',this)">&#128100; Individual</button>
+    <button class="tab-btn" onclick="showTab('tiers',this)">&#127919; Tier Placement</button>
+    <button class="tab-btn" onclick="showTab('action',this)">&#128221; Action Plan</button>
+  </nav>
+</header>
+
+<main>
+<div id="tab-overview" class="tab-pane active"></div>
+<div id="tab-class" class="tab-pane"></div>
+<div id="tab-standards" class="tab-pane"></div>
+<div id="tab-individual" class="tab-pane"></div>
+<div id="tab-tiers" class="tab-pane"></div>
+<div id="tab-action" class="tab-pane"></div>
+</main>
+
+<script>
+// ============================================
+// STUDENT DATA
+// ============================================
+const S = [{"n": "Inaaya A.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 436, "bp": "Grade 2", "wss": 452, "wp": "Early 3", "ss": 452, "p": "Early 3", "rel": "Early On Grade Level", "pct": 71, "grp": 4, "qnt": "575Q", "dur": 49, "rush": "", "ra": "Off", "np": "Early 3", "nss": 454, "nr": "Early On Grade Level", "ap": "Mid 3", "ass": 464, "ar": "Mid or Above Grade Level", "mp": "Grade 2", "mss": 445, "mr": "1 Grade Level Below", "gp": "Grade 2", "gss": 441, "gr": "1 Grade Level Below", "gn": 16, "tg": 26, "sg": 35, "pt": 62, "ps": 46, "mgl": 464}, {"n": "Sai Dhruva A.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 479, "bp": "Mid 3", "wss": 519, "wp": "Grade 4", "ss": 523, "p": "Grade 4", "rel": "Mid or Above Grade Level", "pct": 99, "grp": 5, "qnt": "975Q", "dur": 78, "rush": "", "ra": "Off", "np": "Grade 5", "nss": 537, "nr": "Mid or Above Grade Level", "ap": "Grade 4", "ass": 517, "ar": "Mid or Above Grade Level", "mp": "Late 3", "mss": 514, "mr": "Mid or Above Grade Level", "gp": "Grade 4", "gss": 521, "gr": "Mid or Above Grade Level", "gn": 44, "tg": 21, "sg": 30, "pt": 210, "ps": 147, "mgl": 464}, {"n": "Abigail A.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 404, "bp": "Grade 1", "wss": 442, "wp": "Grade 2", "ss": 445, "p": "Grade 2", "rel": "1 Grade Level Below", "pct": 43, "grp": 2, "qnt": "530Q", "dur": 48, "rush": "", "ra": "Off", "np": "Grade 2", "nss": 440, "nr": "1 Grade Level Below", "ap": "Grade 2", "ass": 437, "ar": "1 Grade Level Below", "mp": "Early 3", "mss": 452, "mr": "Early On Grade Level", "gp": "Early 3", "gss": 457, "gr": "Early On Grade Level", "gn": 41, "tg": 27, "sg": 43, "pt": 152, "ps": 95, "mgl": 464}, {"n": "Kowsar A.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 433, "bp": "Grade 2", "wss": 444, "wp": "Grade 2", "ss": 467, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 73, "grp": 4, "qnt": "670Q", "dur": 56, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 488, "nr": "Mid or Above Grade Level", "ap": "Early 3", "ass": 461, "ar": "Early On Grade Level", "mp": "Grade 2", "mss": 437, "mr": "1 Grade Level Below", "gp": "Mid 3", "gss": 472, "gr": "Mid or Above Grade Level", "gn": 34, "tg": 26, "sg": 35, "pt": 131, "ps": 97, "mgl": 464}, {"n": "Oliver B.", "hr": "Fortun", "tch": "Adams", "ct": "General", "bss": 437, "bp": "Grade 2", "wss": 450, "wp": "Early 3", "ss": 473, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 82, "grp": 5, "qnt": "705Q", "dur": 52, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 469, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 468, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 479, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 477, "gr": "Mid or Above Grade Level", "gn": 36, "tg": 26, "sg": 35, "pt": 138, "ps": 103, "mgl": 464}, {"n": "Gideon B.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 448, "bp": "Grade 2", "wss": 461, "wp": "Early 3", "ss": 481, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 87, "grp": 5, "qnt": "750Q", "dur": 72, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 469, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 502, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 486, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 466, "gr": "Mid or Above Grade Level", "gn": 33, "tg": 26, "sg": 35, "pt": 127, "ps": 94, "mgl": 464}, {"n": "Kavin C.", "hr": "Fortun", "tch": "Adams", "ct": "General", "bss": 436, "bp": "Grade 2", "wss": 466, "wp": "Mid 3", "ss": 461, "p": "Early 3", "rel": "Early On Grade Level", "pct": 64, "grp": 5, "qnt": "630Q", "dur": 89, "rush": "", "ra": "Off", "np": "Early 3", "nss": 445, "nr": "Early On Grade Level", "ap": "Mid 3", "ass": 465, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 460, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 479, "gr": "Mid or Above Grade Level", "gn": 25, "tg": 26, "sg": 35, "pt": 96, "ps": 71, "mgl": 464}, {"n": "Sophia C.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 439, "bp": "Grade 2", "wss": 456, "wp": "Early 3", "ss": 482, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 88, "grp": 5, "qnt": "755Q", "dur": 51, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 483, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 474, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 489, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 481, "gr": "Mid or Above Grade Level", "gn": 43, "tg": 26, "sg": 35, "pt": 165, "ps": 123, "mgl": 464}, {"n": "Srikarthikeya C.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 465, "bp": "Mid 3", "wss": 498, "wp": "Mid 3", "ss": 501, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 97, "grp": 5, "qnt": "870Q", "dur": 63, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 485, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 501, "ar": "Mid or Above Grade Level", "mp": "Late 3", "mss": 510, "mr": "Mid or Above Grade Level", "gp": "Late 3", "gss": 516, "gr": "Mid or Above Grade Level", "gn": 36, "tg": 21, "sg": 30, "pt": 171, "ps": 120, "mgl": 464}, {"n": "Abraham D.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 477, "bp": "Mid 3", "wss": 492, "wp": "Mid 3", "ss": 529, "p": "Grade 5", "rel": "Mid or Above Grade Level", "pct": 99, "grp": 5, "qnt": "975Q", "dur": 96, "rush": "", "ra": "Off", "np": "Grade 5", "nss": 533, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 516, "ar": "Mid or Above Grade Level", "mp": "Grade 6", "mss": 551, "mr": "Mid or Above Grade Level", "gp": "Late 3", "gss": 516, "gr": "Mid or Above Grade Level", "gn": 52, "tg": 21, "sg": 30, "pt": 248, "ps": 173, "mgl": 464}, {"n": "Harlow D.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 453, "bp": "Early 3", "wss": 466, "wp": "Mid 3", "ss": 502, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 97, "grp": 5, "qnt": "875Q", "dur": 66, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 497, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 478, "ar": "Mid or Above Grade Level", "mp": "Grade 4", "mss": 524, "mr": "Mid or Above Grade Level", "gp": "Grade 4", "gss": 517, "gr": "Mid or Above Grade Level", "gn": 49, "tg": 25, "sg": 34, "pt": 196, "ps": 144, "mgl": 464}, {"n": "Harbor D.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 430, "bp": "Grade 2", "wss": 446, "wp": "Grade 2", "ss": 441, "p": "Grade 2", "rel": "1 Grade Level Below", "pct": 38, "grp": 2, "qnt": "505Q", "dur": 61, "rush": "", "ra": "Off", "np": "Grade 2", "nss": 424, "nr": "1 Grade Level Below", "ap": "Mid 3", "ass": 473, "ar": "Mid or Above Grade Level", "mp": "Grade 2", "mss": 420, "mr": "1 Grade Level Below", "gp": "Grade 2", "gss": 439, "gr": "1 Grade Level Below", "gn": 11, "tg": 26, "sg": 35, "pt": 42, "ps": 31, "mgl": 464}, {"n": "Braydon D.", "hr": "Fortun", "tch": "Adams", "ct": "General", "bss": 422, "bp": "Grade 2", "wss": 439, "wp": "Grade 2", "ss": 447, "p": "Grade 2", "rel": "1 Grade Level Below", "pct": 46, "grp": 2, "qnt": "545Q", "dur": 52, "rush": "", "ra": "On", "np": "Early 3", "nss": 452, "nr": "Early On Grade Level", "ap": "Grade 2", "ass": 429, "ar": "1 Grade Level Below", "mp": "Early 3", "mss": 455, "mr": "Early On Grade Level", "gp": "Early 3", "gss": 452, "gr": "Early On Grade Level", "gn": 25, "tg": 26, "sg": 35, "pt": 96, "ps": 71, "mgl": 464}, {"n": "Asim E.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 452, "bp": "Early 3", "wss": 486, "wp": "Mid 3", "ss": 504, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 97, "grp": 5, "qnt": "890Q", "dur": 126, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 480, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 505, "ar": "Mid or Above Grade Level", "mp": "Grade 5", "mss": 528, "mr": "Mid or Above Grade Level", "gp": "Late 3", "gss": 514, "gr": "Mid or Above Grade Level", "gn": 52, "tg": 25, "sg": 34, "pt": 208, "ps": 153, "mgl": 464}, {"n": "Aiden F.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 478, "bp": "Mid 3", "wss": 488, "wp": "Mid 3", "ss": 506, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 97, "grp": 5, "qnt": "900Q", "dur": 89, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 494, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 506, "ar": "Mid or Above Grade Level", "mp": "Late 3", "mss": 514, "mr": "Mid or Above Grade Level", "gp": "Late 3", "gss": 516, "gr": "Mid or Above Grade Level", "gn": 28, "tg": 21, "sg": 30, "pt": 133, "ps": 93, "mgl": 464}, {"n": "Lavínia F.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 416, "bp": "Grade 2", "wss": 439, "wp": "Grade 2", "ss": 451, "p": "Early 3", "rel": "Early On Grade Level", "pct": 51, "grp": 4, "qnt": "570Q", "dur": 64, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 458, "nr": "Mid or Above Grade Level", "ap": "Early 3", "ass": 449, "ar": "Early On Grade Level", "mp": "Grade 2", "mss": 439, "mr": "1 Grade Level Below", "gp": "Early 3", "gss": 456, "gr": "Early On Grade Level", "gn": 35, "tg": 26, "sg": 35, "pt": 135, "ps": 100, "mgl": 464}, {"n": "Elizabeth F.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 451, "bp": "Early 3", "wss": 462, "wp": "Early 3", "ss": 474, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 83, "grp": 5, "qnt": "705Q", "dur": 84, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 465, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 471, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 486, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 478, "gr": "Mid or Above Grade Level", "gn": 23, "tg": 25, "sg": 34, "pt": 92, "ps": 68, "mgl": 464}, {"n": "Vincenzo F.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 436, "bp": "Grade 2", "wss": 446, "wp": "Grade 2", "ss": 486, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 91, "grp": 5, "qnt": "780Q", "dur": 49, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 490, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 481, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 487, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 487, "gr": "Mid or Above Grade Level", "gn": 50, "tg": 26, "sg": 35, "pt": 192, "ps": 143, "mgl": 464}, {"n": "Perola G.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 405, "bp": "Grade 1", "wss": 422, "wp": "Grade 2", "ss": 430, "p": "Grade 2", "rel": "1 Grade Level Below", "pct": 25, "grp": 2, "qnt": "435Q", "dur": 71, "rush": "", "ra": "Off", "np": "Grade 2", "nss": 433, "nr": "1 Grade Level Below", "ap": "Early 3", "ass": 454, "ar": "Early On Grade Level", "mp": "Grade 2", "mss": 431, "mr": "1 Grade Level Below", "gp": "Grade 1", "gss": 390, "gr": "2 Grade Levels Below", "gn": 25, "tg": 27, "sg": 43, "pt": 93, "ps": 58, "mgl": 464}, {"n": "Sammy G.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 432, "bp": "Grade 2", "wss": 444, "wp": "Grade 2", "ss": 455, "p": "Early 3", "rel": "Early On Grade Level", "pct": 56, "grp": 4, "qnt": "595Q", "dur": 62, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 461, "nr": "Mid or Above Grade Level", "ap": "Early 3", "ass": 459, "ar": "Early On Grade Level", "mp": "Early 3", "mss": 448, "mr": "Early On Grade Level", "gp": "Grade 2", "gss": 446, "gr": "1 Grade Level Below", "gn": 23, "tg": 26, "sg": 35, "pt": 88, "ps": 66, "mgl": 464}, {"n": "Miel G.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 451, "bp": "Early 3", "wss": 469, "wp": "Mid 3", "ss": 470, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 77, "grp": 5, "qnt": "685Q", "dur": 57, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 461, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 480, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 476, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 465, "gr": "Mid or Above Grade Level", "gn": 19, "tg": 25, "sg": 34, "pt": 76, "ps": 56, "mgl": 464}, {"n": "Ilyas G.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 448, "bp": "Grade 2", "wss": 462, "wp": "Early 3", "ss": 496, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 95, "grp": 5, "qnt": "840Q", "dur": 82, "rush": "", "ra": "Off", "np": "Late 3", "nss": 508, "nr": "Mid or Above Grade Level", "ap": "Early 3", "ass": 458, "ar": "Early On Grade Level", "mp": "Late 3", "mss": 516, "mr": "Mid or Above Grade Level", "gp": "Late 3", "gss": 506, "gr": "Mid or Above Grade Level", "gn": 48, "tg": 26, "sg": 35, "pt": 185, "ps": 137, "mgl": 464}, {"n": "Riaan H.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 480, "bp": "Mid 3", "wss": 486, "wp": "Mid 3", "ss": 516, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 99, "grp": 5, "qnt": "955Q", "dur": 90, "rush": "", "ra": "Off", "np": "Late 3", "nss": 510, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 498, "ar": "Mid or Above Grade Level", "mp": "Grade 5", "mss": 529, "mr": "Mid or Above Grade Level", "gp": "Grade 5", "gss": 534, "gr": "Mid or Above Grade Level", "gn": 36, "tg": 21, "sg": 30, "pt": 171, "ps": 120, "mgl": 464}, {"n": "Lucille H.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 436, "bp": "Grade 2", "wss": 445, "wp": "Grade 2", "ss": 469, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 76, "grp": 5, "qnt": "680Q", "dur": 28, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 473, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 469, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 476, "mr": "Mid or Above Grade Level", "gp": "Early 3", "gss": 455, "gr": "Early On Grade Level", "gn": 33, "tg": 26, "sg": 35, "pt": 127, "ps": 94, "mgl": 464}, {"n": "Noor I.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 457, "bp": "Early 3", "wss": 467, "wp": "Mid 3", "ss": 500, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 96, "grp": 5, "qnt": "865Q", "dur": 158, "rush": "", "ra": "Off", "np": "Late 3", "nss": 501, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 487, "ar": "Mid or Above Grade Level", "mp": "Late 3", "mss": 511, "mr": "Mid or Above Grade Level", "gp": "Late 3", "gss": 504, "gr": "Mid or Above Grade Level", "gn": 43, "tg": 25, "sg": 34, "pt": 172, "ps": 126, "mgl": 464}, {"n": "Cree J.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 449, "bp": "Early 3", "wss": 474, "wp": "Mid 3", "ss": 482, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 88, "grp": 5, "qnt": "755Q", "dur": 169, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 465, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 476, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 483, "mr": "Mid or Above Grade Level", "gp": "Grade 4", "gss": 522, "gr": "Mid or Above Grade Level", "gn": 33, "tg": 25, "sg": 34, "pt": 132, "ps": 97, "mgl": 464}, {"n": "Joshnika K.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 457, "bp": "Early 3", "wss": 464, "wp": "Mid 3", "ss": 481, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 87, "grp": 5, "qnt": "750Q", "dur": 90, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 474, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 497, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 476, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 476, "gr": "Mid or Above Grade Level", "gn": 24, "tg": 25, "sg": 34, "pt": 96, "ps": 71, "mgl": 464}, {"n": "Suhaas K.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 446, "bp": "Grade 2", "wss": 472, "wp": "Mid 3", "ss": 499, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 96, "grp": 5, "qnt": "855Q", "dur": 121, "rush": "", "ra": "Off", "np": "Late 3", "nss": 501, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 472, "ar": "Mid or Above Grade Level", "mp": "Grade 4", "mss": 521, "mr": "Mid or Above Grade Level", "gp": "Late 3", "gss": 507, "gr": "Mid or Above Grade Level", "gn": 53, "tg": 26, "sg": 35, "pt": 204, "ps": 151, "mgl": 464}, {"n": "Agen K.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 434, "bp": "Grade 2", "wss": 453, "wp": "Early 3", "ss": 482, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 88, "grp": 5, "qnt": "755Q", "dur": 54, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 489, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 467, "ar": "Mid or Above Grade Level", "mp": "Late 3", "mss": 503, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 473, "gr": "Mid or Above Grade Level", "gn": 48, "tg": 26, "sg": 35, "pt": 185, "ps": 137, "mgl": 464}, {"n": "Nalan K.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 468, "bp": "Mid 3", "wss": 487, "wp": "Mid 3", "ss": 508, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 98, "grp": 5, "qnt": "915Q", "dur": 75, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 490, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 505, "ar": "Mid or Above Grade Level", "mp": "Grade 5", "mss": 538, "mr": "Mid or Above Grade Level", "gp": "Late 3", "gss": 511, "gr": "Mid or Above Grade Level", "gn": 40, "tg": 21, "sg": 30, "pt": 190, "ps": 133, "mgl": 464}, {"n": "Leu K.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 457, "bp": "Early 3", "wss": 469, "wp": "Mid 3", "ss": 495, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 95, "grp": 5, "qnt": "840Q", "dur": 80, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 498, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 478, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 487, "mr": "Mid or Above Grade Level", "gp": "Grade 4", "gss": 521, "gr": "Mid or Above Grade Level", "gn": 38, "tg": 25, "sg": 34, "pt": 152, "ps": 112, "mgl": 464}, {"n": "Arnav L.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 444, "bp": "Grade 2", "wss": 459, "wp": "Early 3", "ss": 488, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 92, "grp": 5, "qnt": "795Q", "dur": 119, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 490, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 502, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 482, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 477, "gr": "Mid or Above Grade Level", "gn": 44, "tg": 26, "sg": 35, "pt": 169, "ps": 126, "mgl": 464}, {"n": "Tatum L.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 446, "bp": "Grade 2", "wss": 451, "wp": "Early 3", "ss": 471, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 79, "grp": 5, "qnt": "695Q", "dur": 111, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 470, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 479, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 478, "mr": "Mid or Above Grade Level", "gp": "Early 3", "gss": 456, "gr": "Early On Grade Level", "gn": 25, "tg": 26, "sg": 35, "pt": 96, "ps": 71, "mgl": 464}, {"n": "Austin L.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 425, "bp": "Grade 2", "wss": 449, "wp": "Early 3", "ss": 453, "p": "Early 3", "rel": "Early On Grade Level", "pct": 54, "grp": 4, "qnt": "580Q", "dur": 129, "rush": "", "ra": "Off", "np": "Early 3", "nss": 444, "nr": "Early On Grade Level", "ap": "Mid 3", "ass": 481, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 459, "mr": "Mid or Above Grade Level", "gp": "Grade 2", "gss": 423, "gr": "1 Grade Level Below", "gn": 28, "tg": 26, "sg": 35, "pt": 108, "ps": 80, "mgl": 464}, {"n": "William L.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 416, "bp": "Grade 2", "wss": 449, "wp": "Early 3", "ss": 462, "p": "Early 3", "rel": "Early On Grade Level", "pct": 66, "grp": 5, "qnt": "635Q", "dur": 82, "rush": "", "ra": "Off", "np": "Early 3", "nss": 453, "nr": "Early On Grade Level", "ap": "Early 3", "ass": 456, "ar": "Early On Grade Level", "mp": "Mid 3", "mss": 490, "mr": "Mid or Above Grade Level", "gp": "Early 3", "gss": 456, "gr": "Early On Grade Level", "gn": 46, "tg": 26, "sg": 35, "pt": 177, "ps": 131, "mgl": 464}, {"n": "Sanaa L.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 433, "bp": "Grade 2", "wss": 455, "wp": "Early 3", "ss": 473, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 82, "grp": 5, "qnt": "705Q", "dur": 59, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 472, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 480, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 466, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 472, "gr": "Mid or Above Grade Level", "gn": 40, "tg": 26, "sg": 35, "pt": 154, "ps": 114, "mgl": 464}, {"n": "Harrison L.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 440, "bp": "Grade 2", "wss": 466, "wp": "Mid 3", "ss": 478, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 85, "grp": 5, "qnt": "730Q", "dur": 122, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 481, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 470, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 466, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 496, "gr": "Mid or Above Grade Level", "gn": 38, "tg": 26, "sg": 35, "pt": 146, "ps": 109, "mgl": 464}, {"n": "Enzo M.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 444, "bp": "Grade 2", "wss": 438, "wp": "Grade 2", "ss": 454, "p": "Early 3", "rel": "Early On Grade Level", "pct": 55, "grp": 4, "qnt": "585Q", "dur": 61, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 469, "nr": "Mid or Above Grade Level", "ap": "Early 3", "ass": 458, "ar": "Early On Grade Level", "mp": "Grade 2", "mss": 441, "mr": "1 Grade Level Below", "gp": "Grade 2", "gss": 436, "gr": "1 Grade Level Below", "gn": 10, "tg": 26, "sg": 35, "pt": 38, "ps": 29, "mgl": 464}, {"n": "Delilah M.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 414, "bp": "Grade 2", "wss": 449, "wp": "Early 3", "ss": 467, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 73, "grp": 5, "qnt": "670Q", "dur": 108, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 469, "nr": "Mid or Above Grade Level", "ap": "Early 3", "ass": 459, "ar": "Early On Grade Level", "mp": "Mid 3", "mss": 472, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 467, "gr": "Mid or Above Grade Level", "gn": 53, "tg": 26, "sg": 35, "pt": 204, "ps": 151, "mgl": 464}, {"n": "Amelia M.", "hr": "Fortun", "tch": "Adams", "ct": "General", "bss": 443, "bp": "Grade 2", "wss": 446, "wp": "Grade 2", "ss": 470, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 77, "grp": 5, "qnt": "685Q", "dur": 131, "rush": "", "ra": "On", "np": "Mid 3", "nss": 480, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 464, "ar": "Mid or Above Grade Level", "mp": "Early 3", "mss": 448, "mr": "Early On Grade Level", "gp": "Mid 3", "gss": 487, "gr": "Mid or Above Grade Level", "gn": 27, "tg": 26, "sg": 35, "pt": 104, "ps": 77, "mgl": 464}, {"n": "Caua M.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 454, "bp": "Early 3", "wss": 473, "wp": "Mid 3", "ss": 483, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 89, "grp": 5, "qnt": "765Q", "dur": 64, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 481, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 481, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 484, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 490, "gr": "Mid or Above Grade Level", "gn": 29, "tg": 25, "sg": 34, "pt": 116, "ps": 85, "mgl": 464}, {"n": "Zaha M.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 469, "bp": "Mid 3", "wss": 505, "wp": "Late 3", "ss": 512, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 98, "grp": 5, "qnt": "940Q", "dur": 102, "rush": "", "ra": "Off", "np": "Late 3", "nss": 499, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 499, "ar": "Mid or Above Grade Level", "mp": "Grade 4", "mss": 524, "mr": "Mid or Above Grade Level", "gp": "Grade 5", "gss": 539, "gr": "Mid or Above Grade Level", "gn": 43, "tg": 21, "sg": 30, "pt": 205, "ps": 143, "mgl": 464}, {"n": "Abbie N.", "hr": "Brown", "tch": "Adams", "ct": "General", "bss": 432, "bp": "Grade 2", "wss": 437, "wp": "Grade 2", "ss": 447, "p": "Grade 2", "rel": "1 Grade Level Below", "pct": 46, "grp": 2, "qnt": "545Q", "dur": 91, "rush": "", "ra": "On", "np": "Grade 2", "nss": 440, "nr": "1 Grade Level Below", "ap": "Grade 2", "ass": 445, "ar": "1 Grade Level Below", "mp": "Early 3", "mss": 446, "mr": "Early On Grade Level", "gp": "Early 3", "gss": 460, "gr": "Early On Grade Level", "gn": 15, "tg": 26, "sg": 35, "pt": 58, "ps": 43, "mgl": 464}, {"n": "Arthur O.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 433, "bp": "Grade 2", "wss": 440, "wp": "Grade 2", "ss": 472, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 80, "grp": 5, "qnt": "700Q", "dur": 66, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 461, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 486, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 471, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 471, "gr": "Mid or Above Grade Level", "gn": 39, "tg": 26, "sg": 35, "pt": 150, "ps": 111, "mgl": 464}, {"n": "Sebastian P.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 504, "bp": "Late 3", "wss": 530, "wp": "Grade 5", "ss": 525, "p": "Grade 4", "rel": "Mid or Above Grade Level", "pct": 99, "grp": 5, "qnt": "975Q", "dur": 71, "rush": "", "ra": "Off", "np": "Grade 4", "nss": 518, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 500, "ar": "Mid or Above Grade Level", "mp": "Grade 6", "mss": 546, "mr": "Mid or Above Grade Level", "gp": "Grade 6", "gss": 551, "gr": "Mid or Above Grade Level", "gn": 21, "tg": 21, "sg": 30, "pt": 100, "ps": 70, "mgl": 464}, {"n": "Nina P.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 405, "bp": "Grade 1", "wss": 406, "wp": "Grade 1", "ss": 419, "p": "Grade 2", "rel": "1 Grade Level Below", "pct": 17, "grp": 2, "qnt": "370Q", "dur": 135, "rush": "", "ra": "Off", "np": "Grade 2", "nss": 407, "nr": "1 Grade Level Below", "ap": "Grade 2", "ass": 443, "ar": "1 Grade Level Below", "mp": "Grade 1", "mss": 406, "mr": "2 Grade Levels Below", "gp": "Grade 2", "gss": 423, "gr": "1 Grade Level Below", "gn": 14, "tg": 27, "sg": 43, "pt": 52, "ps": 33, "mgl": 464}, {"n": "Meenakshi P.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 448, "bp": "Grade 2", "wss": 463, "wp": "Early 3", "ss": 463, "p": "Early 3", "rel": "Early On Grade Level", "pct": 67, "grp": 5, "qnt": "645Q", "dur": 93, "rush": "", "ra": "Off", "np": "Early 3", "nss": 446, "nr": "Early On Grade Level", "ap": "Early 3", "ass": 460, "ar": "Early On Grade Level", "mp": "Mid 3", "mss": 463, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 494, "gr": "Mid or Above Grade Level", "gn": 15, "tg": 26, "sg": 35, "pt": 58, "ps": 43, "mgl": 464}, {"n": "Aarya P.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 467, "bp": "Mid 3", "wss": 478, "wp": "Mid 3", "ss": 508, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 98, "grp": 5, "qnt": "915Q", "dur": 81, "rush": "", "ra": "Off", "np": "Late 3", "nss": 499, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 506, "ar": "Mid or Above Grade Level", "mp": "Grade 4", "mss": 517, "mr": "Mid or Above Grade Level", "gp": "Late 3", "gss": 511, "gr": "Mid or Above Grade Level", "gn": 41, "tg": 21, "sg": 30, "pt": 195, "ps": 137, "mgl": 464}, {"n": "Ella P.", "hr": "Fortun", "tch": "Adams", "ct": "General", "bss": 434, "bp": "Grade 2", "wss": 450, "wp": "Early 3", "ss": 463, "p": "Early 3", "rel": "Early On Grade Level", "pct": 67, "grp": 5, "qnt": "645Q", "dur": 70, "rush": "", "ra": "On", "np": "Mid 3", "nss": 456, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 473, "ar": "Mid or Above Grade Level", "mp": "Early 3", "mss": 456, "mr": "Early On Grade Level", "gp": "Mid 3", "gss": 466, "gr": "Mid or Above Grade Level", "gn": 29, "tg": 26, "sg": 35, "pt": 112, "ps": 83, "mgl": 464}, {"n": "Ava P.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 463, "bp": "Early 3", "wss": 482, "wp": "Mid 3", "ss": 492, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 94, "grp": 5, "qnt": "820Q", "dur": 64, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 490, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 487, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 485, "mr": "Mid or Above Grade Level", "gp": "Late 3", "gss": 509, "gr": "Mid or Above Grade Level", "gn": 29, "tg": 25, "sg": 34, "pt": 116, "ps": 85, "mgl": 464}, {"n": "Razwan P.", "hr": "Fortun", "tch": "Adams", "ct": "General", "bss": 427, "bp": "Grade 2", "wss": 441, "wp": "Grade 2", "ss": 459, "p": "Early 3", "rel": "Early On Grade Level", "pct": 61, "grp": 2, "qnt": "620Q", "dur": 133, "rush": "", "ra": "On", "np": "Grade 2", "nss": 443, "nr": "1 Grade Level Below", "ap": "Mid 3", "ass": 481, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 489, "mr": "Mid or Above Grade Level", "gp": "Grade 2", "gss": 423, "gr": "1 Grade Level Below", "gn": 32, "tg": 26, "sg": 35, "pt": 123, "ps": 91, "mgl": 464}, {"n": "DeJari P.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 421, "bp": "Grade 2", "wss": 446, "wp": "Grade 2", "ss": 468, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 74, "grp": 5, "qnt": "675Q", "dur": 149, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 462, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 462, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 461, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 490, "gr": "Mid or Above Grade Level", "gn": 47, "tg": 26, "sg": 35, "pt": 181, "ps": 134, "mgl": 464}, {"n": "Aiden R.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 476, "bp": "Mid 3", "wss": 457, "wp": "Early 3", "ss": 512, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 98, "grp": 5, "qnt": "940Q", "dur": 89, "rush": "", "ra": "Off", "np": "Late 3", "nss": 502, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 503, "ar": "Mid or Above Grade Level", "mp": "Late 3", "mss": 512, "mr": "Mid or Above Grade Level", "gp": "Grade 5", "gss": 540, "gr": "Mid or Above Grade Level", "gn": 36, "tg": 21, "sg": 30, "pt": 171, "ps": 120, "mgl": 464}, {"n": "Chloe R.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 451, "bp": "Early 3", "wss": 451, "wp": "Early 3", "ss": 460, "p": "Early 3", "rel": "Early On Grade Level", "pct": 62, "grp": 2, "qnt": "625Q", "dur": 111, "rush": "", "ra": "Off", "np": "Grade 2", "nss": 436, "nr": "1 Grade Level Below", "ap": "Mid 3", "ass": 467, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 467, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 478, "gr": "Mid or Above Grade Level", "gn": 9, "tg": 25, "sg": 34, "pt": 36, "ps": 26, "mgl": 464}, {"n": "Anderson R.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 428, "bp": "Grade 2", "wss": 438, "wp": "Grade 2", "ss": 478, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 85, "grp": 4, "qnt": "730Q", "dur": 58, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 492, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 478, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 485, "mr": "Mid or Above Grade Level", "gp": "Grade 2", "gss": 446, "gr": "1 Grade Level Below", "gn": 50, "tg": 26, "sg": 35, "pt": 192, "ps": 143, "mgl": 464}, {"n": "Oliver R.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 466, "bp": "Mid 3", "wss": 482, "wp": "Mid 3", "ss": 526, "p": "Grade 4", "rel": "Mid or Above Grade Level", "pct": 99, "grp": 5, "qnt": "975Q", "dur": 87, "rush": "", "ra": "Off", "np": "Late 3", "nss": 515, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 494, "ar": "Mid or Above Grade Level", "mp": "Grade 6", "mss": 543, "mr": "Mid or Above Grade Level", "gp": "Grade 6", "gss": 579, "gr": "Mid or Above Grade Level", "gn": 60, "tg": 21, "sg": 30, "pt": 286, "ps": 200, "mgl": 464}, {"n": "Rory R.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 455, "bp": "Early 3", "wss": 469, "wp": "Mid 3", "ss": 495, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 95, "grp": 5, "qnt": "840Q", "dur": 107, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 486, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 489, "ar": "Mid or Above Grade Level", "mp": "Late 3", "mss": 508, "mr": "Mid or Above Grade Level", "gp": "Late 3", "gss": 500, "gr": "Mid or Above Grade Level", "gn": 40, "tg": 25, "sg": 34, "pt": 160, "ps": 118, "mgl": 464}, {"n": "David R.", "hr": "Brown", "tch": "Adams", "ct": "General", "bss": 436, "bp": "Grade 2", "wss": 449, "wp": "Early 3", "ss": 466, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 72, "grp": 5, "qnt": "660Q", "dur": 85, "rush": "", "ra": "On", "np": "Mid 3", "nss": 461, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 479, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 459, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 462, "gr": "Mid or Above Grade Level", "gn": 30, "tg": 26, "sg": 35, "pt": 115, "ps": 86, "mgl": 464}, {"n": "Leonidas R.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 427, "bp": "Grade 2", "wss": 443, "wp": "Grade 2", "ss": 448, "p": "Grade 2", "rel": "1 Grade Level Below", "pct": 48, "grp": 4, "qnt": "550Q", "dur": 56, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 456, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 467, "ar": "Mid or Above Grade Level", "mp": "Grade 2", "mss": 436, "mr": "1 Grade Level Below", "gp": "Grade 2", "gss": 422, "gr": "1 Grade Level Below", "gn": 21, "tg": 26, "sg": 35, "pt": 81, "ps": 60, "mgl": 464}, {"n": "Beatriz R.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 436, "bp": "Grade 2", "wss": 437, "wp": "Grade 2", "ss": 476, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 84, "grp": 5, "qnt": "720Q", "dur": 120, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 488, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 474, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 470, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 468, "gr": "Mid or Above Grade Level", "gn": 40, "tg": 26, "sg": 35, "pt": 154, "ps": 114, "mgl": 464}, {"n": "Evanka S.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 413, "bp": "Grade 2", "wss": 431, "wp": "Grade 2", "ss": 437, "p": "Grade 2", "rel": "1 Grade Level Below", "pct": 33, "grp": 2, "qnt": "480Q", "dur": 77, "rush": "", "ra": "Off", "np": "Grade 2", "nss": 424, "nr": "1 Grade Level Below", "ap": "Grade 2", "ass": 435, "ar": "1 Grade Level Below", "mp": "Early 3", "mss": 448, "mr": "Early On Grade Level", "gp": "Grade 2", "gss": 449, "gr": "1 Grade Level Below", "gn": 24, "tg": 26, "sg": 35, "pt": 92, "ps": 69, "mgl": 464}, {"n": "Kaan S.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 454, "bp": "Early 3", "wss": 453, "wp": "Early 3", "ss": 473, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 82, "grp": 5, "qnt": "705Q", "dur": 105, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 465, "nr": "Mid or Above Grade Level", "ap": "Early 3", "ass": 460, "ar": "Early On Grade Level", "mp": "Mid 3", "mss": 480, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 494, "gr": "Mid or Above Grade Level", "gn": 19, "tg": 25, "sg": 34, "pt": 76, "ps": 56, "mgl": 464}, {"n": "Olivia S.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 441, "bp": "Grade 2", "wss": 450, "wp": "Early 3", "ss": 463, "p": "Early 3", "rel": "Early On Grade Level", "pct": 67, "grp": 5, "qnt": "645Q", "dur": 59, "rush": "", "ra": "Off", "np": "Early 3", "nss": 445, "nr": "Early On Grade Level", "ap": "Mid 3", "ass": 474, "ar": "Mid or Above Grade Level", "mp": "Early 3", "mss": 450, "mr": "Early On Grade Level", "gp": "Mid 3", "gss": 489, "gr": "Mid or Above Grade Level", "gn": 22, "tg": 26, "sg": 35, "pt": 85, "ps": 63, "mgl": 464}, {"n": "Nora S.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 478, "bp": "Mid 3", "wss": 480, "wp": "Mid 3", "ss": 514, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 99, "grp": 5, "qnt": "945Q", "dur": 78, "rush": "", "ra": "Off", "np": "Late 3", "nss": 505, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 491, "ar": "Mid or Above Grade Level", "mp": "Grade 4", "mss": 521, "mr": "Mid or Above Grade Level", "gp": "Grade 6", "gss": 552, "gr": "Mid or Above Grade Level", "gn": 36, "tg": 21, "sg": 30, "pt": 171, "ps": 120, "mgl": 464}, {"n": "Elena S.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 448, "bp": "Grade 2", "wss": 450, "wp": "Early 3", "ss": 472, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 80, "grp": 4, "qnt": "700Q", "dur": 70, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 469, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 476, "ar": "Mid or Above Grade Level", "mp": "Grade 2", "mss": 442, "mr": "1 Grade Level Below", "gp": "Mid 3", "gss": 498, "gr": "Mid or Above Grade Level", "gn": 24, "tg": 26, "sg": 35, "pt": 92, "ps": 69, "mgl": 464}, {"n": "Kushagra S.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 486, "bp": "Mid 3", "wss": 525, "wp": "Grade 4", "ss": 535, "p": "Grade 5", "rel": "Mid or Above Grade Level", "pct": 99, "grp": 5, "qnt": "975Q", "dur": 199, "rush": "", "ra": "Off", "np": "Grade 5", "nss": 540, "nr": "Mid or Above Grade Level", "ap": "Grade 6", "ass": 543, "ar": "Mid or Above Grade Level", "mp": "Grade 4", "mss": 517, "mr": "Mid or Above Grade Level", "gp": "Grade 5", "gss": 536, "gr": "Mid or Above Grade Level", "gn": 49, "tg": 21, "sg": 30, "pt": 233, "ps": 163, "mgl": 464}, {"n": "Garrett S.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 418, "bp": "Grade 2", "wss": 439, "wp": "Grade 2", "ss": 459, "p": "Early 3", "rel": "Early On Grade Level", "pct": 61, "grp": 5, "qnt": "620Q", "dur": 75, "rush": "", "ra": "Off", "np": "Early 3", "nss": 446, "nr": "Early On Grade Level", "ap": "Mid 3", "ass": 465, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 467, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 464, "gr": "Mid or Above Grade Level", "gn": 41, "tg": 26, "sg": 35, "pt": 158, "ps": 117, "mgl": 464}, {"n": "Jordana S.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 446, "bp": "Grade 2", "wss": 466, "wp": "Mid 3", "ss": 489, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 92, "grp": 5, "qnt": "800Q", "dur": 107, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 475, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 493, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 496, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 497, "gr": "Mid or Above Grade Level", "gn": 43, "tg": 26, "sg": 35, "pt": 165, "ps": 123, "mgl": 464}, {"n": "Xavier S.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 445, "bp": "Grade 2", "wss": 453, "wp": "Early 3", "ss": 474, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 83, "grp": 5, "qnt": "705Q", "dur": 103, "rush": "", "ra": "Off", "np": "Early 3", "nss": 451, "nr": "Early On Grade Level", "ap": "Mid 3", "ass": 463, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 495, "mr": "Mid or Above Grade Level", "gp": "Late 3", "gss": 509, "gr": "Mid or Above Grade Level", "gn": 29, "tg": 26, "sg": 35, "pt": 112, "ps": 83, "mgl": 464}, {"n": "Mukhtar S.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 441, "bp": "Grade 2", "wss": 457, "wp": "Early 3", "ss": 472, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 80, "grp": 5, "qnt": "700Q", "dur": 57, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 462, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 472, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 474, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 484, "gr": "Mid or Above Grade Level", "gn": 31, "tg": 26, "sg": 35, "pt": 119, "ps": 89, "mgl": 464}, {"n": "Ezekiel T.", "hr": "Brown", "tch": "Brown", "ct": "General", "bss": 443, "bp": "Grade 2", "wss": 450, "wp": "Early 3", "ss": 451, "p": "Early 3", "rel": "Early On Grade Level", "pct": 51, "grp": 2, "qnt": "570Q", "dur": 71, "rush": "", "ra": "Off", "np": "Grade 2", "nss": 442, "nr": "1 Grade Level Below", "ap": "Mid 3", "ass": 468, "ar": "Mid or Above Grade Level", "mp": "Grade 2", "mss": 438, "mr": "1 Grade Level Below", "gp": "Early 3", "gss": 456, "gr": "Early On Grade Level", "gn": 8, "tg": 26, "sg": 35, "pt": 31, "ps": 23, "mgl": 464}, {"n": "Liliyti T.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 472, "bp": "Mid 3", "wss": 462, "wp": "Early 3", "ss": 482, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 88, "grp": 5, "qnt": "755Q", "dur": 91, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 473, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 475, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 497, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 491, "gr": "Mid or Above Grade Level", "gn": 10, "tg": 21, "sg": 30, "pt": 48, "ps": 33, "mgl": 464}, {"n": "Skylar T.", "hr": null, "tch": "Unassigned", "ct": "General", "bss": 441, "bp": "Grade 2", "wss": null, "wp": null, "ss": 441, "p": "Grade 2", "rel": "1 Grade Level Below", "pct": 76, "grp": 2, "qnt": "505Q", "dur": 22, "rush": "", "ra": "Off", "np": "Grade 2", "nss": 412, "nr": "1 Grade Level Below", "ap": "Grade 2", "ass": 439, "ar": "1 Grade Level Below", "mp": "Early 3", "mss": 454, "mr": "Early On Grade Level", "gp": "Mid 3", "gss": 477, "gr": "Mid or Above Grade Level", "gn": 0, "tg": 26, "sg": 35, "pt": 0, "ps": 0, "mgl": 464}, {"n": "Lucas T.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 455, "bp": "Early 3", "wss": 470, "wp": "Mid 3", "ss": 503, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 97, "grp": 5, "qnt": "880Q", "dur": 81, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 492, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 504, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 497, "mr": "Mid or Above Grade Level", "gp": "Grade 4", "gss": 526, "gr": "Mid or Above Grade Level", "gn": 48, "tg": 25, "sg": 34, "pt": 192, "ps": 141, "mgl": 464}, {"n": "Jonathan T.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 408, "bp": "Grade 1", "wss": 437, "wp": "Grade 2", "ss": 434, "p": "Grade 2", "rel": "1 Grade Level Below", "pct": 29, "grp": 2, "qnt": "460Q", "dur": 78, "rush": "", "ra": "Off", "np": "Grade 2", "nss": 419, "nr": "1 Grade Level Below", "ap": "Grade 2", "ass": 442, "ar": "1 Grade Level Below", "mp": "Grade 2", "mss": 432, "mr": "1 Grade Level Below", "gp": "Grade 2", "gss": 445, "gr": "1 Grade Level Below", "gn": 26, "tg": 27, "sg": 43, "pt": 96, "ps": 60, "mgl": 464}, {"n": "Akira V.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 461, "bp": "Early 3", "wss": 483, "wp": "Mid 3", "ss": 503, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 97, "grp": 5, "qnt": "880Q", "dur": 90, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 496, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 490, "ar": "Mid or Above Grade Level", "mp": "Late 3", "mss": 503, "mr": "Mid or Above Grade Level", "gp": "Grade 5", "gss": 533, "gr": "Mid or Above Grade Level", "gn": 42, "tg": 25, "sg": 34, "pt": 168, "ps": 124, "mgl": 464}, {"n": "Huxley V.", "hr": "Osborne", "tch": "Adams", "ct": "ACCEL", "bss": 446, "bp": "Grade 2", "wss": 451, "wp": "Early 3", "ss": 480, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 87, "grp": 5, "qnt": "745Q", "dur": 107, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 470, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 483, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 480, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 489, "gr": "Mid or Above Grade Level", "gn": 34, "tg": 26, "sg": 35, "pt": 131, "ps": 97, "mgl": 464}, {"n": "Benjamin V.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 421, "bp": "Grade 2", "wss": 437, "wp": "Grade 2", "ss": 449, "p": "Early 3", "rel": "Early On Grade Level", "pct": 49, "grp": 2, "qnt": "555Q", "dur": 69, "rush": "", "ra": "Off", "np": "Grade 2", "nss": 440, "nr": "1 Grade Level Below", "ap": "Early 3", "ass": 450, "ar": "Early On Grade Level", "mp": "Mid 3", "mss": 457, "mr": "Mid or Above Grade Level", "gp": "Early 3", "gss": 454, "gr": "Early On Grade Level", "gn": 28, "tg": 26, "sg": 35, "pt": 108, "ps": 80, "mgl": 464}, {"n": "Jayashwika V.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 447, "bp": "Grade 2", "wss": 461, "wp": "Early 3", "ss": 467, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 73, "grp": 4, "qnt": "670Q", "dur": 81, "rush": "", "ra": "Off", "np": "Early 3", "nss": 454, "nr": "Early On Grade Level", "ap": "Mid 3", "ass": 478, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 496, "mr": "Mid or Above Grade Level", "gp": "Grade 2", "gss": 446, "gr": "1 Grade Level Below", "gn": 20, "tg": 26, "sg": 35, "pt": 77, "ps": 57, "mgl": 464}, {"n": "Gemma W.", "hr": "Osborne", "tch": "Osborne", "ct": "ACCEL", "bss": 472, "bp": "Mid 3", "wss": 486, "wp": "Mid 3", "ss": 505, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 97, "grp": 5, "qnt": "895Q", "dur": 90, "rush": "", "ra": "Off", "np": "Late 3", "nss": 502, "nr": "Mid or Above Grade Level", "ap": "Mid 3", "ass": 488, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 482, "mr": "Mid or Above Grade Level", "gp": "Grade 6", "gss": 573, "gr": "Mid or Above Grade Level", "gn": 33, "tg": 21, "sg": 30, "pt": 157, "ps": 110, "mgl": 464}, {"n": "Charleston W.", "hr": "Rodriguez", "tch": "Brown", "ct": "General", "bss": 443, "bp": "Grade 2", "wss": 461, "wp": "Early 3", "ss": 469, "p": "Mid 3", "rel": "Mid or Above Grade Level", "pct": 76, "grp": 5, "qnt": "680Q", "dur": 47, "rush": "", "ra": "Off", "np": "Early 3", "nss": 453, "nr": "Early On Grade Level", "ap": "Mid 3", "ass": 466, "ar": "Mid or Above Grade Level", "mp": "Mid 3", "mss": 482, "mr": "Mid or Above Grade Level", "gp": "Mid 3", "gss": 482, "gr": "Mid or Above Grade Level", "gn": 26, "tg": 26, "sg": 35, "pt": 100, "ps": 74, "mgl": 464}, {"n": "Lucas W.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 458, "bp": "Early 3", "wss": 496, "wp": "Mid 3", "ss": 510, "p": "Late 3", "rel": "Mid or Above Grade Level", "pct": 98, "grp": 5, "qnt": "925Q", "dur": 70, "rush": "", "ra": "Off", "np": "Mid 3", "nss": 485, "nr": "Mid or Above Grade Level", "ap": "Late 3", "ass": 507, "ar": "Mid or Above Grade Level", "mp": "Grade 5", "mss": 538, "mr": "Mid or Above Grade Level", "gp": "Grade 4", "gss": 522, "gr": "Mid or Above Grade Level", "gn": 52, "tg": 25, "sg": 34, "pt": 208, "ps": 153, "mgl": 464}, {"n": "Ruby Z.", "hr": "Fortun", "tch": "Osborne", "ct": "General", "bss": 435, "bp": "Grade 2", "wss": 431, "wp": "Grade 2", "ss": 441, "p": "Grade 2", "rel": "1 Grade Level Below", "pct": 38, "grp": 2, "qnt": "505Q", "dur": 40, "rush": "", "ra": "Off", "np": "Grade 2", "nss": 426, "nr": "1 Grade Level Below", "ap": "Early 3", "ass": 452, "ar": "Early On Grade Level", "mp": "Grade 2", "mss": 421, "mr": "1 Grade Level Below", "gp": "Mid 3", "gss": 467, "gr": "Mid or Above Grade Level", "gn": 6, "tg": 26, "sg": 35, "pt": 23, "ps": 17, "mgl": 464}];
+
+// ============================================
+// TAB SYSTEM
+// ============================================
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'overview') renderOverview();
+  if (name === 'class') renderClass();
+  if (name === 'standards') renderStandards();
+  if (name === 'individual') renderIndividual();
+  if (name === 'tiers') renderTiers();
+  if (name === 'action') renderAction();
+}
+
+// ============================================
+// HELPERS
+// ============================================
+const placements = ['Grade 1','Grade 2','Early 3','Mid 3','Late 3','Grade 4','Grade 5','Grade 6'];
+const placementColors = {
+  'Grade 1':'#be123c', 'Grade 2':'#ea580c', 'Early 3':'#eab308',
+  'Mid 3':'#15803d', 'Late 3':'#0f766e', 'Grade 4':'#0284c7',
+  'Grade 5':'#6d28d9', 'Grade 6':'#4c1d95'
+};
+const placementRank = {'Grade 1':1,'Grade 2':2,'Early 3':3,'Mid 3':4,'Late 3':5,'Grade 4':6,'Grade 5':7,'Grade 6':8};
+const pct = (n,t) => t > 0 ? Math.round(100*n/t) : 0;
+const getInits = (name) => {
+  const parts = name.split(' ');
+  return (parts[0][0] + (parts[1]||'')[0]||'').toUpperCase();
+};
+const hColor = (name) => {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
+  const hue = Math.abs(h) % 360;
+  return `hsl(${hue}, 55%, 45%)`;
+};
+const pChip = (p) => `<span class="place-chip" style="background:${placementColors[p]||'#64748b'}">${p}</span>`;
+const pBar = (label, pct, color) => `
+  <div class="pbar-wrap">
+    <div class="pbar-top"><span>${label}</span><span style="color:${color}">${pct}%</span></div>
+    <div class="pbar-bg"><div class="pbar-fill" style="width:${pct}%;background:${color}"></div></div>
+  </div>`;
+
+// Teacher color map for distinguishing classes
+const teacherColors = {
+  'Osborne': '#6d28d9',
+  'Brown': '#0f766e',
+  'Adams': '#be123c',
+  'Fortun': '#0284c7',
+  'Rodriguez': '#d97706',
+  'Unassigned': '#64748b'
+};
+// Normalize homeroom value (handles null/undefined/NaN)
+const hrOf = (s) => (s.hr && s.hr !== 'nan' && typeof s.hr === 'string') ? s.hr : 'Unassigned';
+
+// Proficiency determination for FAST Math PM3
+// "On track for proficiency" = Mid 3 or above AND/OR strong growth
+const isOnTrack = (s) => placementRank[s.p] >= 4;
+const isAtRisk = (s) => placementRank[s.p] === 3;  // Early 3 borderline
+const isBelow = (s) => placementRank[s.p] <= 2;    // Grade 1 or Grade 2
+
+// ============================================
+// COUNTDOWN TO FAST MATH PM3
+// ============================================
+// COUNTDOWN TO FAST MATH PM3 - May 11, 2026 at 8:00 AM
+// ============================================
+const TEST_DATE = new Date('2026-05-11T08:00:00');
+function updateCountdown() {
+  const now = new Date();
+  const diff = TEST_DATE - now;
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent = '0';
+    document.getElementById('cd-hours').textContent = '0';
+    document.getElementById('cd-mins').textContent = '0';
+    document.getElementById('cd-secs').textContent = '0';
+    return;
+  }
+  const d = Math.floor(diff/(1000*60*60*24));
+  const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+  const m = Math.floor((diff%(1000*60*60))/(1000*60));
+  const s = Math.floor((diff%(1000*60))/1000);
+  document.getElementById('cd-days').textContent = d;
+  document.getElementById('cd-hours').textContent = h;
+  document.getElementById('cd-mins').textContent = m;
+  document.getElementById('cd-secs').textContent = s;
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ============================================
+// OVERVIEW TAB
+// ============================================
+function renderOverview() {
+  const el = document.getElementById('tab-overview');
+  
+  // Core stats
+  const total = S.length;
+  const onTrack = S.filter(isOnTrack).length;
+  const atRisk = S.filter(isAtRisk).length;
+  const below = S.filter(isBelow).length;
+  const avgGain = Math.round(S.reduce((a,b) => a + b.gn, 0) / total);
+  const stretchMet = S.filter(s => s.ps >= 100).length;
+  const typicalMet = S.filter(s => s.pt >= 100).length;
+  const avgPct = Math.round(S.reduce((a,b) => a + (b.pct||0), 0) / total);
+  
+  const stats = [
+    {l:'Total Students', v:total, d:'4 classes · 3 teachers', c:'#6d28d9'},
+    {l:'On Grade Level (Mid 3+)', v:onTrack, d:`${pct(onTrack,total)}% of class`, c:'#15803d'},
+    {l:'Early 3 (Watch)', v:atRisk, d:`${pct(atRisk,total)}% borderline`, c:'#d97706'},
+    {l:'Below Grade Level', v:below, d:`${pct(below,total)}% need support`, c:'#be123c'},
+    {l:'Avg Diagnostic Gain', v:`+${avgGain}`, d:'points baseline→latest', c:'#0284c7'},
+    {l:'% Met Typical Growth', v:`${pct(typicalMet,total)}%`, d:`${typicalMet} of ${total} students`, c:'#0f766e'},
+    {l:'% Met Stretch Growth', v:`${pct(stretchMet,total)}%`, d:`${stretchMet} of ${total} students`, c:'#6d28d9'},
+    {l:'Avg Percentile', v:avgPct, d:'national iReady norm', c:'#be123c'},
+  ];
+
+  const pc = {};
+  placements.forEach(p => { pc[p] = S.filter(x => x.p === p).length; });
+
+  const domains = [
+    {n:'Number & Operations', k:'nr', i:'🔢'},
+    {n:'Algebra & Algebraic Thinking', k:'ar', i:'➕'},
+    {n:'Measurement & Data', k:'mr', i:'📏'},
+    {n:'Geometry', k:'gr', i:'📐'}
+  ];
+
+  const gainBuckets = [
+    {l:'40+ pts (Outstanding)', min:40, max:9999, c:'#15803d'},
+    {l:'25–39 pts (Strong)', min:25, max:39, c:'#0f766e'},
+    {l:'15–24 pts (Adequate)', min:15, max:24, c:'#0284c7'},
+    {l:'1–14 pts (Minimal)', min:1, max:14, c:'#d97706'},
+    {l:'0 or Negative (No Growth)', min:-9999, max:0, c:'#be123c'}
+  ];
+
+  const stars = [...S].sort((a,b) => b.gn - a.gn).slice(0, 6);
+
+  el.innerHTML = `
+  <div class="sec-title">School Overview — 3rd Grade Math</div>
+  <div class="sec-sub">YTD Diagnostic · All Classes · ${total} students · Source: iReady Connect (Curriculum Associates)</div>
+  <div class="fast-cal"><div class="fast-cal-icon">📝</div><div class="fast-cal-body">
+    <div class="fast-cal-title">FAST Math PM3 — Florida Statewide Assessment on May 11, 2026</div>
+    <div class="fast-cal-txt">3rd grade students will take the computer-based FAST Mathematics Progress Monitoring 3 (PM3), which determines B.E.S.T. achievement levels (1–5) and counts as a critical accountability measure. The test spans all 5 B.E.S.T. domains: Number Sense & Operations (MA.3.NSO), Fractions (MA.3.FR), Algebraic Reasoning (MA.3.AR), Measurement (MA.3.M), Geometric Reasoning (MA.3.GR), and Data Analysis & Probability (MA.3.DP). Note: iReady groups Measurement + Data together and does not report fractions as a separate domain — expect FAST items on fractions under MA.3.FR (equivalent fractions, fractions on a number line, comparing fractions).</div>
+  </div></div>
+  <div class="stat-grid">${stats.map(x => `<div class="stat-card" style="--acc:${x.c}"><div class="stat-lbl">${x.l}</div><div class="stat-val">${x.v}</div><div class="stat-det">${x.d}</div></div>`).join('')}</div>
+  
+  <div class="two-col">
+    <div class="card"><div class="card-title"><div class="cicon" style="background:#dbeafe">📊</div>Overall Placement Distribution (Latest Diagnostic)</div>
+      ${placements.filter(p => pc[p]).map(p => pBar(p + ` (${pc[p]||0})`, pct(pc[p]||0, total), placementColors[p] || '#64748b')).join('')}
+      <div style="margin-top:14px; padding:10px 12px; background:#f0fdf4; border-radius:7px; border-left:3px solid #15803d; font-size:.72rem; line-height:1.5; color:#1e293b;">
+        <strong>FAST PM3 Projection:</strong> Students at <strong>Mid 3 or above</strong> (${onTrack}, ${pct(onTrack,total)}%) are projected to score Level 3+ on FAST. <strong>Early 3</strong> students (${atRisk}) are borderline — proficiency will depend on stretch growth and domain-level precision. <strong>Grade 2 / Grade 1</strong> students (${below}) likely score Level 1–2 and need immediate targeted support.
+      </div>
+    </div>
+    <div class="card"><div class="card-title"><div class="cicon" style="background:#dcfce7">📈</div>Growth Distribution (Fall Baseline → Latest)</div>
+      ${gainBuckets.map(b => {
+        const n = S.filter(x => x.gn >= b.min && x.gn <= b.max).length;
+        return pBar(b.l + ` (${n})`, pct(n, total), b.c);
+      }).join('')}
+      <div style="margin-top:14px; padding:10px 12px; background:#eff6ff; border-radius:7px; border-left:3px solid #0284c7; font-size:.72rem; line-height:1.5;">
+        <strong>Growth Interpretation:</strong> Annual typical growth targets average 25 points; stretch growth averages 35. ${typicalMet} students (${pct(typicalMet,total)}%) have met typical growth; ${stretchMet} (${pct(stretchMet,total)}%) have met stretch growth. Students at 50%+ typical progress by now are on pace.
+      </div>
+    </div>
+  </div>
+  
+  <div class="two-col">
+    <div class="card"><div class="card-title"><div class="cicon" style="background:#fef3c7">🎯</div>iReady Domain Performance (% On or Above Grade Level)</div>
+      <div class="dbar-wrap">${domains.map(d => {
+        const valid = S.filter(x => x[d.k] && x[d.k] !== 'Not Assessed');
+        const onGL = valid.filter(x => x[d.k] === 'Early On Grade Level' || x[d.k] === 'Mid or Above Grade Level').length;
+        const pv = valid.length ? pct(onGL, valid.length) : 0;
+        const c = pv >= 75 ? '#15803d' : pv >= 60 ? '#0f766e' : pv >= 45 ? '#d97706' : '#be123c';
+        return `<div class="dbar-row"><div class="dbar-name"><span>${d.i} ${d.n}</span><span style="color:${c};font-weight:800">${pv}%</span></div>
+        <div class="dbar-bg"><div class="dbar-fill" style="width:${pv}%;background:${c}">${pv}%</div><div class="dbar-bench" style="left:70%"></div></div></div>`;
+      }).join('')}</div>
+      <div style="margin-top:12px; font-size:.68rem; color:#64748b;"><strong>Benchmark line at 70%</strong> = expected school proficiency rate by PM3</div>
+    </div>
+    <div class="card"><div class="card-title"><div class="cicon" style="background:#ede9fe">⚡</div>Top Growth Stars (Highest Diagnostic Gains)</div>
+      ${stars.map(s => `<div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid #f1f5f9">
+        <div style="width:34px;height:34px;border-radius:50%;background:${hColor(s.n)};display:flex;align-items:center;justify-content:center;color:#fff;font-size:.72rem;font-weight:800;flex-shrink:0">${getInits(s.n)}</div>
+        <div style="flex:1"><div style="font-weight:800;font-size:.82rem">${s.n}</div><div style="font-size:.66rem;color:#64748b">${s.tch} · Homeroom ${s.hr}</div></div>
+        <div style="text-align:right"><div style="font-weight:900;color:#15803d;font-family:'Playfair Display',serif;font-size:1.15rem">+${s.gn}</div><div style="font-size:.62rem;color:#64748b">pts · ${s.bp} → ${s.p}</div></div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ============================================
+// CLASS VIEW (by Homeroom Teacher)
+// ============================================
+function renderClass() {
+  const el = document.getElementById('tab-class');
+  
+  // Group by homeroom teacher
+  const byHomeroom = {};
+  S.forEach(s => {
+    const hr = hrOf(s);
+    if (!byHomeroom[hr]) byHomeroom[hr] = [];
+    byHomeroom[hr].push(s);
+  });
+
+  const homerooms = Object.keys(byHomeroom).sort();
+  
+  // Class comparison bars
+  const classBarData = homerooms.map(h => {
+    const kids = byHomeroom[h];
+    const onTrack = kids.filter(isOnTrack).length;
+    return {
+      homeroom: h,
+      total: kids.length,
+      onTrack,
+      pct: pct(onTrack, kids.length),
+      avgGain: Math.round(kids.reduce((a,b) => a + b.gn, 0) / kids.length)
+    };
+  });
+
+  let html = `<div class="sec-title">Class View by Homeroom Teacher</div>
+  <div class="sec-sub">Compare performance across all 3rd grade homeroom classrooms · ${homerooms.length} homerooms</div>
+  
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-title"><div class="cicon" style="background:#ede9fe">🏆</div>Homeroom-by-Homeroom Proficiency Comparison (% On or Above Grade Level)</div>
+    ${classBarData.map(c => {
+      const color = c.pct >= 75 ? '#15803d' : c.pct >= 55 ? '#0f766e' : c.pct >= 40 ? '#d97706' : '#be123c';
+      return `<div class="dbar-row"><div class="dbar-name"><span>${c.homeroom} Homeroom (${c.total} students) · Avg Gain: +${c.avgGain}</span><span style="color:${color};font-weight:800">${c.pct}% (${c.onTrack}/${c.total})</span></div>
+      <div class="dbar-bg"><div class="dbar-fill" style="width:${c.pct}%;background:${color}">${c.pct}%</div><div class="dbar-bench" style="left:70%"></div></div></div>`;
+    }).join('')}
+  </div>`;
+
+  // Build one class card per homeroom
+  homerooms.forEach(h => {
+    const kids = byHomeroom[h];
+    const color = teacherColors[h] || '#64748b';
+    const onTrack = kids.filter(isOnTrack).length;
+    const atRisk = kids.filter(isAtRisk).length;
+    const bel = kids.filter(isBelow).length;
+    const avgGain = Math.round(kids.reduce((a,b) => a + b.gn, 0) / kids.length);
+    const stretchMet = kids.filter(k => k.ps >= 100).length;
+    const typMet = kids.filter(k => k.pt >= 100).length;
+    
+    // Domain %s for this homeroom
+    const domResults = [
+      {n:'Number/Ops', k:'nr'}, {n:'Algebra', k:'ar'},
+      {n:'Measurement/Data', k:'mr'}, {n:'Geometry', k:'gr'}
+    ].map(d => {
+      const on = kids.filter(x => x[d.k] === 'Early On Grade Level' || x[d.k] === 'Mid or Above Grade Level').length;
+      return {n:d.n, pct:pct(on, kids.length)};
+    });
+
+    // Math teacher breakdown within this homeroom
+    const mathTeacherCounts = {};
+    kids.forEach(k => { mathTeacherCounts[k.tch] = (mathTeacherCounts[k.tch] || 0) + 1; });
+    const mathTeacherLabel = Object.entries(mathTeacherCounts)
+      .sort((a,b) => b[1] - a[1])
+      .map(([t,n]) => `${t} (${n})`)
+      .join(' · ');
+
+    // ACCEL count
+    const accelCount = kids.filter(k => k.ct === 'ACCEL').length;
+    const accelLabel = accelCount > 0 ? ` · ${accelCount} ACCEL` : '';
+
+    html += `<div class="class-card" style="--acc:${color}">
+      <div class="cc-hd">
+        <div>
+          <div class="cc-name">${h} — Homeroom</div>
+          <div class="cc-teacher">${kids.length} students · Math instruction: ${mathTeacherLabel}${accelLabel}</div>
+        </div>
+        <div class="cc-count" style="background:${color}">${kids.length} students</div>
+      </div>
+      <div class="cc-metrics">
+        <div class="ccm"><div class="ccm-val" style="color:${color}">${onTrack}</div><div class="ccm-lbl">On Grade Level</div></div>
+        <div class="ccm"><div class="ccm-val" style="color:#d97706">${atRisk}</div><div class="ccm-lbl">Early 3 (Watch)</div></div>
+        <div class="ccm"><div class="ccm-val" style="color:#be123c">${bel}</div><div class="ccm-lbl">Below</div></div>
+        <div class="ccm"><div class="ccm-val" style="color:${color}">+${avgGain}</div><div class="ccm-lbl">Avg Gain</div></div>
+        <div class="ccm"><div class="ccm-val" style="color:${color}">${typMet}</div><div class="ccm-lbl">Typical Growth Met</div></div>
+        <div class="ccm"><div class="ccm-val" style="color:${color}">${stretchMet}</div><div class="ccm-lbl">Stretch Growth Met</div></div>
+      </div>
+      <div class="dbar-wrap" style="margin-top:10px">
+        ${domResults.map(d => {
+          const c2 = d.pct >= 75 ? '#15803d' : d.pct >= 60 ? '#0f766e' : d.pct >= 45 ? '#d97706' : '#be123c';
+          return `<div class="dbar-row"><div class="dbar-name"><span>${d.n}</span><span style="color:${c2};font-weight:800">${d.pct}%</span></div>
+          <div class="dbar-bg"><div class="dbar-fill" style="width:${d.pct}%;background:${c2}">${d.pct}%</div></div></div>`;
+        }).join('')}
+      </div>
+      <details style="margin-top:14px">
+        <summary style="cursor:pointer; font-weight:700; font-size:.78rem; color:${color}; padding:6px 0">View Student Roster (${kids.length}) ▾</summary>
+        <div style="margin-top:10px; overflow-x:auto">
+          <table>
+            <thead><tr>
+              <th>Student</th><th>Math Teacher</th><th>Placement</th><th>Scale</th><th>%ile</th>
+              <th>Gain</th><th>Typical</th><th>Stretch</th><th>Tier</th>
+            </tr></thead>
+            <tbody>
+            ${[...kids].sort((a,b) => (placementRank[b.p]||0) - (placementRank[a.p]||0)).map(k => {
+              const tier = isOnTrack(k) ? 1 : (isAtRisk(k) ? 2 : 3);
+              const tierC = tier === 1 ? '#15803d' : tier === 2 ? '#d97706' : '#be123c';
+              return `<tr>
+                <td style="font-weight:700">${k.n}</td>
+                <td>${k.tch}${k.ct === 'ACCEL' ? ' ⭐' : ''}</td>
+                <td>${pChip(k.p)}</td>
+                <td>${k.ss}</td>
+                <td>${k.pct}</td>
+                <td style="color:${k.gn >= 25 ? '#15803d' : k.gn >= 10 ? '#d97706' : '#be123c'};font-weight:700">+${k.gn}</td>
+                <td>${k.pt}%</td>
+                <td>${k.ps}%</td>
+                <td><span class="place-chip" style="background:${tierC}">T${tier}</span></td>
+              </tr>`;
+            }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+// ============================================
+// STANDARDS & GAPS TAB
+// ============================================
+function renderStandards() {
+  const el = document.getElementById('tab-standards');
+  
+  // iReady domains → FL BEST MA.3 standard mapping for 3rd grade Math
+  const standards = [
+    // NUMBER & OPERATIONS
+    {dom:'Number & Operations', ir:'Place value, rounding, reading/writing numbers to 10,000', std:'MA.3.NSO.1.1–1.4', desc:'Read, write, compare, compose, and decompose whole numbers up to 10,000. Round whole numbers to nearest 10 or 100.', pri:'High', note:'Foundational for all subsequent strands. Any student with NSO placement below Mid 3 needs immediate scaffolded review before PM3.'},
+    {dom:'Number & Operations', ir:'Multi-digit addition/subtraction with regrouping', std:'MA.3.NSO.2.1–2.2', desc:'Add and subtract whole numbers within 10,000 using place-value strategies and the standard algorithm with procedural fluency.', pri:'High', note:'Strong fluency here predicts broader math confidence. Many students who rank Grade 2 in NSO have gaps in regrouping across zeros.'},
+    {dom:'Number & Operations', ir:'Multiplication facts and single-digit × multi-digit', std:'MA.3.NSO.2.2, MA.3.AR.1.1', desc:'Multiply a one-digit whole number by a multi-digit whole number up to two digits; fluently recall multiplication facts 0–10.', pri:'High', note:'CRITICAL FAST PM3 focus. Fact fluency drives speed on the untimed but stamina-heavy test.'},
+    {dom:'Number & Operations (Fractions)', ir:'Iready does not separately report fractions — blended into NO', std:'MA.3.FR.1.1–1.3, MA.3.FR.2.1–2.2', desc:'Represent and interpret fractions as parts of a whole; identify equivalent fractions; represent fractions on a number line; compare fractions with same numerator or denominator.', pri:'CRITICAL', note:'⚠️ MAJOR BLIND SPOT: FAST Math PM3 tests MA.3.FR heavily, but iReady does NOT report fractions as a separate domain on 3rd grade diagnostics — these items are rolled into Number & Operations. Teachers MUST do a fractions-specific formative check before 5/11 to diagnose this gap. Plan explicit fraction review in all tier groups.'},
+    
+    // ALGEBRAIC REASONING
+    {dom:'Algebra & Algebraic Thinking', ir:'Multiplication & division relationships, equal groups, arrays', std:'MA.3.AR.1.1–1.2', desc:'Apply the commutative, associative, and distributive properties to multiply whole numbers. Solve one- and two-step real-world problems with multiplication and division.', pri:'High', note:'Strong domain overall (92% on/above). Push high performers toward two-step word problems and interpreting remainders.'},
+    {dom:'Algebra & Algebraic Thinking', ir:'Understand division as unknown-factor problems', std:'MA.3.AR.2.1–2.3', desc:'Interpret, represent, and solve division of whole numbers within 144 using equal groups. Identify and create patterns.', pri:'Med', note:'FAST items frame division in word-problem context. Practice solving "How many groups?" vs "How many in each group?" framings.'},
+    {dom:'Algebra & Algebraic Thinking', ir:'Patterns on addition/multiplication tables', std:'MA.3.AR.3.1–3.3', desc:'Identify, continue, and generate patterns in addition and multiplication tables. Determine whether a whole number from 1 to 144 is a multiple of a given 1-digit number.', pri:'Low', note:'Often under-tested in classrooms but shows up on PM3. Do 2–3 targeted warm-ups.'},
+    
+    // MEASUREMENT & DATA → iReady combines; BEST splits into MA.3.M and MA.3.DP
+    {dom:'Measurement & Data → MA.3.M', ir:'Time to the minute, elapsed time', std:'MA.3.M.1.1–1.2', desc:'Select and use appropriate tools to measure length, weight, volume; solve real-world problems involving elapsed time to the nearest minute.', pri:'High', note:'Elapsed time is the #1 tested M standard on PM3. Pair with a clock tool. Students who place Grade 2 in MD typically miss elapsed-time backward-counting.'},
+    {dom:'Measurement & Data → MA.3.M', ir:'Perimeter of polygons', std:'MA.3.M.2.1–2.2', desc:'Solve real-world problems involving perimeter of polygons; find an unknown side length given the perimeter.', pri:'High', note:'Students confuse perimeter with area. Explicit contrast tasks in the last 2 weeks before testing.'},
+    {dom:'Measurement & Data → MA.3.DP', ir:'Bar graphs, pictographs, scaled graphs', std:'MA.3.DP.1.1–1.2', desc:'Read and interpret data in frequency tables, bar graphs, and pictographs with scales; generate questions and solve problems using graph data.', pri:'Med', note:'Multi-step questions (e.g., "how many more X than Y combined?") trip students up. Practice reading scaled intervals (by 2s, 5s, 10s).'},
+    
+    // GEOMETRY
+    {dom:'Geometry', ir:'Classify quadrilaterals by attributes', std:'MA.3.GR.1.1–1.3', desc:'Describe and classify polygons by the number of sides and vertices; identify and draw quadrilaterals based on their attributes; categorize quadrilaterals in a hierarchy.', pri:'Med', note:'Rhombus vs parallelogram vs trapezoid is a common trap. Use Venn/hierarchy graphic organizers.'},
+    {dom:'Geometry', ir:'Area as additive, counting unit squares', std:'MA.3.GR.2.1–2.4', desc:'Explore area as the number of unit squares; find area by multiplying side lengths; solve real-world problems involving area of rectangles; decompose rectangles to find area of composite figures.', pri:'High', note:'Students conflate area (square units) with perimeter (linear units). Drill units and formulas explicitly. High-yield PM3 focus area.'}
+  ];
+
+  // Calculate gap for each domain
+  const domGap = {
+    'nr': {n:'Number & Operations', onGL:S.filter(x => x.nr === 'Early On Grade Level' || x.nr === 'Mid or Above Grade Level').length, below:S.filter(x => x.nr === '1 Grade Level Below' || x.nr === '2 Grade Levels Below').length},
+    'ar': {n:'Algebra & Algebraic Thinking', onGL:S.filter(x => x.ar === 'Early On Grade Level' || x.ar === 'Mid or Above Grade Level').length, below:S.filter(x => x.ar === '1 Grade Level Below' || x.ar === '2 Grade Levels Below').length},
+    'mr': {n:'Measurement & Data', onGL:S.filter(x => x.mr === 'Early On Grade Level' || x.mr === 'Mid or Above Grade Level').length, below:S.filter(x => x.mr === '1 Grade Level Below' || x.mr === '2 Grade Levels Below').length},
+    'gr': {n:'Geometry', onGL:S.filter(x => x.gr === 'Early On Grade Level' || x.gr === 'Mid or Above Grade Level').length, below:S.filter(x => x.gr === '1 Grade Level Below' || x.gr === '2 Grade Levels Below').length}
+  };
+
+  const priColors = {'CRITICAL':'#7c2d12','High':'#be123c','Med':'#d97706','Low':'#0f766e'};
+  const domColors = {'Number & Operations':'#6d28d9','Number & Operations (Fractions)':'#7c2d12','Algebra & Algebraic Thinking':'#0284c7','Measurement & Data → MA.3.M':'#0f766e','Measurement & Data → MA.3.DP':'#059669','Geometry':'#d97706'};
+
+  el.innerHTML = `<div class="sec-title">iReady Domains → FL B.E.S.T. MA.3 Standards</div>
+  <div class="sec-sub">Maps each iReady subtopic to its aligned Florida B.E.S.T. Benchmark with priority ranking for FAST Math PM3 prep</div>
+  
+  <div class="fast-cal"><div class="fast-cal-icon">⚠️</div><div class="fast-cal-body">
+    <div class="fast-cal-title">CRITICAL iReady → FAST Mismatch on Fractions</div>
+    <div class="fast-cal-txt">iReady Math for Grade 3 reports 4 domains: Number & Operations, Algebra & Algebraic Thinking, Measurement & Data, Geometry. <strong>It does NOT report Fractions as a distinct strand.</strong> FAST Math PM3 tests <strong>MA.3.FR</strong> (equivalent fractions, fractions on a number line, comparing fractions) as its own reporting category. Teachers should use a separate fractions pre-assessment (textbook unit test, teacher-made exit ticket, or iReady on-path fractions lessons) to diagnose this area before 5/11.</div>
+  </div></div>
+  
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-title"><div class="cicon" style="background:#fef3c7">📊</div>Class-Wide Domain Performance Snapshot</div>
+    ${Object.entries(domGap).map(([k,d]) => {
+      const valid = S.length;
+      const p = pct(d.onGL, valid);
+      const c = p >= 75 ? '#15803d' : p >= 60 ? '#0f766e' : p >= 45 ? '#d97706' : '#be123c';
+      return `<div class="dbar-row"><div class="dbar-name"><span>${d.n}</span><span style="color:${c};font-weight:800">${p}% on/above · ${d.below} below grade level</span></div>
+      <div class="dbar-bg"><div class="dbar-fill" style="width:${p}%;background:${c}">${p}%</div></div></div>`;
+    }).join('')}
+  </div>
+
+  ${standards.map(s => `<div class="std-card" style="--acc:${domColors[s.dom] || '#64748b'}">
+    <div class="std-hd">
+      <div>
+        <div class="std-code">${s.std}</div>
+        <div class="std-dom">${s.dom}</div>
+      </div>
+      <div class="std-pri" style="background:${priColors[s.pri]}">${s.pri} Priority</div>
+    </div>
+    <div class="std-ir"><strong>iReady Subtopic:</strong> ${s.ir}</div>
+    <div class="std-desc">${s.desc}</div>
+    <div class="std-note"><strong>Teacher Note:</strong> ${s.note}</div>
+  </div>`).join('')}`;
+}
+
+// ============================================
+// INDIVIDUAL STUDENT VIEW
+// ============================================
+let currentFilter = 'all';
+let currentSearch = '';
+
+function renderIndividual() {
+  const el = document.getElementById('tab-individual');
+  
+  el.innerHTML = `<div class="sec-title">Individual Student Profiles</div>
+  <div class="sec-sub">Search, filter, and drill into each student's domain performance and FL B.E.S.T. standard alignment</div>
+  <input type="text" id="stu-search" class="stu-search" placeholder="🔍 Search by student name..." oninput="handleSearch(this.value)">
+  <div class="filter-bar">
+    <button class="fbtn active" onclick="setFilter('all',this)">All Students (${S.length})</button>
+    <button class="fbtn" onclick="setFilter('t1',this)">🟢 Tier 1 On Grade Level</button>
+    <button class="fbtn" onclick="setFilter('t2',this)">🟡 Tier 2 Early 3</button>
+    <button class="fbtn" onclick="setFilter('t3',this)">🔴 Tier 3 Below Grade Level</button>
+    <button class="fbtn" onclick="setFilter('nogrowth',this)">⚠️ Zero/Low Growth</button>
+    <button class="fbtn" onclick="setFilter('accel',this)">⭐ ACCEL</button>
+  </div>
+  <div id="stu-list"></div>`;
+  renderStudentList();
+}
+
+function handleSearch(v) {
+  currentSearch = v.toLowerCase();
+  renderStudentList();
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderStudentList();
+}
+
+function renderStudentList() {
+  let list = [...S];
+  if (currentFilter === 't1') list = list.filter(isOnTrack);
+  if (currentFilter === 't2') list = list.filter(isAtRisk);
+  if (currentFilter === 't3') list = list.filter(isBelow);
+  if (currentFilter === 'nogrowth') list = list.filter(s => s.gn < 10);
+  if (currentFilter === 'accel') list = list.filter(s => s.ct === 'ACCEL');
+  if (currentSearch) list = list.filter(s => s.n.toLowerCase().includes(currentSearch));
+  list.sort((a,b) => a.n.localeCompare(b.n));
+  
+  const holder = document.getElementById('stu-list');
+  if (list.length === 0) {
+    holder.innerHTML = '<div style="padding:30px;text-align:center;color:#64748b">No students match your filter.</div>';
+    return;
+  }
+  holder.innerHTML = list.map(s => renderStudentCard(s)).join('');
+}
+
+function renderStudentCard(s) {
+  const tier = isOnTrack(s) ? 1 : (isAtRisk(s) ? 2 : 3);
+  const tierColor = tier === 1 ? '#15803d' : tier === 2 ? '#d97706' : '#be123c';
+  const tierLabel = tier === 1 ? 'Tier 1 — On Grade Level' : tier === 2 ? 'Tier 2 — Early 3 Watch' : 'Tier 3 — Below Grade Level';
+  
+  const domains = [
+    {n:'Number & Operations', key:'NO', place:s.np, ss:s.nss, rel:s.nr, std:'MA.3.NSO.1–2, MA.3.FR.1–2'},
+    {n:'Algebra & Algebraic Thinking', key:'AR', place:s.ap, ss:s.ass, rel:s.ar, std:'MA.3.AR.1–3'},
+    {n:'Measurement & Data', key:'MD', place:s.mp, ss:s.mss, rel:s.mr, std:'MA.3.M.1–2, MA.3.DP.1'},
+    {n:'Geometry', key:'GEO', place:s.gp, ss:s.gss, rel:s.gr, std:'MA.3.GR.1–2'}
+  ];
+  
+  const needsMidGL = s.mgl - s.ss;
+  const gainProj = needsMidGL > 0 ? `Needs +${needsMidGL} pts to reach Mid On Grade Level` : 'At or above Mid On Grade Level benchmark ✓';
+
+  return `<div class="stu-card" style="--acc:${tierColor}">
+    <div class="stu-hd">
+      <div class="stu-avatar" style="background:${hColor(s.n)}">${getInits(s.n)}</div>
+      <div>
+        <div class="stu-name">${s.n}</div>
+        <div class="stu-meta">Homeroom: ${s.hr} · Teacher: ${s.tch} · ${s.ct === 'ACCEL' ? '⭐ ACCEL' : 'General'}</div>
+        <div class="stu-chips">
+          <span class="pchip" style="background:${tierColor};color:#fff">${tierLabel}</span>
+          <span class="pchip" style="background:${placementColors[s.p]};color:#fff">Overall: ${s.p}</span>
+          <span class="pchip" style="background:#e2e8f0;color:#334155">Grouping ${s.grp} / 5</span>
+          ${s.rush === 'Y' ? '<span class="pchip" style="background:#be123c;color:#fff">⚡ Rush Flag</span>' : ''}
+          ${s.ra === 'On' ? '<span class="pchip" style="background:#0284c7;color:#fff">🔊 Read Aloud</span>' : ''}
+        </div>
+      </div>
+    </div>
+    
+    <div class="pmet-grid">
+      <div class="pmet"><div class="pm-lbl">Scale Score</div><div class="pm-val" style="color:${tierColor}">${s.ss}</div><div class="pm-sub">Baseline: ${s.bss}</div></div>
+      <div class="pmet"><div class="pm-lbl">Diagnostic Gain</div><div class="pm-val" style="color:${s.gn >= 25 ? '#15803d' : s.gn >= 10 ? '#d97706' : '#be123c'}">+${s.gn}</div><div class="pm-sub">points YTD</div></div>
+      <div class="pmet"><div class="pm-lbl">Percentile</div><div class="pm-val" style="color:${tierColor}">${s.pct}</div><div class="pm-sub">national norm</div></div>
+      <div class="pmet"><div class="pm-lbl">Quantile</div><div class="pm-val" style="color:${tierColor};font-size:1.2rem">${s.qnt || '—'}</div><div class="pm-sub">math measure</div></div>
+      <div class="pmet"><div class="pm-lbl">Test Duration</div><div class="pm-val" style="color:${tierColor};font-size:1.2rem">${s.dur||'—'} min</div><div class="pm-sub">${s.rush === 'Y' ? '⚠ Possibly rushed' : 'No rush flag'}</div></div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div class="gbr-row">
+        <div class="gbr-lbl">Progress to Typical</div>
+        <div class="gbr-bg"><div class="gbr-fill" style="width:${Math.min(100, s.pt)}%; background:${s.pt >= 100 ? '#15803d' : s.pt >= 60 ? '#0f766e' : s.pt >= 30 ? '#d97706' : '#be123c'}">${s.pt}%</div></div>
+      </div>
+      <div class="gbr-row">
+        <div class="gbr-lbl">Progress to Stretch</div>
+        <div class="gbr-bg"><div class="gbr-fill" style="width:${Math.min(100, s.ps)}%; background:${s.ps >= 100 ? '#6d28d9' : s.ps >= 60 ? '#0f766e' : s.ps >= 30 ? '#d97706' : '#be123c'}">${s.ps}%</div></div>
+      </div>
+    </div>
+
+    <div class="dom-grid">
+      ${domains.map(d => {
+        const c = (d.rel === 'Mid or Above Grade Level') ? '#15803d' : (d.rel === 'Early On Grade Level') ? '#d97706' : '#be123c';
+        return `<div class="dcard" style="border-color:${c}">
+          <div class="dc-title">${d.n}</div>
+          <div class="dc-place">${d.place || '—'}</div>
+          <div class="dc-score">Scale: ${d.ss || '—'} · ${d.rel || '—'}</div>
+          <div class="std-match-item"><span style="color:#64748b">FL B.E.S.T.:</span> <strong>${d.std}</strong></div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div style="padding:10px 14px; background:${s.ss >= s.mgl ? '#f0fdf4' : '#fef3c7'}; border-radius:8px; border-left:4px solid ${s.ss >= s.mgl ? '#15803d' : '#d97706'}; font-size:.76rem; line-height:1.5;">
+      <strong>FAST Math PM3 Projection:</strong> ${gainProj}. ${getIndividualRecommendation(s)}
+    </div>
+  </div>`;
+}
+
+function getIndividualRecommendation(s) {
+  const tier = isOnTrack(s) ? 1 : (isAtRisk(s) ? 2 : 3);
+  const weakest = [
+    {k:'nr', n:'Number & Operations', std:'MA.3.NSO', p:s.np, r:s.nr},
+    {k:'ar', n:'Algebra', std:'MA.3.AR', p:s.ap, r:s.ar},
+    {k:'mr', n:'Measurement/Data', std:'MA.3.M / MA.3.DP', p:s.mp, r:s.mr},
+    {k:'gr', n:'Geometry', std:'MA.3.GR', p:s.gp, r:s.gr}
+  ].sort((a,b) => (placementRank[a.p]||0) - (placementRank[b.p]||0))[0];
+
+  if (tier === 1) {
+    if (s.gn < 15) return `Strong placement but low growth (+${s.gn} pts). Verify engagement — may be under-testing. Push stretch growth via enrichment lessons in ${weakest.n} (${weakest.std}).`;
+    if (s.ct === 'ACCEL') return `ACCEL pace confirmed. Enrich with 4th-grade preview in ${weakest.n} (${weakest.std}) and multi-step word problems. Ensure fractions review — blind spot for iReady.`;
+    return `On track for FAST Level 3–5. Weakest strand: ${weakest.n} (${weakest.std}) at "${weakest.p}". Target 1–2 focused lessons + fraction review before 5/11.`;
+  }
+  if (tier === 2) {
+    return `Borderline — weakest strand is ${weakest.n} (${weakest.std}) at "${weakest.p}". Place in small-group Tier 2 targeted instruction 3x/week. Close gap = likely Level 3 on FAST.`;
+  }
+  return `CRITICAL INTERVENTION. Weakest strand: ${weakest.n} (${weakest.std}) at "${weakest.p}". Daily small-group Tier 3 plus iReady assigned lessons (45+ min/week). Fact fluency + fraction basics are non-negotiable.`;
+}
+
+// ============================================
+// TIER PLACEMENT TAB
+// ============================================
+function renderTiers() {
+  const el = document.getElementById('tab-tiers');
+  
+  const tier1 = S.filter(isOnTrack);
+  const tier2 = S.filter(isAtRisk);
+  const tier3 = S.filter(isBelow);
+  const zeroGrowth = S.filter(s => s.gn < 10);
+  
+  const tiers = [
+    {
+      tier:3, cls:'t3', title:'Tier 3 — Intensive Intervention (Daily + Small Group)',
+      students:tier3,
+      focus:[
+        'MA.3.NSO.1.1–1.4 — Place value, reading/writing numbers to 10,000, rounding',
+        'MA.3.NSO.2.1–2.2 — Multi-digit addition/subtraction within 1,000 with regrouping',
+        'MA.3.AR.1.1 — Multiplication facts 0–10 with fluency (non-negotiable)',
+        'MA.3.FR.1.1–1.2 — Fractions as equal parts, fractions on a number line (iReady gap)',
+        'MA.3.M.2.1 — Perimeter of rectangles and polygons',
+        'MA.3.GR.2.1–2.2 — Area as unit squares; rectangle area via multiplication'
+      ],
+      strategies:[
+        'Daily 30-min small group (3–4 students) with classroom teacher or interventionist during WIN/flex block',
+        'Multiplication fact fluency drill 5 min/day — target 0–5s first, then 6–10s (use flashcards, Xtramath, iReady facts)',
+        'Concrete-Representational-Abstract (CRA) instruction: base-ten blocks → drawings → standard algorithm',
+        'Fraction kit instruction: paper strips, fraction bars, number lines (CRITICAL iReady blind spot)',
+        'FAST-formatted item-type exposure 2x/week: multiple choice, multi-select, fill-in, drag-and-drop',
+        'Elapsed time on physical/online clocks — 5-min warm-up daily',
+        'iReady: verify 45+ min/week of assigned lessons (Groupings 1–2)',
+        'Flag and conference with any student with zero or low gain — verify engagement, rush flags, read-aloud needs'
+      ],
+      resources:['iReady assigned lessons (Groupings 1–2)', 'Ready Math Grade 3 toolkit lessons', 'Xtramath fact fluency', 'Number Talks Math curriculum', 'FCRR Student Center Activities (Gr 2–3)', 'FAST Math PM2/PM3 item specifications (FLDOE)', 'Fraction kits or virtual manipulatives (Didax, Math Learning Center)']
+    },
+    {
+      tier:2, cls:'t2', title:'Tier 2 — Targeted Support (3x/week Small Group)',
+      students:tier2,
+      focus:[
+        'MA.3.NSO.2.2 + MA.3.AR.1.1 — Multiplication facts + multi-digit multiplication fluency (Mid 3 gap)',
+        'MA.3.FR.1–2 — Fraction equivalence and comparison (iReady blind spot — ALL students need this)',
+        'MA.3.AR.2.1–2.3 — Two-step word problems with multiplication/division',
+        'MA.3.M.1.2 — Elapsed time to the minute',
+        'MA.3.M.2.1–2.2 — Perimeter with unknown sides',
+        'MA.3.GR.2.3 — Area of composite figures'
+      ],
+      strategies:[
+        'Small group (4–6) 3x/week during WIN/flex or guided math rotations',
+        'FAST-formatted practice problems 2x/week — focus on multi-step word problems and interpreting graphs',
+        'Fact fluency check-in weekly with goal of sub-3-second recall on 0–10 facts',
+        'Fractions unit review with fraction bars and number lines — do NOT skip even for Mid 3 students',
+        'Error-analysis routine: students justify WHY an answer is wrong using math vocabulary',
+        'iReady: maintain 45+ min/week; use teacher dashboard to monitor lesson completion and pass rates',
+        'Growth goal conferences: review % progress to typical growth target weekly with students',
+        'Flag and follow up with zero-gain students — verify engagement, rush flags, and diagnostic validity'
+      ],
+      resources:['iReady assigned lessons (Groupings 3–4)','Ready Math Grade 3 toolkit lessons','Math Playground / Prodigy for extra practice','FAST sample items (FLDOE Florida Statewide Assessments)','Number line and fraction bar printables']
+    },
+    {
+      tier:1, cls:'t1', title:'Tier 1 — Core Instruction + Enrichment (Daily + Extension)',
+      students:tier1,
+      focus:[
+        'MA.3.NSO.1–2 — Full mastery of place value and multi-digit operations',
+        'MA.3.AR.1–3 — Properties of operations, two-step word problems, patterns',
+        'MA.3.FR.1–2 — Fractions as numbers, on number lines, equivalence (ALL students need this prep)',
+        'MA.3.M, MA.3.DP — Elapsed time, perimeter, scaled graph interpretation',
+        'MA.3.GR.1–2 — Quadrilateral classification, area of composite figures'
+      ],
+      strategies:[
+        'Whole-class rigorous Tier 1 instruction with differentiated questioning and tiered tasks',
+        'Math discourse: "Talk moves" — restate, add on, agree/disagree with evidence',
+        'Weekly fractions review even for top performers — iReady did not assess this separately',
+        '3-Act Tasks and open-ended problem solving for ACCEL students',
+        'iReady: maintain 45+ min/week of on-path or enrichment lessons (Grouping 5)',
+        'FAST sample item practice — interface familiarity (drag-drop, multi-select, equation editor)',
+        'Peer tutoring: pair Tier 1 students with Tier 2 partners for fact fluency and word problem review',
+        'Enrichment: students placing Grade 4+ work on 4th-grade preview lessons (multi-digit multiplication, fractions)'
+      ],
+      resources:['iReady enrichment lessons (Grouping 5)','Open Middle problems','3-Act Math Tasks (Dan Meyer / Graham Fletcher)','Beast Academy / Art of Problem Solving','FAST practice tests (FLDOE)']
+    }
+  ];
+
+  el.innerHTML = `<div class="sec-title">Tiered Support Placement</div>
+  <div class="sec-sub">Recommended MTSS groupings based on iReady placement, growth, and diagnostic validity — aligned to FL B.E.S.T. MA.3 standards</div>
+  
+  <div class="stat-grid" style="margin-bottom:24px">
+    <div class="stat-card" style="--acc:#15803d"><div class="stat-lbl">Tier 1 — On Grade Level</div><div class="stat-val">${tier1.length}</div><div class="stat-det">${pct(tier1.length, S.length)}% · Core + Enrichment</div></div>
+    <div class="stat-card" style="--acc:#d97706"><div class="stat-lbl">Tier 2 — Early 3 Watch</div><div class="stat-val">${tier2.length}</div><div class="stat-det">${pct(tier2.length, S.length)}% · 3x/week small group</div></div>
+    <div class="stat-card" style="--acc:#be123c"><div class="stat-lbl">Tier 3 — Below Grade Level</div><div class="stat-val">${tier3.length}</div><div class="stat-det">${pct(tier3.length, S.length)}% · Daily intervention</div></div>
+    <div class="stat-card" style="--acc:#7c2d12"><div class="stat-lbl">⚠ Low Growth Flag</div><div class="stat-val">${zeroGrowth.length}</div><div class="stat-det">Students with gain &lt; 10 pts</div></div>
+  </div>
+
+  <div class="tier-grid">
+    ${tiers.map(t => `<div class="tcard ${t.cls}">
+      <div class="t-hd">
+        <div class="t-num">${t.tier}</div>
+        <div><div class="t-title">${t.title}</div><div class="t-count">${t.students.length} students (${pct(t.students.length, S.length)}% of class)</div></div>
+      </div>
+      <div class="t-sec">
+        <div class="t-sec-title">FL B.E.S.T. MA.3 Focus Standards</div>
+        <ul class="t-list">${t.focus.map(f => `<li>${f}</li>`).join('')}</ul>
+      </div>
+      <div class="t-sec">
+        <div class="t-sec-title">Instructional Strategies</div>
+        <ul class="t-list">${t.strategies.map(x => `<li>${x}</li>`).join('')}</ul>
+      </div>
+      <div class="t-sec">
+        <div class="t-sec-title">Resources</div>
+        <div style="font-size:.72rem; line-height:1.5; color:#334155">${t.resources.join(' · ')}</div>
+      </div>
+      <details style="margin-top:12px">
+        <summary style="cursor:pointer; font-weight:700; font-size:.74rem; color:#1e293b; padding:4px 0">📋 Student List (${t.students.length}) ▾</summary>
+        <div style="max-height:240px; overflow-y:auto; margin-top:8px; font-size:.72rem;">
+          ${[...t.students].sort((a,b) => a.n.localeCompare(b.n)).map(s => `<div style="padding:5px 8px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; gap:6px; align-items:center">
+            <span style="font-weight:700">${s.n}</span>
+            <span style="font-size:.65rem; color:#64748b">${s.tch} · ${s.p} · +${s.gn}pt</span>
+          </div>`).join('')}
+        </div>
+      </details>
+    </div>`).join('')}
+  </div>
+  
+  <div class="card" style="background:#fef2f2; border-left:5px solid #be123c">
+    <div class="card-title"><div class="cicon" style="background:#fee2e2">⚠</div>Low-Growth Students Requiring Immediate Follow-Up</div>
+    <div style="font-size:.78rem; margin-bottom:10px; line-height:1.5">These ${zeroGrowth.length} students have gained fewer than 10 points from baseline. Before re-testing or planning intervention, verify: (1) diagnostic validity and rush flags, (2) attendance during Diagnostic windows, (3) read-aloud or accommodation needs, (4) engagement or test-fatigue patterns.</div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Student</th><th>Teacher</th><th>Baseline</th><th>Current</th><th>Gain</th><th>Rush?</th><th>Duration</th><th>Typical Progress</th></tr></thead>
+        <tbody>${zeroGrowth.sort((a,b) => a.gn - b.gn).map(s => `<tr>
+          <td style="font-weight:700">${s.n}</td>
+          <td>${s.tch}</td>
+          <td>${s.bss} (${s.bp})</td>
+          <td>${s.ss} (${s.p})</td>
+          <td style="color:#be123c;font-weight:700">+${s.gn}</td>
+          <td>${s.rush === 'Y' ? '⚠ Yes' : 'No'}</td>
+          <td>${s.dur||'—'} min</td>
+          <td>${s.pt}%</td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ============================================
+// ACTION PLAN TAB
+// ============================================
+function renderAction() {
+  const el = document.getElementById('tab-action');
+  const today = new Date();
+  const testDate = new Date('2026-05-11T08:00:00');
+  const daysLeft = Math.ceil((testDate - today) / (1000*60*60*24));
+
+  const phases = [
+    {num:1, color:'#6d28d9', title:'Phase 1 — Diagnostic & Planning', dates:'Apr 23 – Apr 26 (Weekend Prep)', countdown:'18 days to test', 
+      admin:[
+        'Pull Spring YTD Diagnostic reports from iReady Connect for all 83 students',
+        'Identify the 11 Tier 3 students (Grade 1 / Grade 2 placement) and schedule daily small-group pull-out with interventionist',
+        'Flag the 1 student with zero/negative growth — review rush flag, attendance, and diagnostic validity',
+        'Pull iReady teacher dashboard: verify every student has been assigned current on-path lessons',
+        'Administer a fractions-specific pre-assessment (iReady had no fractions strand) — use textbook unit test or teacher-made exit ticket on MA.3.FR.1–2',
+        'Print parent-friendly score reports for upcoming conferences',
+        'Share this dashboard with grade-level team in PLC'
+      ],
+      instr:[
+        'Review FL B.E.S.T. MA.3 test item specifications on FLDOE website — familiarize with FAST PM3 item types',
+        'Set up fraction manipulatives stations in all 4 classrooms (paper strips, fraction circles, number lines)',
+        'Map final 3-week scope-and-sequence: Week 1 = Number/Ops + Fractions, Week 2 = Algebra + Measurement, Week 3 = Geometry + Review',
+        'Create Tier 1 / Tier 2 / Tier 3 rosters in iReady and assign differentiated lessons',
+        'Coordinate with ESE, ELL, and 504 teams for testing accommodations'
+      ]
+    },
+    {num:2, color:'#0284c7', title:'Phase 2 — Foundational Skills Review', dates:'Apr 27 – May 1 (2 weeks out)', countdown:'10–14 days to test',
+      admin:[
+        'Daily Tier 3 small-group (30 min) during WIN/flex: place value (MA.3.NSO.1) and fact fluency (MA.3.AR.1.1)',
+        'Tier 2 small group 3x/week: focus on multi-digit multiplication and fractions',
+        'iReady: enforce 45 min/week minimum on-path; monitor teacher dashboard Mon/Wed/Fri',
+        'Conference with Tier 3 families — share growth story and set stretch goals'
+      ],
+      instr:[
+        'Whole-class focus: MA.3.NSO.1 (place value, rounding) + MA.3.NSO.2.2 / MA.3.AR.1.1 (multiplication)',
+        'Dedicated fractions mini-unit: MA.3.FR.1.1 (fractions as equal parts), MA.3.FR.1.2 (fractions on number line), MA.3.FR.2.1 (equivalent fractions)',
+        'Number Talks 5 min/day — mental math strategies',
+        'Introduce FAST item types via projected practice items 2x/week — focus on multi-select and drag-and-drop',
+        'Error-analysis protocol: "Find my mistake" warm-ups using common student errors'
+      ]
+    },
+    {num:3, color:'#0f766e', title:'Phase 3 — Application & Problem Solving', dates:'May 4 – May 8 (1 week out)', countdown:'3–7 days to test',
+      admin:[
+        'Final iReady check-ins — no new diagnostic, but push targeted lessons',
+        'Print FAST-style practice tests from FLDOE sample item bank for each class',
+        'Schedule 30-min daily test-taking strategy session with each class',
+        'Confirm testing roster, accommodations, and tech logins with school testing coordinator'
+      ],
+      instr:[
+        'Whole-class focus: MA.3.AR.2 (two-step word problems), MA.3.M.1.2 (elapsed time), MA.3.M.2 (perimeter)',
+        'Geometry review: MA.3.GR.1 (classify quadrilaterals), MA.3.GR.2 (area of rectangles and composites)',
+        'Data analysis practice: MA.3.DP.1 (reading scaled bar graphs and pictographs)',
+        'Full-length FAST-format mock test on May 7 (60 min) followed by review of wrong answers',
+        'Teach test-taking strategies: read the question twice, underline key words, check work, use scratch paper'
+      ]
+    },
+    {num:4, color:'#d97706', title:'Phase 4 — Final Review & Test-Day Readiness', dates:'May 8 – May 10 (Final weekend)', countdown:'1–3 days to test',
+      admin:[
+        'Send home parent reminder: test is Monday 5/11 — good sleep, breakfast, positive mindset',
+        'Confirm all testing technology and headphones (if needed) are ready',
+        'Print any extended-time or read-aloud accommodations lists for proctors',
+        'Post encouraging signs/posters in classrooms'
+      ],
+      instr:[
+        'Short, high-confidence review sessions — NO new content',
+        'Quick-recall games: multiplication facts, place-value drills, fraction flashcards',
+        '5-min "strategy review" each morning: navigating the FAST platform, flagging questions, using scratch paper',
+        'Celebrate YTD growth — show students their baseline → current gain visually',
+        'Breathing/mindfulness exercises to reduce test anxiety'
+      ]
+    },
+    {num:5, color:'#be123c', title:'Phase 5 — Test Day & Post-Test', dates:'May 11 — TEST DAY', countdown:'🎯 GO TIME',
+      admin:[
+        'All proctors briefed on accommodations and testing procedures',
+        'Students arrive, settle, take deep breath — test begins per schedule',
+        'Monitor for any technology issues during test — note time if test must be paused',
+        'Collect any sticky notes or scratch paper per FLDOE test-security protocols',
+        'Celebrate completion — plan a class reward/fun activity after testing'
+      ],
+      instr:[
+        'Morning: positive pep talk, review breathing strategies, brief confidence boost',
+        'During test: circulate silently, ensure engagement without coaching',
+        'After test: do NOT discuss specific items (test-security violation)',
+        'Post-test day (May 12+): low-stakes review, celebration, and transition to next unit',
+        'Schedule post-test PLC in late May to review class-level results when they arrive'
+      ]
+    }
+  ];
+
+  el.innerHTML = `<div class="sec-title">Action Plan to FAST Math PM3 — May 11, 2026</div>
+  <div class="sec-sub">Day-by-day roadmap from today through test day · ${daysLeft > 0 ? daysLeft + ' days remaining' : 'Test day has arrived or passed'}</div>
+  
+  <div class="card" style="margin-bottom:20px; background:linear-gradient(135deg,#f0fdf4 0%,#ecfdf5 100%); border-left:5px solid #15803d">
+    <div class="card-title"><div class="cicon" style="background:#dcfce7">🎯</div>Strategic Priorities (Remaining ${daysLeft > 0 ? daysLeft : 0} Days)</div>
+    <div style="font-size:.82rem; line-height:1.6;">
+      <strong>Priority 1 (CRITICAL):</strong> Diagnose and close the <strong>fractions (MA.3.FR)</strong> gap — iReady does not report this as a separate strand for 3rd grade, but FAST Math PM3 weights it heavily. Every student (Tier 1, 2, 3) needs explicit fractions review.<br><br>
+      <strong>Priority 2:</strong> Fact fluency for Tier 2 and Tier 3 — non-negotiable for pacing on an untimed but stamina-heavy test. Target 0–10 facts at sub-3-second recall.<br><br>
+      <strong>Priority 3:</strong> Close the 11 students (13%) who are still at Grade 1 or Grade 2 placement. Daily small-group intervention + iReady assigned lessons.<br><br>
+      <strong>Priority 4:</strong> Convert the 15 Early 3 "borderline" students to Mid 3+ by targeting their weakest strand (see Individual tab for student-specific recommendations).
+    </div>
+  </div>
+
+  ${phases.map(p => `<div class="ap-phase" style="--acc:${p.color}">
+    <div class="ap-hd">
+      <div class="ap-num" style="background:${p.color}">${p.num}</div>
+      <div>
+        <div class="ap-title">${p.title}</div>
+        <div class="ap-dates">${p.dates}</div>
+      </div>
+      <div class="ap-countdown" style="background:${p.color}20; color:${p.color}">${p.countdown}</div>
+    </div>
+    <div class="ap-grid">
+      <div class="ap-box">
+        <div class="ap-box-title">📋 Administrative Actions</div>
+        <ul class="ap-list">${p.admin.map(a => `<li>${a}</li>`).join('')}</ul>
+      </div>
+      <div class="ap-box">
+        <div class="ap-box-title">📚 Instructional Focus</div>
+        <ul class="ap-list">${p.instr.map(i => `<li>${i}</li>`).join('')}</ul>
+      </div>
+    </div>
+  </div>`).join('')}
+  
+  <div class="card" style="margin-top:18px; background:#fef3c7; border-left:5px solid #d97706">
+    <div class="card-title"><div class="cicon" style="background:#fde68a">💡</div>Quick Reference — Final 3-Week Scope</div>
+    <table>
+      <thead><tr><th>Week</th><th>Primary MA.3 Focus</th><th>Key Benchmarks</th><th>Assessment</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:800">Week 1 (Apr 27)</td><td>Number Sense + Fractions</td><td>MA.3.NSO.1–2, MA.3.FR.1–2, MA.3.AR.1.1</td><td>Fractions exit ticket Fri</td></tr>
+        <tr><td style="font-weight:800">Week 2 (May 4)</td><td>Algebra + Measurement</td><td>MA.3.AR.1–3, MA.3.M.1–2, MA.3.DP.1</td><td>Mock PM3 test May 7</td></tr>
+        <tr><td style="font-weight:800">Week 3 (May 10)</td><td>Geometry + Review</td><td>MA.3.GR.1–2 + comprehensive review</td><td>🎯 FAST PM3 on May 11</td></tr>
+      </tbody>
+    </table>
+  </div>`;
+}
+
+// ============================================
+// INITIAL RENDER
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+  renderOverview();
+});
+
+</script>
+</body>
+</html>
