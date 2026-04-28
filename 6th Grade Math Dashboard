@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6th Grade Math iReady Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1e3c;
+    --navy2: #162849;
+    --teal: #0d9488;
+    --teal-light: #5eead4;
+    --amber: #f59e0b;
+    --amber-light: #fde68a;
+    --rose: #e11d48;
+    --rose-light: #fecdd3;
+    --violet: #7c3aed;
+    --violet-light: #ddd6fe;
+    --sky: #0ea5e9;
+    --sky-light: #bae6fd;
+    --green: #10b981;
+    --green-light: #a7f3d0;
+    --slate: #64748b;
+    --cream: #f8f5f0;
+    --white: #ffffff;
+    --t1-color: #10b981;
+    --t2-color: #f59e0b;
+    --t3-color: #e11d48;
+    --card-shadow: 0 4px 24px rgba(15,30,60,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--navy);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header { background: var(--navy); color: var(--white); padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,.35); }
+  .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 32px; gap: 24px; flex-wrap: wrap; }
+  .header-title { display: flex; flex-direction: column; }
+  .header-title h1 { font-family: 'DM Serif Display', serif; font-size: 1.45rem; letter-spacing: .3px; line-height: 1.2; }
+  .header-title span { font-size: .75rem; color: var(--teal-light); font-weight: 500; letter-spacing: .8px; text-transform: uppercase; margin-top: 2px; }
+
+  /* COUNTDOWN */
+  .countdown-box { display: flex; align-items: center; gap: 14px; background: linear-gradient(135deg, #be123c, #7c3aed); border: 1px solid rgba(255,255,255,.2); border-radius: 10px; padding: 10px 18px; }
+  .cd-icon { font-size: 1.7rem; }
+  .cd-body { display: flex; flex-direction: column; }
+  .cd-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+  .countdown-label { font-size: .62rem; text-transform: uppercase; letter-spacing: 1px; color: #fde68a; font-weight: 800; }
+  .countdown-date { font-size: .72rem; color: #fde68a; font-weight: 600; }
+  .cd-grid { display: flex; gap: 8px; }
+  .cd-unit { display: flex; flex-direction: column; align-items: center; min-width: 34px; }
+  .cd-val { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: #fff; line-height: 1; font-weight: 700; }
+  .cd-lbl-small { font-size: .55rem; color: #e9d5ff; text-transform: uppercase; letter-spacing: .5px; font-weight: 700; margin-top: 2px; }
+
+  /* NAV TABS */
+  .tab-nav { display: flex; gap: 0; background: var(--navy2); padding: 0 32px; border-bottom: 2px solid rgba(255,255,255,.06); overflow-x: auto; }
+  .tab-btn { background: none; border: none; color: #94a3b8; padding: 11px 22px; font-family: 'DM Sans', sans-serif; font-size: .82rem; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all .2s; white-space: nowrap; letter-spacing: .4px; text-transform: uppercase; }
+  .tab-btn:hover { color: var(--white); }
+  .tab-btn.active { color: var(--teal-light); border-bottom-color: var(--teal); }
+
+  /* MAIN */
+  main { padding: 28px 32px; max-width: 1600px; margin: 0 auto; }
+  .tab-pane { display: none; animation: fadeIn .3s ease; }
+  .tab-pane.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 6px; }
+  .section-sub { font-size: .82rem; color: var(--slate); margin-bottom: 22px; }
+
+  /* STAT CARDS */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 14px; margin-bottom: 28px; }
+  .stat-card { background: var(--white); border-radius: 12px; padding: 18px 20px; box-shadow: var(--card-shadow); position: relative; overflow: hidden; }
+  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent, var(--teal)); border-radius: 12px 12px 0 0; }
+  .stat-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .8px; color: var(--slate); font-weight: 600; margin-bottom: 8px; }
+  .stat-value { font-family: 'DM Serif Display', serif; font-size: 2rem; line-height: 1; color: var(--navy); margin-bottom: 4px; }
+  .stat-detail { font-size: .75rem; color: var(--slate); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  @media (max-width: 960px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+
+  .card { background: var(--white); border-radius: 14px; padding: 22px 24px; box-shadow: var(--card-shadow); }
+  .card-title { font-family: 'DM Serif Display', serif; font-size: 1.05rem; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .card-title .icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: .85rem; flex-shrink: 0; }
+
+  .placement-bar-wrap { margin-bottom: 10px; }
+  .placement-label { font-size: .75rem; font-weight: 600; margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .placement-bar-bg { background: #e2e8f0; border-radius: 6px; height: 10px; overflow: hidden; }
+  .placement-bar-fill { height: 100%; border-radius: 6px; transition: width .8s ease; }
+
+  .domain-bars { display: flex; flex-direction: column; gap: 10px; }
+  .domain-name { font-size: .75rem; font-weight: 600; color: var(--slate); margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .domain-bar-bg { background: #e2e8f0; border-radius: 6px; height: 22px; position: relative; overflow: hidden; }
+  .domain-bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: .65rem; color: white; font-weight: 700; transition: width .8s; }
+  .domain-bar-benchmark { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--rose); }
+
+  .standards-table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+  .standards-table th { background: var(--navy); color: white; padding: 9px 12px; text-align: left; font-weight: 600; font-size: .7rem; letter-spacing: .5px; text-transform: uppercase; }
+  .standards-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+  .standards-table tr:hover td { background: #f8fafc; }
+  .std-code { font-family: monospace; font-size: .7rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; white-space: nowrap; font-weight: 700; }
+  .gap-pill { display: inline-block; padding: 2px 7px; border-radius: 20px; font-size: .65rem; font-weight: 700; }
+  .gap-high { background: #fecdd3; color: #be123c; }
+  .gap-med { background: #fde68a; color: #92400e; }
+  .gap-low { background: #bbf7d0; color: #065f46; }
+  .gap-crit { background: #fee2e2; color: #7f1d1d; border: 1px solid #fecaca; }
+
+  .student-table-wrap { overflow-x: auto; }
+  .student-table { width: 100%; border-collapse: collapse; font-size: .76rem; }
+  .student-table th { background: var(--navy); color: var(--white); padding: 9px 11px; text-align: left; font-size: .68rem; letter-spacing: .4px; text-transform: uppercase; font-weight: 600; white-space: nowrap; }
+  .student-table td { padding: 8px 11px; border-bottom: 1px solid #f1f5f9; white-space: nowrap; }
+  .student-table tr:hover td { background: #f8fafc; }
+  .placement-tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: .66rem; font-weight: 700; }
+  .pt-g2 { background: #fecdd3; color: #be123c; }
+  .pt-g3 { background: #ffe4e6; color: #9f1239; }
+  .pt-g4 { background: #fef3c7; color: #854d0e; }
+  .pt-g5 { background: #fef9c3; color: #713f12; }
+  .pt-e6 { background: #d1fae5; color: #065f46; }
+  .pt-m6 { background: #bbf7d0; color: #065f46; }
+  .pt-l6 { background: #a7f3d0; color: #064e3b; }
+  .pt-max { background: #c7d2fe; color: #1e3a8a; font-weight:800; }
+  .pt-g7 { background: #c7d2fe; color: #312e81; }
+  .pt-g8 { background: #ddd6fe; color: #4c1d95; }
+  .pt-g9 { background: #e9d5ff; color: #581c87; }
+
+  .tier-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 24px; }
+  @media (max-width: 900px) { .tier-grid { grid-template-columns: 1fr; } }
+  .tier-card { border-radius: 14px; padding: 20px 22px; box-shadow: var(--card-shadow); border-top: 5px solid; }
+  .tier-card.t1 { background: #f0fdf4; border-color: var(--green); }
+  .tier-card.t2 { background: #fffbeb; border-color: var(--amber); }
+  .tier-card.t3 { background: #fff1f2; border-color: var(--rose); }
+  .tier-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .tier-num { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; }
+  .t1 .tier-num { background: var(--green); color: white; }
+  .t2 .tier-num { background: var(--amber); color: white; }
+  .t3 .tier-num { background: var(--rose); color: white; }
+  .tier-title { font-family: 'DM Serif Display', serif; font-size: 1rem; }
+  .tier-count { font-size: .8rem; color: var(--slate); margin-top: 1px; }
+
+  .tier-student-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .tier-student { background: white; border-radius: 8px; padding: 10px 14px; display: flex; align-items: flex-start; gap: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .tier-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .82rem; flex-shrink: 0; color: white; }
+  .tier-info { flex: 1; min-width: 0; }
+  .tier-sname { font-weight: 700; font-size: .8rem; }
+  .tier-room { font-size: .68rem; color: var(--slate); }
+  .tier-gaps { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .gap-tag { font-size: .62rem; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+
+  .action-card { background: white; border-radius: 14px; padding: 22px 24px; box-shadow: var(--card-shadow); margin-bottom: 18px; border-left: 5px solid; }
+  .action-card.t3 { border-color: var(--rose); }
+  .action-card.t2 { border-color: var(--amber); }
+  .action-card.t1 { border-color: var(--green); }
+  .action-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .action-tier-badge { padding: 4px 12px; border-radius: 20px; font-size: .72rem; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; }
+  .t3 .action-tier-badge { background: var(--rose); color: white; }
+  .t2 .action-tier-badge { background: var(--amber); color: white; }
+  .t1 .action-tier-badge { background: var(--green); color: white; }
+  .action-title { font-family: 'DM Serif Display', serif; font-size: 1.08rem; }
+  .action-body { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 800px) { .action-body { grid-template-columns: 1fr; } }
+  .action-section-title { font-size: .7rem; text-transform: uppercase; letter-spacing: .7px; font-weight: 700; color: var(--slate); margin-bottom: 8px; }
+  .action-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .action-list li { font-size: .78rem; display: flex; gap: 8px; line-height: 1.4; }
+  .action-list li::before { content: '▸'; color: var(--teal); flex-shrink: 0; margin-top: 1px; }
+  .action-students { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .student-chip { background: var(--navy); color: white; border-radius: 20px; padding: 4px 11px; font-size: .7rem; font-weight: 600; }
+
+  .student-search-wrap { margin-bottom: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .search-input { flex: 1; min-width: 220px; border: 2px solid #e2e8f0; border-radius: 10px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: .88rem; outline: none; transition: border .2s; }
+  .search-input:focus { border-color: var(--teal); }
+  .filter-select { border: 2px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: .85rem; outline: none; background: white; cursor: pointer; }
+  .student-profile { background: white; border-radius: 16px; padding: 28px; box-shadow: var(--card-shadow); display: none; }
+  .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid #f1f5f9; flex-wrap: wrap; }
+  .profile-avatar { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: white; flex-shrink: 0; }
+  .profile-name { font-family: 'DM Serif Display', serif; font-size: 1.5rem; }
+  .profile-meta { font-size: .8rem; color: var(--slate); margin-top: 4px; }
+  .profile-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .profile-chip { padding: 4px 12px; border-radius: 20px; font-size: .72rem; font-weight: 700; }
+
+  .profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .profile-metric { background: #f8fafc; border-radius: 10px; padding: 14px; text-align: center; }
+  .pm-label { font-size: .65rem; text-transform: uppercase; letter-spacing: .7px; color: var(--slate); font-weight: 600; margin-bottom: 6px; }
+  .pm-value { font-family: 'DM Serif Display', serif; font-size: 1.6rem; line-height: 1; }
+  .pm-sub { font-size: .68rem; color: var(--slate); margin-top: 3px; }
+
+  .domain-profile { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  @media (max-width: 700px) { .domain-profile { grid-template-columns: 1fr; } }
+  .domain-pcard { background: #f8fafc; border-radius: 10px; padding: 14px 16px; border-left: 4px solid; }
+  .dp-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--slate); margin-bottom: 6px; }
+  .dp-placement { font-weight: 700; font-size: .88rem; margin-bottom: 4px; }
+  .dp-score { font-size: .75rem; color: var(--slate); }
+  .dp-std { font-size: .68rem; color: var(--slate); margin-top: 4px; font-family: monospace; }
+
+  .standards-match { margin-top: 6px; }
+  .std-match-item { font-size: .7rem; padding: 5px 0; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+
+  .growth-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .gbr-label { font-size: .72rem; font-weight: 600; width: 140px; flex-shrink: 0; color: var(--slate); }
+  .gbr-bar-wrap { flex: 1; }
+  .gbr-bg { background: #e2e8f0; border-radius: 6px; height: 18px; position: relative; overflow: hidden; }
+  .gbr-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; font-size: .62rem; color: white; font-weight: 700; }
+  .gbr-target { position: absolute; top: 0; bottom: 0; width: 2px; background: #334155; }
+
+  .no-selection { text-align: center; padding: 60px 20px; color: var(--slate); font-size: .9rem; }
+  .no-selection .big { font-size: 2.5rem; margin-bottom: 10px; }
+
+  .homeroom-tabs { display: flex; gap: 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 22px; flex-wrap: wrap; }
+  .hr-tab { padding: 9px 20px; background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: .8rem; font-weight: 600; cursor: pointer; color: var(--slate); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all .2s; }
+  .hr-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+  .hr-tab:hover { color: var(--navy); }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+
+  .legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: .72rem; color: var(--slate); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  .callout { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 12px; padding: 14px 18px; margin-bottom: 18px; border-left: 5px solid var(--amber); display: flex; gap: 12px; align-items: flex-start; }
+  .callout-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .callout-title { font-weight: 800; font-size: .82rem; color: #78350f; margin-bottom: 3px; }
+  .callout-txt { font-size: .75rem; color: #78350f; line-height: 1.5; }
+
+  @media print { header { position: static; } .tab-btn { display: none; } .tab-pane { display: block !important; page-break-after: always; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-title">
+      <h1>6th Grade Math iReady Dashboard</h1>
+      <span>YTD Diagnostic Analysis · Florida B.E.S.T. Standards Alignment · Source: iReady Connect</span>
+    </div>
+    <div class="countdown-box">
+      <div class="cd-icon">⏳</div>
+      <div class="cd-body">
+        <div class="cd-top">
+          <div class="countdown-label">FAST Math PM3</div>
+          <div class="countdown-date">May 12, 2026</div>
+        </div>
+        <div class="cd-grid">
+          <div class="cd-unit"><div class="cd-val" id="cd-days">--</div><div class="cd-lbl-small">Days</div></div>
+          <div class="cd-unit"><div class="cd-val" id="cd-hours">--</div><div class="cd-lbl-small">Hrs</div></div>
+          <div class="cd-unit"><div class="cd-val" id="cd-mins">--</div><div class="cd-lbl-small">Min</div></div>
+          <div class="cd-unit"><div class="cd-val" id="cd-secs">--</div><div class="cd-lbl-small">Sec</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('overview', event)">📊 Overview</button>
+    <button class="tab-btn" onclick="showTab('class', event)">🏫 Class View</button>
+    <button class="tab-btn" onclick="showTab('standards', event)">📋 Standards &amp; Gaps</button>
+    <button class="tab-btn" onclick="showTab('individual', event)">👤 Individual</button>
+    <button class="tab-btn" onclick="showTab('tiers', event)">🎯 Tier Placement</button>
+    <button class="tab-btn" onclick="showTab('action', event)">📝 Action Plan</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- OVERVIEW -->
+<div id="tab-overview" class="tab-pane active">
+  <div class="section-title">School Overview</div>
+  <div class="section-sub">6th Grade Math · All Class Periods · YTD Diagnostic Results (121 students)</div>
+
+  <div class="callout">
+    <div class="callout-icon">⚠️</div>
+    <div>
+      <div class="callout-title">CRITICAL: iReady → FAST Math PM3 Ratios, Expressions &amp; Integer Blind Spots</div>
+      <div class="callout-txt">iReady Math for 6th grade reports 4 domains: Number &amp; Operations, Algebra &amp; Algebraic Thinking, Measurement &amp; Data, Geometry. FAST Math PM3 reports five categories — Number Sense &amp; Operations (incl. integers), <strong>Algebraic Reasoning</strong> (ratios, rates, expressions, equations, inequalities), Geometric Reasoning, and Data Analysis &amp; Probability. iReady's Algebra domain blends ratios + expressions + equations into one score, masking which strand is weak. <strong>MA.6.AR.1</strong> (ratios/rates/percents) and <strong>MA.6.NSO.4</strong> (integers/absolute value) need targeted formative checks before 5/12.</div>
+    </div>
+  </div>
+
+  <div class="stat-grid" id="overview-stats"></div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#dbeafe">📊</div> Overall Placement Distribution</div>
+      <div id="placement-dist"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#d1fae5">📈</div> Growth Summary (Baseline → Latest)</div>
+      <div id="growth-summary"></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#fef3c7">🎯</div> Domain Performance (% On or Above Grade)</div>
+      <div class="domain-bars" id="domain-overview"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#ede9fe">⚡</div> Top Growth Stars (Gain Points)</div>
+      <div id="growth-stars"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CLASS VIEW -->
+<div id="tab-class" class="tab-pane">
+  <div class="section-title">Class View by Math Period</div>
+  <div class="section-sub">Compare performance across the six 6th grade math sections (Braswell × 5 + Rutledge × 1)</div>
+  <div class="homeroom-tabs" id="hr-tabs"></div>
+  <div id="hr-content"></div>
+</div>
+
+<!-- STANDARDS -->
+<div id="tab-standards" class="tab-pane">
+  <div class="section-title">Florida B.E.S.T. Standards Alignment &amp; Gaps</div>
+  <div class="section-sub">iReady Math domains mapped to Florida B.E.S.T. MA.6 standards · Red = high need · Source: iReady Connect</div>
+
+  <div class="two-col" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#ffe4e6">⚠️</div> Critical Gap Areas</div>
+      <div id="gap-summary"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#dcfce7">✅</div> Strength Areas</div>
+      <div id="strength-summary"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon" style="background:#dbeafe">📋</div> iReady Domain → Florida B.E.S.T. MA.6 Standards Mapping</div>
+    <div class="student-table-wrap">
+      <table class="standards-table" id="standards-table"></table>
+    </div>
+  </div>
+</div>
+
+<!-- INDIVIDUAL -->
+<div id="tab-individual" class="tab-pane">
+  <div class="section-title">Individual Student Profile</div>
+  <div class="section-sub">Search for a student to view detailed diagnostic data, growth, and standards gaps</div>
+  <div class="student-search-wrap">
+    <input type="text" class="search-input" id="student-search" placeholder="🔍  Search student name..." oninput="filterStudentList()">
+    <select class="filter-select" id="room-filter" onchange="filterStudentList()">
+      <option value="">All Periods</option>
+      <option>P1-Braswell</option>
+      <option>P2-ACCEL-Braswell</option>
+      <option>P3-Braswell</option>
+      <option>P3-ACCEL-Rutledge</option>
+      <option>P4-Braswell</option>
+      <option>P6-Braswell</option>
+    </select>
+    <select class="filter-select" id="tier-filter" onchange="filterStudentList()">
+      <option value="">All Tiers</option>
+      <option value="3">Tier 3</option>
+      <option value="2">Tier 2</option>
+      <option value="1">Tier 1</option>
+    </select>
+    <select class="filter-select" id="class-filter" onchange="filterStudentList()">
+      <option value="">All Classes</option>
+      <option>General</option>
+      <option>ACCEL</option>
+    </select>
+  </div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;">
+    <div style="width:260px;flex-shrink:0;">
+      <div class="card" style="padding:14px;">
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--slate);margin-bottom:10px;">Students <span id="student-count" style="color:var(--teal);"></span></div>
+        <div id="student-list" style="max-height:560px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;"></div>
+      </div>
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div id="student-profile-wrap">
+        <div class="no-selection">
+          <div class="big">👤</div>
+          Select a student to view their full profile
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TIERS -->
+<div id="tab-tiers" class="tab-pane">
+  <div class="section-title">Tiered Support Placement</div>
+  <div class="section-sub">Students grouped by intervention need based on placement, growth, and diagnostic validity indicators</div>
+  <div class="legend-row">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div><strong>Tier 1</strong> – On/Above grade, meets growth targets</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div><strong>Tier 2</strong> – Early 6 / borderline or below growth targets</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--rose)"></div><strong>Tier 3</strong> – Below grade level (Grade 5 or below)</div>
+  </div>
+  <div class="tier-grid" id="tier-grid"></div>
+  <div class="card" style="margin-top:8px;">
+    <div class="card-title"><div class="icon" style="background:#f0fdf4">📊</div> Tier Summary by Class Period</div>
+    <div id="tier-by-room"></div>
+  </div>
+</div>
+
+<!-- ACTION PLAN -->
+<div id="tab-action" class="tab-pane">
+  <div class="section-title">Action Plan — Tiered Supports</div>
+  <div class="section-sub">Research-aligned intervention strategies mapped to Florida B.E.S.T. MA.6 standards · Test Date: May 12, 2026</div>
+  <div id="action-plan"></div>
+</div>
+
+</main>
+
+<script>
+
+// HELPERS
+const PLACEMENT_ORDER = {'Grade K':0,'Grade 1':1,'Grade 2':2,'Grade 3':3,'Grade 4':4,'Grade 5':5,'Early 6':6,'Mid 6':7,'Late 6':8,'Max Score':9,'Grade 7':10,'Grade 8':11,'Grade 9':12};
+const PLACEMENT_COLORS = {
+  'Grade 9':'#3730a3','Grade 8':'#4338ca','Grade 7':'#4f46e5',
+  'Max Score':'#1e3a8a',
+  'Late 6':'#065f46','Mid 6':'#10b981','Early 6':'#0d9488',
+  'Grade 5':'#d97706','Grade 4':'#b45309','Grade 3':'#9f1239','Grade 2':'#be123c','Grade 1':'#831843','Grade K':'#831843'
+};
+const PLACEMENT_CSS = {
+  'Grade 9':'pt-g9','Grade 8':'pt-g8','Grade 7':'pt-g7',
+  'Max Score':'pt-max',
+  'Late 6':'pt-l6','Mid 6':'pt-m6','Early 6':'pt-e6',
+  'Grade 5':'pt-g5','Grade 4':'pt-g4','Grade 3':'pt-g3','Grade 2':'pt-g2','Grade 1':'pt-g2','Grade K':'pt-g2'
+};
+const ROOM_COLORS = {'P1-Braswell':'#7c3aed','P2-ACCEL-Braswell':'#be123c','P3-Braswell':'#0d9488','P3-ACCEL-Rutledge':'#0369a1','P4-Braswell':'#b45309','P6-Braswell':'#065f46'};
+const ROOM_BG = {'P1-Braswell':'#ede9fe','P2-ACCEL-Braswell':'#ffe4e6','P3-Braswell':'#ccfbf1','P3-ACCEL-Rutledge':'#dbeafe','P4-Braswell':'#fef3c7','P6-Braswell':'#d1fae5'};
+
+function getTier(s) {
+  // Tier 3: Grade 4 or below (2+ grade levels below for 6th grade target)
+  if (['Grade 4','Grade 3','Grade 2','Grade 1','Grade K'].includes(s.placement)) return 3;
+  // Tier 2: Grade 5 (1 grade level below) OR Early 6 with low growth, OR low overall growth
+  if (s.placement === 'Grade 5') return 2;
+  if (s.placement === 'Early 6' && s.pct_typical < 50) return 2;
+  if (s.pct_typical < 50 && s.gain < 15) return 2;
+  return 1;
+}
+function avg(arr, key) {
+  const v = arr.map(s=>s[key]).filter(x=>x!=null&&!isNaN(x));
+  return v.length ? Math.round(v.reduce((a,b)=>a+b,0)/v.length) : 0;
+}
+function pct(n,d) { return d===0?0:Math.round(n/d*100); }
+function isAboveGrade(p) { return ['Mid 6','Late 6','Max Score','Grade 7','Grade 8','Grade 9'].includes(p); }
+function isBelowGrade(p) { return ['Grade K','Grade 1','Grade 2','Grade 3','Grade 4','Grade 5'].includes(p); }
+function placementBar(label, pctVal, color) {
+  return `<div class="placement-bar-wrap"><div class="placement-label"><span>${label}</span><span style="color:${color};font-weight:700">${pctVal}%</span></div><div class="placement-bar-bg"><div class="placement-bar-fill" style="width:${pctVal}%;background:${color}"></div></div></div>`;
+}
+function tierColor(t) { return t===3?'var(--rose)':t===2?'var(--amber)':'var(--green)'; }
+function getInitials(name) { return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
+function hashColor(str) {
+  const palette = ['#0d9488','#7c3aed','#0369a1','#b45309','#be123c','#065f46','#1d4ed8','#6b21a8'];
+  let h=0; for(let c of str) h=(h*31+c.charCodeAt(0))%palette.length;
+  return palette[h];
+}
+
+// COUNTDOWN (live)
+const TEST_DATE = new Date('2026-05-12T08:00:00');
+function updateCountdown() {
+  const now = new Date();
+  const diff = TEST_DATE - now;
+  if (diff <= 0) {
+    ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id=>document.getElementById(id).textContent='0');
+    return;
+  }
+  const d = Math.floor(diff/(1000*60*60*24));
+  const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+  const m = Math.floor((diff%(1000*60*60))/(1000*60));
+  const s = Math.floor((diff%(1000*60))/1000);
+  document.getElementById('cd-days').textContent = d;
+  document.getElementById('cd-hours').textContent = h;
+  document.getElementById('cd-mins').textContent = m;
+  document.getElementById('cd-secs').textContent = s;
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// TABS
+function showTab(id, evt) {
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(evt) evt.currentTarget.classList.add('active');
+}
+
+// DATA
+const STUDENTS = [{"name": "Noah A.", "first": "Noah", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 428, "baseline_score": 469, "placement": "Grade 2", "baseline_placement": "Grade 3", "percentile": 7, "quantile": "425Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 14, "stretch_target": 26, "no_score": 433, "no_placement": "Grade 3", "no_rel": "3 or More Grade Levels Below", "ar_score": 447, "ar_placement": "Grade 4", "ar_rel": "2 Grade Levels Below", "md_score": 407, "md_placement": "Grade 1", "md_rel": "3 or More Grade Levels Below", "geo_score": 421, "geo_placement": "Grade 2", "geo_rel": "3 or More Grade Levels Below", "rush_flag": "", "read_aloud": "On", "duration": 63, "grouping": 1, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Kaan A.", "first": "Kaan", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 522, "baseline_score": 511, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 90, "quantile": "995Q", "gain": 11, "pct_typical": 85, "pct_stretch": 44, "typical_target": 13, "stretch_target": 25, "no_score": 528, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 523, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 516, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 517, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 103, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Ensar A.", "first": "Ensar", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 521, "baseline_score": 521, "placement": "Mid 6", "baseline_placement": "Mid 6", "percentile": 81, "quantile": "990Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 20, "no_score": 520, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 515, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 528, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 523, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 75, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Emily A.", "first": "Emily", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 506, "baseline_score": 498, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 67, "quantile": "900Q", "gain": 8, "pct_typical": 62, "pct_stretch": 32, "typical_target": 13, "stretch_target": 25, "no_score": 523, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 510, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 501, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 480, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 75, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Kaisen B.", "first": "Kaisen", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 475, "baseline_score": 477, "placement": "Grade 5", "baseline_placement": "Grade 4", "percentile": 34, "quantile": "710Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 14, "stretch_target": 26, "no_score": 495, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 461, "ar_placement": "Grade 4", "ar_rel": "2 Grade Levels Below", "md_score": 468, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 474, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 46, "grouping": 1, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Naomi B.", "first": "Naomi", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 510, "baseline_score": 515, "placement": "Early 6", "baseline_placement": "Early 6", "percentile": 70, "quantile": "925Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 20, "no_score": 538, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 502, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 489, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 503, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 55, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Jada B.", "first": "Jada", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 471, "baseline_score": 474, "placement": "Grade 5", "baseline_placement": "Grade 4", "percentile": 31, "quantile": "695Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 14, "stretch_target": 26, "no_score": 468, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 452, "ar_placement": "Grade 4", "ar_rel": "2 Grade Levels Below", "md_score": 477, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 497, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 85, "grouping": 1, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Chloe B.", "first": "Chloe", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 509, "baseline_score": 494, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 69, "quantile": "920Q", "gain": 15, "pct_typical": 107, "pct_stretch": 58, "typical_target": 14, "stretch_target": 26, "no_score": 494, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 516, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 516, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 516, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 49, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Logan B.", "first": "Logan", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 518, "baseline_score": 502, "placement": "Mid 6", "baseline_placement": "Grade 5", "percentile": 88, "quantile": "970Q", "gain": 16, "pct_typical": 123, "pct_stretch": 64, "typical_target": 13, "stretch_target": 25, "no_score": 552, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 490, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 524, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 508, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 118, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Uchan B.", "first": "Uchan", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 538, "baseline_score": 509, "placement": "Mid 6", "baseline_placement": "Grade 5", "percentile": 90, "quantile": "1090Q", "gain": 29, "pct_typical": 223, "pct_stretch": 116, "typical_target": 13, "stretch_target": 25, "no_score": 549, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 542, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 531, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 520, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 53, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Brynley B.", "first": "Brynley", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 500, "baseline_score": 498, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 58, "quantile": "865Q", "gain": 2, "pct_typical": 15, "pct_stretch": 8, "typical_target": 13, "stretch_target": 25, "no_score": 500, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 500, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 494, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 508, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 87, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Xavier B.", "first": "Xavier", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 513, "baseline_score": 500, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 75, "quantile": "940Q", "gain": 13, "pct_typical": 100, "pct_stretch": 52, "typical_target": 13, "stretch_target": 25, "no_score": 536, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 495, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 520, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 499, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 57, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Evan B.", "first": "Evan", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 548, "baseline_score": 507, "placement": "Late 6", "baseline_placement": "Grade 5", "percentile": 94, "quantile": "1145Q", "gain": 41, "pct_typical": 315, "pct_stretch": 164, "typical_target": 13, "stretch_target": 25, "no_score": 574, "no_placement": "Grade 7", "no_rel": "Mid or Above Grade Level", "ar_score": 547, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 528, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 531, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 98, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Russell B.", "first": "Russell", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 523, "baseline_score": 510, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 83, "quantile": "1000Q", "gain": 13, "pct_typical": 100, "pct_stretch": 52, "typical_target": 13, "stretch_target": 25, "no_score": 518, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 532, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 517, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 524, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 60, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Naitsabe C.", "first": "Naitsabe", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 500, "baseline_score": 472, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 58, "quantile": "865Q", "gain": 28, "pct_typical": 200, "pct_stretch": 108, "typical_target": 14, "stretch_target": 26, "no_score": 508, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 494, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 485, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 510, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 94, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Jackson C.", "first": "Jackson", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 534, "baseline_score": 509, "placement": "Mid 6", "baseline_placement": "Grade 5", "percentile": 88, "quantile": "1065Q", "gain": 25, "pct_typical": 192, "pct_stretch": 100, "typical_target": 13, "stretch_target": 25, "no_score": 528, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 548, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 545, "md_placement": "Late 6", "md_rel": "Mid or Above Grade Level", "geo_score": 512, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 66, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Tristan C.", "first": "Tristan", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 494, "baseline_score": 502, "placement": "Grade 5", "baseline_placement": "Grade 5", "percentile": 51, "quantile": "830Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 25, "no_score": 497, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 504, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 472, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 496, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 43, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Johnathan C.", "first": "Johnathan", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 484, "baseline_score": 490, "placement": "Grade 5", "baseline_placement": "Grade 5", "percentile": 42, "quantile": "770Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 14, "stretch_target": 26, "no_score": 488, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 477, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 491, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 482, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "On", "duration": 103, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Daniel C.", "first": "Daniel", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 513, "baseline_score": 499, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 75, "quantile": "940Q", "gain": 14, "pct_typical": 108, "pct_stretch": 56, "typical_target": 13, "stretch_target": 25, "no_score": 498, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 517, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 525, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 516, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 51, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Donovan C.", "first": "Donovan", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 480, "baseline_score": 422, "placement": "Grade 5", "baseline_placement": "Grade 1", "percentile": 38, "quantile": "745Q", "gain": 58, "pct_typical": 387, "pct_stretch": 166, "typical_target": 15, "stretch_target": 35, "no_score": 470, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 487, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 480, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 484, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 114, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Stefon C.", "first": "Stefon", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 499, "baseline_score": 474, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 57, "quantile": "855Q", "gain": 25, "pct_typical": 179, "pct_stretch": 96, "typical_target": 14, "stretch_target": 26, "no_score": 519, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 468, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 520, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 494, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 32, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "SriRam Reddy C.", "first": "SriRam Reddy", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 575, "baseline_score": 556, "placement": "Grade 8", "baseline_placement": "Grade 7", "percentile": 99, "quantile": "1200Q", "gain": 19, "pct_typical": 146, "pct_stretch": 95, "typical_target": 13, "stretch_target": 20, "no_score": 595, "no_placement": "Max Score", "no_rel": "Mid or Above Grade Level", "ar_score": 558, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 592, "md_placement": "Max Score", "md_rel": "Mid or Above Grade Level", "geo_score": 551, "geo_placement": "Late 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 106, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Ming C.", "first": "Ming", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 465, "baseline_score": 475, "placement": "Grade 5", "baseline_placement": "Grade 4", "percentile": 26, "quantile": "655Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 14, "stretch_target": 26, "no_score": 463, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 488, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 465, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 436, "geo_placement": "Grade 3", "geo_rel": "3 or More Grade Levels Below", "rush_flag": "", "read_aloud": "Off", "duration": 98, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Jace C.", "first": "Jace", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 507, "baseline_score": 486, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 67, "quantile": "905Q", "gain": 21, "pct_typical": 150, "pct_stretch": 81, "typical_target": 14, "stretch_target": 26, "no_score": 515, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 499, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 514, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 498, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 77, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Norah C.", "first": "Norah", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 512, "baseline_score": 485, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 73, "quantile": "940Q", "gain": 27, "pct_typical": 193, "pct_stretch": 104, "typical_target": 14, "stretch_target": 26, "no_score": 510, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 513, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 498, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 528, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 122, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Bryce C.", "first": "Bryce", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 486, "baseline_score": 484, "placement": "Grade 5", "baseline_placement": "Grade 4", "percentile": 44, "quantile": "780Q", "gain": 2, "pct_typical": 14, "pct_stretch": 8, "typical_target": 14, "stretch_target": 26, "no_score": 479, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 496, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 465, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 504, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 85, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Sofia C.", "first": "Sofia", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 500, "baseline_score": 483, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 58, "quantile": "865Q", "gain": 17, "pct_typical": 121, "pct_stretch": 65, "typical_target": 14, "stretch_target": 26, "no_score": 501, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 495, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 506, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 501, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 88, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Katherine C.", "first": "Katherine", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 513, "baseline_score": 512, "placement": "Early 6", "baseline_placement": "Early 6", "percentile": 83, "quantile": "940Q", "gain": 1, "pct_typical": 8, "pct_stretch": 4, "typical_target": 13, "stretch_target": 25, "no_score": 521, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 516, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 512, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 501, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 98, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Mylo C.", "first": "Mylo", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 498, "baseline_score": 471, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 56, "quantile": "850Q", "gain": 27, "pct_typical": 193, "pct_stretch": 104, "typical_target": 14, "stretch_target": 26, "no_score": 499, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 498, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 505, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 490, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 66, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Julian D.", "first": "Julian", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 546, "baseline_score": 514, "placement": "Late 6", "baseline_placement": "Early 6", "percentile": 97, "quantile": "1130Q", "gain": 32, "pct_typical": 246, "pct_stretch": 160, "typical_target": 13, "stretch_target": 20, "no_score": 561, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 530, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 537, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 553, "geo_placement": "Late 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 240, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Ella D.", "first": "Ella", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 499, "baseline_score": 497, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 57, "quantile": "855Q", "gain": 2, "pct_typical": 15, "pct_stretch": 8, "typical_target": 13, "stretch_target": 25, "no_score": 513, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 486, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 486, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 510, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 74, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Landon D. #1", "first": "Landon", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 541, "baseline_score": 527, "placement": "Late 6", "baseline_placement": "Mid 6", "percentile": 91, "quantile": "1105Q", "gain": 14, "pct_typical": 108, "pct_stretch": 70, "typical_target": 13, "stretch_target": 20, "no_score": 550, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 547, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 528, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 534, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 112, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Lilly D.", "first": "Lilly", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 537, "baseline_score": 502, "placement": "Mid 6", "baseline_placement": "Grade 5", "percentile": 89, "quantile": "1080Q", "gain": 35, "pct_typical": 269, "pct_stretch": 140, "typical_target": 13, "stretch_target": 25, "no_score": 539, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 538, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 495, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 566, "geo_placement": "Grade 7", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 75, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Akshara D.", "first": "Akshara", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 545, "baseline_score": 520, "placement": "Late 6", "baseline_placement": "Mid 6", "percentile": 97, "quantile": "1125Q", "gain": 25, "pct_typical": 192, "pct_stretch": 125, "typical_target": 13, "stretch_target": 20, "no_score": 548, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 551, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 539, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 541, "geo_placement": "Late 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 113, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Joel D.", "first": "Joel", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 443, "baseline_score": 447, "placement": "Grade 3", "baseline_placement": "Grade 2", "percentile": 14, "quantile": "520Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 15, "stretch_target": 35, "no_score": 437, "no_placement": "Grade 3", "no_rel": "3 or More Grade Levels Below", "ar_score": 457, "ar_placement": "Grade 4", "ar_rel": "2 Grade Levels Below", "md_score": 438, "md_placement": "Grade 3", "md_rel": "3 or More Grade Levels Below", "geo_score": 442, "geo_placement": "Grade 3", "geo_rel": "3 or More Grade Levels Below", "rush_flag": "", "read_aloud": "Off", "duration": 45, "grouping": 1, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Shu Fan D.", "first": "Shu Fan", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 543, "baseline_score": 506, "placement": "Late 6", "baseline_placement": "Grade 5", "percentile": 92, "quantile": "1115Q", "gain": 37, "pct_typical": 285, "pct_stretch": 148, "typical_target": 13, "stretch_target": 25, "no_score": 549, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 552, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 543, "md_placement": "Late 6", "md_rel": "Mid or Above Grade Level", "geo_score": 523, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 136, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Daksh D.", "first": "Daksh", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 504, "baseline_score": 491, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 64, "quantile": "890Q", "gain": 13, "pct_typical": 93, "pct_stretch": 50, "typical_target": 14, "stretch_target": 26, "no_score": 509, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 503, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 504, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 497, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 46, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Aarna D.", "first": "Aarna", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 544, "baseline_score": 491, "placement": "Late 6", "baseline_placement": "Grade 5", "percentile": 92, "quantile": "1120Q", "gain": 53, "pct_typical": 379, "pct_stretch": 204, "typical_target": 14, "stretch_target": 26, "no_score": 543, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 544, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 503, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 583, "geo_placement": "Grade 8", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 113, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Landon D. #2", "first": "Landon", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 496, "baseline_score": 480, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 53, "quantile": "840Q", "gain": 16, "pct_typical": 114, "pct_stretch": 62, "typical_target": 14, "stretch_target": 26, "no_score": 497, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 486, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 524, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 482, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 45, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Carmelo F.", "first": "Carmelo", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 499, "baseline_score": 488, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 57, "quantile": "855Q", "gain": 11, "pct_typical": 79, "pct_stretch": 42, "typical_target": 14, "stretch_target": 26, "no_score": 490, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 511, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 492, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 502, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 40, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Rafael F.", "first": "Rafael", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 504, "baseline_score": 486, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 64, "quantile": "890Q", "gain": 18, "pct_typical": 129, "pct_stretch": 69, "typical_target": 14, "stretch_target": 26, "no_score": 501, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 524, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 504, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 484, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "On", "duration": 128, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Naleeyah F.", "first": "Naleeyah", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 498, "baseline_score": 475, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 56, "quantile": "850Q", "gain": 23, "pct_typical": 164, "pct_stretch": 88, "typical_target": 14, "stretch_target": 26, "no_score": 509, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 496, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 477, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 506, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 54, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Kenneth F.", "first": "Kenneth", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 490, "baseline_score": 500, "placement": "Grade 5", "baseline_placement": "Grade 5", "percentile": 47, "quantile": "805Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 25, "no_score": 487, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 517, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 492, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 462, "geo_placement": "Grade 4", "geo_rel": "2 Grade Levels Below", "rush_flag": "", "read_aloud": "Off", "duration": 58, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Munesu F.", "first": "Munesu", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 515, "baseline_score": 488, "placement": "Mid 6", "baseline_placement": "Grade 4", "percentile": 78, "quantile": "950Q", "gain": 27, "pct_typical": 193, "pct_stretch": 104, "typical_target": 14, "stretch_target": 26, "no_score": 519, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 497, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 520, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 525, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 85, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Kailee G.", "first": "Kailee", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 523, "baseline_score": 513, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 83, "quantile": "1000Q", "gain": 10, "pct_typical": 77, "pct_stretch": 40, "typical_target": 13, "stretch_target": 25, "no_score": 528, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 515, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 517, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 534, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 76, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Damir G.", "first": "Damir", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 519, "baseline_score": 511, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 80, "quantile": "975Q", "gain": 8, "pct_typical": 62, "pct_stretch": 32, "typical_target": 13, "stretch_target": 25, "no_score": 534, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 515, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 514, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 510, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 123, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Nicholas G.", "first": "Nicholas", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 528, "baseline_score": 516, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 85, "quantile": "1025Q", "gain": 12, "pct_typical": 92, "pct_stretch": 60, "typical_target": 13, "stretch_target": 20, "no_score": 535, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 523, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 523, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 532, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 84, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Maksim G.", "first": "Maksim", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 536, "baseline_score": 516, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 89, "quantile": "1075Q", "gain": 20, "pct_typical": 154, "pct_stretch": 100, "typical_target": 13, "stretch_target": 20, "no_score": 535, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 550, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 549, "md_placement": "Late 6", "md_rel": "Mid or Above Grade Level", "geo_score": 504, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 63, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Joris G.", "first": "Joris", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 483, "baseline_score": 454, "placement": "Grade 5", "baseline_placement": "Grade 3", "percentile": 41, "quantile": "765Q", "gain": 29, "pct_typical": 207, "pct_stretch": 97, "typical_target": 14, "stretch_target": 30, "no_score": 491, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 496, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 476, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 464, "geo_placement": "Grade 4", "geo_rel": "2 Grade Levels Below", "rush_flag": "", "read_aloud": "Off", "duration": 86, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Sevda G.", "first": "Sevda", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 519, "baseline_score": 530, "placement": "Mid 6", "baseline_placement": "Late 6", "percentile": 80, "quantile": "975Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 20, "no_score": 514, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 524, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 520, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 517, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 116, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Srinidhi H.", "first": "Srinidhi", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 554, "baseline_score": 535, "placement": "Late 6", "baseline_placement": "Late 6", "percentile": 96, "quantile": "1180Q", "gain": 19, "pct_typical": 146, "pct_stretch": 95, "typical_target": 13, "stretch_target": 20, "no_score": 584, "no_placement": "Grade 8", "no_rel": "Mid or Above Grade Level", "ar_score": 534, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 522, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 568, "geo_placement": "Grade 7", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 103, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Quoc Minh H.", "first": "Quoc Minh", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 494, "baseline_score": 541, "placement": "Grade 5", "baseline_placement": "Grade 7", "percentile": 51, "quantile": "830Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 20, "no_score": 489, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 516, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 481, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 486, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 46, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "McKenzie H.", "first": "McKenzie", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 464, "baseline_score": 430, "placement": "Grade 4", "baseline_placement": "Grade 2", "percentile": 25, "quantile": "650Q", "gain": 34, "pct_typical": 227, "pct_stretch": 97, "typical_target": 15, "stretch_target": 35, "no_score": 495, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 432, "ar_placement": "Grade 3", "ar_rel": "3 or More Grade Levels Below", "md_score": 466, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 470, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 79, "grouping": 1, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Katalanja H.", "first": "Katalanja", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 523, "baseline_score": 514, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 83, "quantile": "1000Q", "gain": 9, "pct_typical": 69, "pct_stretch": 45, "typical_target": 13, "stretch_target": 20, "no_score": 546, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 525, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 511, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 498, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 92, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Emma H.", "first": "Emma", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 538, "baseline_score": 513, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 90, "quantile": "1090Q", "gain": 25, "pct_typical": 192, "pct_stretch": 100, "typical_target": 13, "stretch_target": 25, "no_score": 543, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 540, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 536, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 532, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 69, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Piper H.", "first": "Piper", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 537, "baseline_score": 506, "placement": "Mid 6", "baseline_placement": "Grade 5", "percentile": 89, "quantile": "1080Q", "gain": 31, "pct_typical": 238, "pct_stretch": 124, "typical_target": 13, "stretch_target": 25, "no_score": 537, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 535, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 550, "md_placement": "Late 6", "md_rel": "Mid or Above Grade Level", "geo_score": 527, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 97, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Aaliyah J.", "first": "Aaliyah", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 487, "baseline_score": 492, "placement": "Grade 5", "baseline_placement": "Grade 5", "percentile": 44, "quantile": "790Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 14, "stretch_target": 26, "no_score": 503, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 497, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 474, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 461, "geo_placement": "Grade 4", "geo_rel": "2 Grade Levels Below", "rush_flag": "", "read_aloud": "Off", "duration": 55, "grouping": 3, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Vedansh J.", "first": "Vedansh", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 549, "baseline_score": 532, "placement": "Late 6", "baseline_placement": "Late 6", "percentile": 94, "quantile": "1150Q", "gain": 17, "pct_typical": 131, "pct_stretch": 85, "typical_target": 13, "stretch_target": 20, "no_score": 546, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 551, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 541, "md_placement": "Late 6", "md_rel": "Mid or Above Grade Level", "geo_score": 559, "geo_placement": "Late 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 135, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Bronson J.", "first": "Bronson", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 517, "baseline_score": 514, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 79, "quantile": "965Q", "gain": 3, "pct_typical": 23, "pct_stretch": 15, "typical_target": 13, "stretch_target": 20, "no_score": 520, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 514, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 519, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 512, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 92, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Caylx J.", "first": "Caylx", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 483, "baseline_score": 462, "placement": "Grade 5", "baseline_placement": "Grade 3", "percentile": 41, "quantile": "765Q", "gain": 21, "pct_typical": 150, "pct_stretch": 70, "typical_target": 14, "stretch_target": 30, "no_score": 483, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 477, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 491, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 482, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 139, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Alisa K.", "first": "Alisa", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 557, "baseline_score": 520, "placement": "Late 6", "baseline_placement": "Mid 6", "percentile": 99, "quantile": "1195Q", "gain": 37, "pct_typical": 285, "pct_stretch": 185, "typical_target": 13, "stretch_target": 20, "no_score": 578, "no_placement": "Grade 8", "no_rel": "Mid or Above Grade Level", "ar_score": 563, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 513, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 552, "geo_placement": "Late 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 116, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Hailey K.", "first": "Hailey", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 564, "baseline_score": 537, "placement": "Late 6", "baseline_placement": "Late 6", "percentile": 98, "quantile": "1200Q", "gain": 27, "pct_typical": 208, "pct_stretch": 135, "typical_target": 13, "stretch_target": 20, "no_score": 599, "no_placement": "Max Score", "no_rel": "Mid or Above Grade Level", "ar_score": 546, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 551, "md_placement": "Late 6", "md_rel": "Mid or Above Grade Level", "geo_score": 558, "geo_placement": "Late 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 119, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Ava L.", "first": "Ava", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 512, "baseline_score": 492, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 73, "quantile": "940Q", "gain": 20, "pct_typical": 143, "pct_stretch": 77, "typical_target": 14, "stretch_target": 26, "no_score": 520, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 531, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 500, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 485, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 74, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Walker L.", "first": "Walker", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 549, "baseline_score": 506, "placement": "Late 6", "baseline_placement": "Grade 5", "percentile": 94, "quantile": "1150Q", "gain": 43, "pct_typical": 331, "pct_stretch": 172, "typical_target": 13, "stretch_target": 25, "no_score": 569, "no_placement": "Grade 7", "no_rel": "Mid or Above Grade Level", "ar_score": 536, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 548, "md_placement": "Late 6", "md_rel": "Mid or Above Grade Level", "geo_score": 537, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 107, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Sean L.", "first": "Sean", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 506, "baseline_score": 488, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 67, "quantile": "900Q", "gain": 18, "pct_typical": 129, "pct_stretch": 69, "typical_target": 14, "stretch_target": 26, "no_score": 504, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 486, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 527, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 512, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "On", "duration": 79, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Mason L.", "first": "Mason", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 511, "baseline_score": 479, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 71, "quantile": "930Q", "gain": 32, "pct_typical": 229, "pct_stretch": 123, "typical_target": 14, "stretch_target": 26, "no_score": 508, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 526, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 510, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 498, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 48, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Alikhan M.", "first": "Alikhan", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 490, "baseline_score": 491, "placement": "Grade 5", "baseline_placement": "Grade 5", "percentile": 47, "quantile": "805Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 14, "stretch_target": 26, "no_score": 484, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 501, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 476, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 501, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 73, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Selim M.", "first": "Selim", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 521, "baseline_score": 487, "placement": "Mid 6", "baseline_placement": "Grade 4", "percentile": 81, "quantile": "990Q", "gain": 34, "pct_typical": 243, "pct_stretch": 131, "typical_target": 14, "stretch_target": 26, "no_score": 542, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 533, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 492, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 499, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 102, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Beckham M.", "first": "Beckham", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 491, "baseline_score": 483, "placement": "Grade 5", "baseline_placement": "Grade 4", "percentile": 48, "quantile": "815Q", "gain": 8, "pct_typical": 57, "pct_stretch": 31, "typical_target": 14, "stretch_target": 26, "no_score": 504, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 492, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 472, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 490, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 64, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Carter M.", "first": "Carter", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 516, "baseline_score": 482, "placement": "Mid 6", "baseline_placement": "Grade 4", "percentile": 79, "quantile": "955Q", "gain": 34, "pct_typical": 243, "pct_stretch": 131, "typical_target": 14, "stretch_target": 26, "no_score": 510, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 520, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 503, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 532, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "On", "duration": 84, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Lucas M.", "first": "Lucas", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 523, "baseline_score": 520, "placement": "Mid 6", "baseline_placement": "Mid 6", "percentile": 83, "quantile": "1000Q", "gain": 3, "pct_typical": 23, "pct_stretch": 15, "typical_target": 13, "stretch_target": 20, "no_score": 524, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 536, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 524, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 505, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 96, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Annabelle M.", "first": "Annabelle", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 503, "baseline_score": 497, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 63, "quantile": "880Q", "gain": 6, "pct_typical": 46, "pct_stretch": 24, "typical_target": 13, "stretch_target": 25, "no_score": 499, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 510, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 509, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 494, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 95, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Charles M.", "first": "Charles", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 511, "baseline_score": 500, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 71, "quantile": "930Q", "gain": 11, "pct_typical": 85, "pct_stretch": 44, "typical_target": 13, "stretch_target": 25, "no_score": 509, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 502, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 525, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 509, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 41, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Graham M.", "first": "Graham", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 536, "baseline_score": 516, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 89, "quantile": "1075Q", "gain": 20, "pct_typical": 154, "pct_stretch": 100, "typical_target": 13, "stretch_target": 20, "no_score": 538, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 533, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 513, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 556, "geo_placement": "Late 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 90, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Noah M.", "first": "Noah", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 495, "baseline_score": 474, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 52, "quantile": "840Q", "gain": 21, "pct_typical": 150, "pct_stretch": 81, "typical_target": 14, "stretch_target": 26, "no_score": 502, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 530, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 474, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 463, "geo_placement": "Grade 4", "geo_rel": "2 Grade Levels Below", "rush_flag": "", "read_aloud": "Off", "duration": 119, "grouping": 3, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Alexander M.", "first": "Alexander", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 470, "baseline_score": 434, "placement": "Grade 5", "baseline_placement": "Grade 2", "percentile": 30, "quantile": "685Q", "gain": 36, "pct_typical": 240, "pct_stretch": 103, "typical_target": 15, "stretch_target": 35, "no_score": 455, "no_placement": "Grade 4", "no_rel": "2 Grade Levels Below", "ar_score": 492, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 477, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 455, "geo_placement": "Grade 4", "geo_rel": "2 Grade Levels Below", "rush_flag": "", "read_aloud": "Off", "duration": 101, "grouping": 1, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Isabela M.", "first": "Isabela", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 539, "baseline_score": 515, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 90, "quantile": "1095Q", "gain": 24, "pct_typical": 185, "pct_stretch": 120, "typical_target": 13, "stretch_target": 20, "no_score": 550, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 523, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 527, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 555, "geo_placement": "Late 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 206, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Madeleine N.", "first": "Madeleine", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 505, "baseline_score": 499, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 65, "quantile": "895Q", "gain": 6, "pct_typical": 46, "pct_stretch": 24, "typical_target": 13, "stretch_target": 25, "no_score": 497, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 516, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 506, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 500, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 82, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Kaden N.", "first": "Kaden", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 506, "baseline_score": 495, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 67, "quantile": "900Q", "gain": 11, "pct_typical": 85, "pct_stretch": 44, "typical_target": 13, "stretch_target": 25, "no_score": 510, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 501, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 514, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 499, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 65, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Nia N.", "first": "Nia", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 553, "baseline_score": 511, "placement": "Late 6", "baseline_placement": "Early 6", "percentile": 96, "quantile": "1175Q", "gain": 42, "pct_typical": 323, "pct_stretch": 168, "typical_target": 13, "stretch_target": 25, "no_score": 580, "no_placement": "Grade 8", "no_rel": "Mid or Above Grade Level", "ar_score": 534, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 540, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 557, "geo_placement": "Late 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 74, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Claire O.", "first": "Claire", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 535, "baseline_score": 505, "placement": "Mid 6", "baseline_placement": "Grade 5", "percentile": 89, "quantile": "1070Q", "gain": 30, "pct_typical": 231, "pct_stretch": 120, "typical_target": 13, "stretch_target": 25, "no_score": 537, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 539, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 522, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 538, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 130, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Timberlyn P.", "first": "Timberlyn", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 461, "baseline_score": 443, "placement": "Grade 4", "baseline_placement": "Grade 2", "percentile": 23, "quantile": "630Q", "gain": 18, "pct_typical": 120, "pct_stretch": 51, "typical_target": 15, "stretch_target": 35, "no_score": 449, "no_placement": "Grade 4", "no_rel": "2 Grade Levels Below", "ar_score": 468, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 448, "md_placement": "Grade 4", "md_rel": "2 Grade Levels Below", "geo_score": 485, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "On", "duration": 70, "grouping": 1, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Miranda P.", "first": "Miranda", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 513, "baseline_score": 494, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 75, "quantile": "940Q", "gain": 19, "pct_typical": 136, "pct_stretch": 73, "typical_target": 14, "stretch_target": 26, "no_score": 511, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 527, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 527, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 481, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 82, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Alyssa P.", "first": "Alyssa", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 498, "baseline_score": 462, "placement": "Early 6", "baseline_placement": "Grade 3", "percentile": 56, "quantile": "850Q", "gain": 36, "pct_typical": 257, "pct_stretch": 120, "typical_target": 14, "stretch_target": 30, "no_score": 500, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 501, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 498, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 492, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 109, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Camila P.", "first": "Camila", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 497, "baseline_score": 506, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 54, "quantile": "845Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 25, "no_score": 488, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 522, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 483, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 497, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 76, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Clementine P.", "first": "Clementine", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 504, "baseline_score": 473, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 64, "quantile": "890Q", "gain": 31, "pct_typical": 221, "pct_stretch": 119, "typical_target": 14, "stretch_target": 26, "no_score": 507, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 508, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 512, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 489, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 59, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Kyler R.", "first": "Kyler", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 529, "baseline_score": 506, "placement": "Mid 6", "baseline_placement": "Grade 5", "percentile": 85, "quantile": "1030Q", "gain": 23, "pct_typical": 177, "pct_stretch": 92, "typical_target": 13, "stretch_target": 25, "no_score": 536, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 543, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 510, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 522, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "Yellow Rush Flag", "read_aloud": "Off", "duration": 70, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Rylan R.", "first": "Rylan", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 560, "baseline_score": 520, "placement": "Late 6", "baseline_placement": "Mid 6", "percentile": 98, "quantile": "1200Q", "gain": 40, "pct_typical": 308, "pct_stretch": 200, "typical_target": 13, "stretch_target": 20, "no_score": 564, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 544, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 574, "md_placement": "Grade 7", "md_rel": "Mid or Above Grade Level", "geo_score": 555, "geo_placement": "Late 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 63, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Chase R.", "first": "Chase", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 523, "baseline_score": 493, "placement": "Mid 6", "baseline_placement": "Grade 5", "percentile": 83, "quantile": "1000Q", "gain": 30, "pct_typical": 214, "pct_stretch": 115, "typical_target": 14, "stretch_target": 26, "no_score": 531, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 526, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 509, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 520, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 134, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Kenley R.", "first": "Kenley", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 480, "baseline_score": 465, "placement": "Grade 5", "baseline_placement": "Grade 3", "percentile": 38, "quantile": "745Q", "gain": 15, "pct_typical": 107, "pct_stretch": 58, "typical_target": 14, "stretch_target": 26, "no_score": 492, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 456, "ar_placement": "Grade 4", "ar_rel": "2 Grade Levels Below", "md_score": 501, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 473, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 70, "grouping": 1, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Connor R.", "first": "Connor", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 494, "baseline_score": 499, "placement": "Grade 5", "baseline_placement": "Grade 5", "percentile": 51, "quantile": "830Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 25, "no_score": 497, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 505, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 488, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 482, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 70, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Valerie R.", "first": "Valerie", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 534, "baseline_score": 492, "placement": "Mid 6", "baseline_placement": "Grade 5", "percentile": 88, "quantile": "1065Q", "gain": 42, "pct_typical": 300, "pct_stretch": 162, "typical_target": 14, "stretch_target": 26, "no_score": 544, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 533, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 534, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 523, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 118, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Zoe R.", "first": "Zoe", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 491, "baseline_score": 495, "placement": "Grade 5", "baseline_placement": "Grade 5", "percentile": 48, "quantile": "815Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 25, "no_score": 489, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 479, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 491, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 511, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 82, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Isabella R.", "first": "Isabella", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 509, "baseline_score": 505, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 69, "quantile": "920Q", "gain": 4, "pct_typical": 31, "pct_stretch": 16, "typical_target": 13, "stretch_target": 25, "no_score": 522, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 515, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 479, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 509, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 54, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Flynn S.", "first": "Flynn", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 556, "baseline_score": 533, "placement": "Late 6", "baseline_placement": "Late 6", "percentile": 97, "quantile": "1190Q", "gain": 23, "pct_typical": 177, "pct_stretch": 115, "typical_target": 13, "stretch_target": 20, "no_score": 565, "no_placement": "Grade 7", "no_rel": "Mid or Above Grade Level", "ar_score": 544, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 563, "md_placement": "Late 6", "md_rel": "Mid or Above Grade Level", "geo_score": 553, "geo_placement": "Late 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 95, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Leo S.", "first": "Leo", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 505, "baseline_score": 491, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 65, "quantile": "895Q", "gain": 14, "pct_typical": 100, "pct_stretch": 54, "typical_target": 14, "stretch_target": 26, "no_score": 522, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 488, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 506, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 500, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 47, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Aditi S.", "first": "Aditi", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 513, "baseline_score": 517, "placement": "Early 6", "baseline_placement": "Early 6", "percentile": 75, "quantile": "940Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 20, "no_score": 509, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 518, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 527, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 498, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 71, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Brayden S.", "first": "Brayden", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 550, "baseline_score": 507, "placement": "Late 6", "baseline_placement": "Grade 5", "percentile": 95, "quantile": "1155Q", "gain": 43, "pct_typical": 331, "pct_stretch": 172, "typical_target": 13, "stretch_target": 25, "no_score": 576, "no_placement": "Grade 8", "no_rel": "Mid or Above Grade Level", "ar_score": 541, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 520, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 556, "geo_placement": "Late 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 101, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Rajvi S.", "first": "Rajvi", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 518, "baseline_score": 513, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 80, "quantile": "970Q", "gain": 5, "pct_typical": 38, "pct_stretch": 20, "typical_target": 13, "stretch_target": 25, "no_score": 530, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 502, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 534, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 508, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 68, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Preston S.", "first": "Preston", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 539, "baseline_score": 526, "placement": "Mid 6", "baseline_placement": "Mid 6", "percentile": 95, "quantile": "1095Q", "gain": 13, "pct_typical": 100, "pct_stretch": 65, "typical_target": 13, "stretch_target": 20, "no_score": 556, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 526, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 538, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 532, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 162, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Yeva S.", "first": "Yeva", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 513, "baseline_score": 495, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 75, "quantile": "940Q", "gain": 18, "pct_typical": 138, "pct_stretch": 72, "typical_target": 13, "stretch_target": 25, "no_score": 516, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 510, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 520, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 504, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 114, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "MacKenzie S.", "first": "MacKenzie", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 510, "baseline_score": 497, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 70, "quantile": "925Q", "gain": 13, "pct_typical": 100, "pct_stretch": 52, "typical_target": 13, "stretch_target": 25, "no_score": 527, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 530, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 496, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 457, "geo_placement": "Grade 4", "geo_rel": "2 Grade Levels Below", "rush_flag": "", "read_aloud": "Off", "duration": 85, "grouping": 3, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Shelby S.", "first": "Shelby", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 536, "baseline_score": 511, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 89, "quantile": "1075Q", "gain": 25, "pct_typical": 192, "pct_stretch": 100, "typical_target": 13, "stretch_target": 25, "no_score": 524, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 545, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 544, "md_placement": "Late 6", "md_rel": "Mid or Above Grade Level", "geo_score": 534, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 128, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "David S.", "first": "David", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 499, "baseline_score": 499, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 57, "quantile": "855Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 25, "no_score": 491, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 510, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 497, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 496, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 57, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Sriya S.", "first": "Sriya", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 515, "baseline_score": 509, "placement": "Mid 6", "baseline_placement": "Grade 5", "percentile": 78, "quantile": "950Q", "gain": 6, "pct_typical": 46, "pct_stretch": 24, "typical_target": 13, "stretch_target": 25, "no_score": 529, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 528, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 502, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 491, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 131, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Fallon T.", "first": "Fallon", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 514, "baseline_score": 515, "placement": "Mid 6", "baseline_placement": "Early 6", "percentile": 76, "quantile": "945Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 20, "no_score": 505, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 531, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 525, "md_placement": "Mid 6", "md_rel": "Mid or Above Grade Level", "geo_score": 498, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 72, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Mason T.", "first": "Mason", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 434, "baseline_score": 459, "placement": "Grade 3", "baseline_placement": "Grade 3", "percentile": 9, "quantile": "460Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 14, "stretch_target": 30, "no_score": 447, "no_placement": "Grade 4", "no_rel": "2 Grade Levels Below", "ar_score": 413, "ar_placement": "Grade 2", "ar_rel": "3 or More Grade Levels Below", "md_score": 455, "md_placement": "Grade 4", "md_rel": "2 Grade Levels Below", "geo_score": 422, "geo_placement": "Grade 2", "geo_rel": "3 or More Grade Levels Below", "rush_flag": "", "read_aloud": "On", "duration": 42, "grouping": 1, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Agastya U.", "first": "Agastya", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 556, "baseline_score": 543, "placement": "Late 6", "baseline_placement": "Grade 7", "percentile": 99, "quantile": "1190Q", "gain": 13, "pct_typical": 100, "pct_stretch": 65, "typical_target": 13, "stretch_target": 20, "no_score": 561, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 563, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 556, "md_placement": "Late 6", "md_rel": "Mid or Above Grade Level", "geo_score": 539, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 161, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Olivia U.", "first": "Olivia", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 459, "baseline_score": 461, "placement": "Grade 4", "baseline_placement": "Grade 3", "percentile": 21, "quantile": "620Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 14, "stretch_target": 30, "no_score": 442, "no_placement": "Grade 4", "no_rel": "2 Grade Levels Below", "ar_score": 455, "ar_placement": "Grade 4", "ar_rel": "2 Grade Levels Below", "md_score": 500, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 456, "geo_placement": "Grade 4", "geo_rel": "2 Grade Levels Below", "rush_flag": "", "read_aloud": "Off", "duration": 46, "grouping": 1, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Joyce V.", "first": "Joyce", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 483, "baseline_score": 482, "placement": "Grade 5", "baseline_placement": "Grade 4", "percentile": 41, "quantile": "765Q", "gain": 1, "pct_typical": 7, "pct_stretch": 4, "typical_target": 14, "stretch_target": 26, "no_score": 481, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 490, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 483, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 479, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 97, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Hitesh V.", "first": "Hitesh", "homeroom": "P2-ACCEL-Braswell", "teacher": "Braswell", "class_type": "ACCEL", "overall_score": 516, "baseline_score": 502, "placement": "Mid 6", "baseline_placement": "Grade 5", "percentile": 79, "quantile": "955Q", "gain": 14, "pct_typical": 108, "pct_stretch": 56, "typical_target": 13, "stretch_target": 25, "no_score": 534, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 515, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 504, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 505, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 61, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gonzalez"}, {"name": "Chloe V.", "first": "Chloe", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 477, "baseline_score": 458, "placement": "Grade 5", "baseline_placement": "Grade 3", "percentile": 36, "quantile": "725Q", "gain": 19, "pct_typical": 136, "pct_stretch": 63, "typical_target": 14, "stretch_target": 30, "no_score": 477, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 471, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 478, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 485, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 67, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Joshua V.", "first": "Joshua", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 505, "baseline_score": 506, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 65, "quantile": "895Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 25, "no_score": 521, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 519, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 492, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 467, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 93, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Aishvi V.", "first": "Aishvi", "homeroom": "P1-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 539, "baseline_score": 543, "placement": "Mid 6", "baseline_placement": "Grade 7", "percentile": 90, "quantile": "1095Q", "gain": 0, "pct_typical": 0, "pct_stretch": 0, "typical_target": 13, "stretch_target": 20, "no_score": 569, "no_placement": "Grade 7", "no_rel": "Mid or Above Grade Level", "ar_score": 542, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 477, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 535, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 77, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Braswell"}, {"name": "Marie-Lou W.", "first": "Marie-Lou", "homeroom": "P4-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 497, "baseline_score": 478, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 54, "quantile": "845Q", "gain": 19, "pct_typical": 136, "pct_stretch": 73, "typical_target": 14, "stretch_target": 26, "no_score": 478, "no_placement": "Grade 5", "no_rel": "1 Grade Level Below", "ar_score": 531, "ar_placement": "Mid 6", "ar_rel": "Mid or Above Grade Level", "md_score": 504, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 474, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 81, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Matteo"}, {"name": "Jackson W.", "first": "Jackson", "homeroom": "P3-ACCEL-Rutledge", "teacher": "Rutledge", "class_type": "ACCEL", "overall_score": 552, "baseline_score": 519, "placement": "Late 6", "baseline_placement": "Early 6", "percentile": 98, "quantile": "1170Q", "gain": 33, "pct_typical": 254, "pct_stretch": 165, "typical_target": 13, "stretch_target": 20, "no_score": 551, "no_placement": "Late 6", "no_rel": "Mid or Above Grade Level", "ar_score": 548, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 545, "md_placement": "Late 6", "md_rel": "Mid or Above Grade Level", "geo_score": 566, "geo_placement": "Grade 7", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 126, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Gurcan"}, {"name": "Lily W.", "first": "Lily", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 470, "baseline_score": 459, "placement": "Grade 5", "baseline_placement": "Grade 3", "percentile": 30, "quantile": "685Q", "gain": 11, "pct_typical": 79, "pct_stretch": 37, "typical_target": 14, "stretch_target": 30, "no_score": 498, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 479, "ar_placement": "Grade 5", "ar_rel": "1 Grade Level Below", "md_score": 429, "md_placement": "Grade 2", "md_rel": "3 or More Grade Levels Below", "geo_score": 451, "geo_placement": "Grade 4", "geo_rel": "2 Grade Levels Below", "rush_flag": "", "read_aloud": "Off", "duration": 36, "grouping": 2, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Archer W.", "first": "Archer", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 540, "baseline_score": 534, "placement": "Mid 6", "baseline_placement": "Late 6", "percentile": 90, "quantile": "1100Q", "gain": 6, "pct_typical": 46, "pct_stretch": 30, "typical_target": 13, "stretch_target": 20, "no_score": 536, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 553, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 541, "md_placement": "Late 6", "md_rel": "Mid or Above Grade Level", "geo_score": 528, "geo_placement": "Mid 6", "geo_rel": "Mid or Above Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 58, "grouping": 5, "mid_grade_score": 514, "eng_homeroom": "Hoxhaj"}, {"name": "Ashlynd W.", "first": "Ashlynd", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 509, "baseline_score": 499, "placement": "Early 6", "baseline_placement": "Grade 5", "percentile": 69, "quantile": "920Q", "gain": 10, "pct_typical": 77, "pct_stretch": 40, "typical_target": 13, "stretch_target": 25, "no_score": 500, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 541, "ar_placement": "Late 6", "ar_rel": "Mid or Above Grade Level", "md_score": 488, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 503, "geo_placement": "Early 6", "geo_rel": "Early On Grade Level", "rush_flag": "", "read_aloud": "Off", "duration": 98, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Wesley W.", "first": "Wesley", "homeroom": "P6-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 492, "baseline_score": 480, "placement": "Grade 5", "baseline_placement": "Grade 4", "percentile": 49, "quantile": "820Q", "gain": 12, "pct_typical": 86, "pct_stretch": 46, "typical_target": 14, "stretch_target": 26, "no_score": 504, "no_placement": "Early 6", "no_rel": "Early On Grade Level", "ar_score": 496, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 479, "md_placement": "Grade 5", "md_rel": "1 Grade Level Below", "geo_score": 482, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 74, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Harnage"}, {"name": "Dominik Z.", "first": "Dominik", "homeroom": "P3-Braswell", "teacher": "Braswell", "class_type": "General", "overall_score": 503, "baseline_score": 474, "placement": "Early 6", "baseline_placement": "Grade 4", "percentile": 63, "quantile": "880Q", "gain": 29, "pct_typical": 207, "pct_stretch": 112, "typical_target": 14, "stretch_target": 26, "no_score": 517, "no_placement": "Mid 6", "no_rel": "Mid or Above Grade Level", "ar_score": 498, "ar_placement": "Early 6", "ar_rel": "Early On Grade Level", "md_score": 504, "md_placement": "Early 6", "md_rel": "Early On Grade Level", "geo_score": 491, "geo_placement": "Grade 5", "geo_rel": "1 Grade Level Below", "rush_flag": "", "read_aloud": "Off", "duration": 67, "grouping": 4, "mid_grade_score": 514, "eng_homeroom": "Harnage"}];
+
+// OVERVIEW
+function renderOverview() {
+  const s = STUDENTS;
+  const avgGain = avg(s,'gain');
+  const avgScore = avg(s,'overall_score');
+  const pctTypical = Math.round(avg(s.filter(x=>x.pct_typical>0),'pct_typical'));
+  const belowGL = s.filter(x=>isBelowGrade(x.placement)).length;
+  const aboveGL = s.filter(x=>['Early 6','Mid 6','Late 6','Max Score','Grade 7','Grade 8','Grade 9'].includes(x.placement)).length;
+  const typMet = s.filter(x=>x.pct_typical >= 100).length;
+  const stretchMet = s.filter(x=>x.pct_stretch >= 100).length;
+
+  const statsHTML = [
+    {label:'Total Students',value:s.length,detail:'Across 6 math periods',color:'var(--teal)'},
+    {label:'Avg Scale Score',value:avgScore,detail:'Spring YTD',color:'var(--sky)'},
+    {label:'Avg Gain',value:'+'+avgGain,detail:'pts since baseline',color:'var(--green)'},
+    {label:'% Typical Growth',value:pctTypical+'%',detail:'Avg progress to goal',color:'var(--violet)'},
+    {label:'On/Above Grade',value:aboveGL,detail:'Early 6 or higher',color:'#059669'},
+    {label:'Below Grade Level',value:belowGL,detail:'Grade 5 or below',color:'var(--rose)'},
+    {label:'Met Typical Growth',value:typMet,detail:pct(typMet,s.length)+'% of students',color:'var(--teal)'},
+    {label:'Met Stretch Growth',value:stretchMet,detail:pct(stretchMet,s.length)+'% of students',color:'var(--violet)'}
+  ].map(({label,value,detail,color})=>`
+    <div class="stat-card" style="--accent:${color}">
+      <div class="stat-label">${label}</div>
+      <div class="stat-value" style="color:${color}">${value}</div>
+      <div class="stat-detail">${detail}</div>
+    </div>`).join('');
+  document.getElementById('overview-stats').innerHTML = statsHTML;
+
+  // Placement distribution
+  const placements = ['Grade 9','Grade 8','Grade 7','Max Score','Late 6','Mid 6','Early 6','Grade 5','Grade 4','Grade 3','Grade 2','Grade 1'];
+  const placeCounts = {};
+  s.forEach(x=>{placeCounts[x.placement]=(placeCounts[x.placement]||0)+1;});
+  let distHTML = placements.filter(p=>placeCounts[p]>0).map(p=>{
+    const n=placeCounts[p]||0, pv=pct(n,s.length);
+    return placementBar(p+` (${n})`, pv, PLACEMENT_COLORS[p]||'#64748b');
+  }).join('');
+  document.getElementById('placement-dist').innerHTML = distHTML;
+
+  // Growth summary
+  const gainBuckets = [
+    {label:'40+ pts (Outstanding)',min:40,max:999,color:'#10b981'},
+    {label:'25–39 pts (Strong)',min:25,max:39,color:'#0d9488'},
+    {label:'15–24 pts (Adequate)',min:15,max:24,color:'#0ea5e9'},
+    {label:'1–14 pts (Minimal)',min:1,max:14,color:'#f59e0b'},
+    {label:'0 or Negative (No Growth)',min:-999,max:0,color:'#e11d48'}
+  ];
+  let gHTML = gainBuckets.map(b=>{
+    const n=s.filter(x=>x.gain>=b.min&&x.gain<=b.max).length;
+    const pv=pct(n,s.length);
+    return placementBar(b.label+` (${n})`,pv,b.color);
+  }).join('');
+  document.getElementById('growth-summary').innerHTML = gHTML;
+
+  // Domain overview
+  const domains = [
+    {name:'Number & Operations', relKey:'no_rel', icon:'🔢'},
+    {name:'Algebra & Algebraic Thinking', relKey:'ar_rel', icon:'➕'},
+    {name:'Measurement & Data', relKey:'md_rel', icon:'📏'},
+    {name:'Geometry', relKey:'geo_rel', icon:'📐'}
+  ];
+  let domHTML = domains.map(d=>{
+    const onGL = s.filter(x=>x[d.relKey]==='Mid or Above Grade Level'||x[d.relKey]==='Early On Grade Level').length;
+    const pv = pct(onGL, s.length);
+    const color = pv>=75?'var(--green)':pv>=60?'var(--teal)':pv>=45?'var(--amber)':'var(--rose)';
+    return `<div class="domain-row">
+      <div class="domain-name"><span>${d.icon} ${d.name}</span><span style="font-weight:700;color:${color}">${pv}%</span></div>
+      <div class="domain-bar-bg"><div class="domain-bar-fill" style="width:${pv}%;background:${color}">${pv}%</div><div class="domain-bar-benchmark" style="left:70%"></div></div>
+    </div>`;
+  }).join('');
+  document.getElementById('domain-overview').innerHTML = domHTML;
+
+  // Growth stars
+  const stars = [...s].sort((a,b)=>b.gain-a.gain).slice(0,8);
+  let starsHTML = stars.map(st=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #f1f5f9;">
+      <div style="width:32px;height:32px;border-radius:50%;background:${hashColor(st.name)};display:flex;align-items:center;justify-content:center;color:white;font-size:.7rem;font-weight:700;flex-shrink:0">${getInitials(st.name)}</div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:.8rem">${st.name}</div>
+        <div style="font-size:.68rem;color:var(--slate)">${st.homeroom} · ${st.baseline_placement} → ${st.placement}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:800;color:var(--green);font-family:'DM Serif Display',serif;font-size:1.1rem">+${st.gain}</div>
+        <div style="font-size:.62rem;color:var(--slate)">pts</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('growth-stars').innerHTML = starsHTML;
+}
+
+// CLASS VIEW
+function renderClassView() {
+  const periods = ['P1-Braswell','P2-ACCEL-Braswell','P3-Braswell','P3-ACCEL-Rutledge','P4-Braswell','P6-Braswell'];
+  const tabsEl = document.getElementById('hr-tabs');
+  tabsEl.innerHTML = periods.map((r,i)=>`<button class="hr-tab ${i===0?'active':''}" onclick="showHomeroom('${r}',this)">${r}</button>`).join('');
+  showHomeroomData('P1-Braswell');
+}
+function showHomeroom(room, btn) {
+  document.querySelectorAll('.hr-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  showHomeroomData(room);
+}
+function showHomeroomData(room) {
+  const students = STUDENTS.filter(s=>s.homeroom===room).sort((a,b)=>b.overall_score-a.overall_score);
+  if (students.length === 0) {
+    document.getElementById('hr-content').innerHTML = '<div style="padding:40px;text-align:center;color:var(--slate)">No students found in this period.</div>';
+    return;
+  }
+  const avgScore = avg(students,'overall_score');
+  const avgGain = avg(students,'gain');
+  const avgTyp = Math.round(avg(students.filter(x=>x.pct_typical>0),'pct_typical'));
+  const color = ROOM_COLORS[room]||'#64748b';
+
+  const placements = ['Grade 9','Grade 8','Grade 7','Max Score','Late 6','Mid 6','Early 6','Grade 5','Grade 4','Grade 3','Grade 2','Grade 1'];
+  const placeCounts = {};
+  students.forEach(s=>{placeCounts[s.placement]=(placeCounts[s.placement]||0)+1;});
+
+  // Math teacher breakdown within this period
+  const mathTeachers = {};
+  students.forEach(s=>{mathTeachers[s.teacher]=(mathTeachers[s.teacher]||0)+1;});
+  const teacherLabel = Object.entries(mathTeachers).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`${t} (${n})`).join(' · ');
+  const accelCount = students.filter(s=>s.class_type==='ACCEL').length;
+  const tagsLabel = accelCount>0 ? `${accelCount} ACCEL` : '';
+
+  const html = `
+    <div style="background:${ROOM_BG[room]||'#f1f5f9'};border-radius:12px;padding:12px 16px;margin-bottom:16px;border-left:4px solid ${color}">
+      <div style="font-size:.72rem;color:var(--slate);text-transform:uppercase;letter-spacing:.6px;font-weight:700;margin-bottom:3px">Class Period Details</div>
+      <div style="font-size:.82rem"><strong>Math Instruction:</strong> ${teacherLabel}${tagsLabel?` · <strong>${tagsLabel}</strong>`:''}</div>
+    </div>
+    <div class="stat-grid">
+      ${[{l:'Students',v:students.length,d:'in period'},{l:'Avg Score',v:avgScore,d:'scale score'},{l:'Avg Gain',v:'+'+avgGain,d:'pts growth'},{l:'Avg % Typical',v:avgTyp+'%',d:'growth progress'}]
+        .map(({l,v,d})=>`<div class="stat-card" style="--accent:${color}"><div class="stat-label">${l}</div><div class="stat-value" style="color:${color}">${v}</div><div class="stat-detail">${d}</div></div>`).join('')}
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><div class="icon" style="background:${ROOM_BG[room]||'#f1f5f9'}">📊</div> Placement Distribution</div>
+        ${placements.filter(p=>placeCounts[p]).map(p=>{
+          const n=placeCounts[p]||0, pv=pct(n,students.length);
+          return placementBar(p+` (${n})`,pv,PLACEMENT_COLORS[p]||'#64748b');
+        }).join('')}
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="icon" style="background:#fef3c7">⚡</div> Tier Breakdown</div>
+        ${[3,2,1].map(t=>{
+          const n=students.filter(s=>getTier(s)===t).length;
+          const pv=pct(n,students.length);
+          const labels={3:'Tier 3 – Below Grade',2:'Tier 2 – Borderline/Watch',1:'Tier 1 – On Track'};
+          const colors={3:'var(--rose)',2:'var(--amber)',1:'var(--green)'};
+          return placementBar(labels[t]+` (${n})`,pv,colors[t]);
+        }).join('')}
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <div class="card-title"><div class="icon" style="background:${ROOM_BG[room]||'#f1f5f9'}">🎯</div> Domain Performance (% On or Above Grade Level)</div>
+      ${[
+        {name:'Number & Operations',key:'no_rel'},
+        {name:'Algebra & Algebraic Thinking',key:'ar_rel'},
+        {name:'Measurement & Data',key:'md_rel'},
+        {name:'Geometry',key:'geo_rel'}
+      ].map(d=>{
+        const onGL = students.filter(x=>x[d.key]==='Mid or Above Grade Level'||x[d.key]==='Early On Grade Level').length;
+        const pv = pct(onGL, students.length);
+        const c = pv>=75?'var(--green)':pv>=60?'var(--teal)':pv>=45?'var(--amber)':'var(--rose)';
+        return `<div class="domain-row" style="margin-bottom:8px">
+          <div class="domain-name"><span>${d.name}</span><span style="font-weight:700;color:${c}">${pv}% (${onGL}/${students.length})</span></div>
+          <div class="domain-bar-bg"><div class="domain-bar-fill" style="width:${pv}%;background:${c}">${pv}%</div><div class="domain-bar-benchmark" style="left:70%"></div></div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="card" style="margin-top:18px;padding:0">
+      <div style="padding:18px 22px 12px"><div class="card-title" style="margin-bottom:0"><div class="icon" style="background:${ROOM_BG[room]||'#f1f5f9'}">📋</div> Full Class Roster</div></div>
+      <div class="student-table-wrap">
+        <table class="student-table">
+          <thead><tr>
+            <th>Student</th>
+            <th>Math Tch.</th>
+            <th>Placement</th>
+            <th>Scale</th>
+            <th>%ile</th>
+            <th>Gain</th>
+            <th>% Typical</th>
+            <th>Number/Ops</th>
+            <th>Algebra</th>
+            <th>Meas/Data</th>
+            <th>Geometry</th>
+            <th>Tier</th>
+          </tr></thead>
+          <tbody>
+            ${students.map(s=>{
+              const t=getTier(s);
+              const tc={1:'#10b981',2:'#f59e0b',3:'#e11d48'}[t];
+              const tag = s.class_type==='ACCEL'?' ⭐':'';
+              return `<tr>
+                <td><span style="font-weight:700;cursor:pointer;color:var(--teal)" onclick="openStudent('${s.name.replace(/'/g,"&#39;")}')">${s.name}</span>${tag}</td>
+                <td style="font-size:.7rem;color:var(--slate)">${s.teacher}</td>
+                <td><span class="placement-tag ${PLACEMENT_CSS[s.placement]||''}">${s.placement}</span></td>
+                <td style="font-weight:700">${s.overall_score}</td>
+                <td>${s.percentile}</td>
+                <td style="font-weight:700;color:${s.gain>=25?'var(--green)':s.gain>=10?'var(--amber)':'var(--rose)'}">${s.gain>0?'+':''}${s.gain}</td>
+                <td>${s.pct_typical>0?Math.round(s.pct_typical)+'%':'–'}</td>
+                <td><span class="placement-tag ${PLACEMENT_CSS[s.no_placement]||''}">${s.no_placement}</span></td>
+                <td><span class="placement-tag ${PLACEMENT_CSS[s.ar_placement]||''}">${s.ar_placement}</span></td>
+                <td><span class="placement-tag ${PLACEMENT_CSS[s.md_placement]||''}">${s.md_placement}</span></td>
+                <td><span class="placement-tag ${PLACEMENT_CSS[s.geo_placement]||''}">${s.geo_placement}</span></td>
+                <td><span style="background:${tc}22;color:${tc};padding:2px 9px;border-radius:20px;font-size:.68rem;font-weight:800">T${t}</span></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  document.getElementById('hr-content').innerHTML = html;
+}
+
+// STANDARDS - FL BEST MA.6 mapping
+const STANDARDS = [
+  {domain:'Number & Operations',iready:'Multi-digit operations with whole numbers, fractions, decimals (5th-grade carryover)',standard:'MA.6.NSO.2.1-2.3',desc:'Multiply and divide multi-digit positive numbers with fluency, including decimals; apply standard algorithms.',priority:'High',note:'Foundational for 6th grade. Students placing Grade 5 or below need decimal-operation review BEFORE ratio work.'},
+  {domain:'Number & Operations',iready:'Greatest common factor, least common multiple',standard:'MA.6.NSO.3.1-3.5',desc:'Apply factors, multiples, prime factorization, GCF, LCM; rewrite expressions using the distributive property and GCF.',priority:'Med',note:'GCF/LCM is heavily tested on PM3. Practice factor rainbows and Venn-diagram methods.'},
+  {domain:'Number & Operations',iready:'Integers, opposites, and absolute value',standard:'MA.6.NSO.4.1-4.2',desc:'Locate, compare, and order integers on the number line; understand opposites and absolute value as distance from zero.',priority:'Crit',note:'⚠️ MAJOR PM3 GAP: First time students see negative numbers. iReady\'s NO domain blends integers with whole-number ops, masking weakness. A standalone integers pre-assessment is essential before 5/12.'},
+  {domain:'Algebra & Algebraic Thinking',iready:'Ratios, rates, and unit rates',standard:'MA.6.AR.1.1-1.3',desc:'Use ratio language to describe relationships; understand the concept of unit rate; solve real-world problems with ratios, rates, and percentages.',priority:'Crit',note:'⚠️ TOP PM3 PRIORITY: Ratios and unit rates are the single highest-tested 6th grade strand. iReady reports them under Algebra (mixed with expressions/equations) — students may have AR placement on grade level but ratio gaps. Use a standalone ratio pre-assessment.'},
+  {domain:'Algebra & Algebraic Thinking',iready:'Equivalent expressions, evaluating expressions',standard:'MA.6.AR.2.1-2.4',desc:'Write, read, and evaluate expressions with variables; identify equivalent expressions; apply order of operations to expressions with exponents.',priority:'High',note:'PM3 frequently tests "which expression is equivalent." Students confuse 3x with x+3. Use algebra tiles and area models.'},
+  {domain:'Algebra & Algebraic Thinking',iready:'One-step equations and inequalities',standard:'MA.6.AR.3.1-3.5',desc:'Write and solve one-step equations and inequalities; represent solutions on a number line; interpret solutions in context.',priority:'High',note:'Solving inequalities and graphing on a number line is a common PM3 question type. Practice flipping inequality direction is NOT yet required (that\'s 7th grade).'},
+  {domain:'Algebra & Algebraic Thinking',iready:'Independent and dependent variables, tables, graphs',standard:'MA.6.AR.4.1-4.2',desc:'Identify and analyze relationships between independent and dependent variables using tables, graphs, and equations.',priority:'Med',note:'Coordinate plane work overlaps with Geometry (MA.6.GR.1.3). Practice translating between table, equation, and graph.'},
+  {domain:'Geometry',iready:'Area of triangles, quadrilaterals, polygons',standard:'MA.6.GR.2.1-2.4',desc:'Derive and apply formulas for area of triangles, parallelograms, trapezoids, and composite figures using decomposition.',priority:'High',note:'Area formula derivation (esp. triangle = ½ × b × h) is heavily tested. Use grid paper and decomposition activities.'},
+  {domain:'Geometry',iready:'Volume of right rectangular prisms with fractional edges',standard:'MA.6.GR.2.5',desc:'Find the volume of right rectangular prisms with fractional edge lengths; apply V = l×w×h or V = B×h.',priority:'High',note:'Builds on 5th grade volume but adds fractional dimensions. Common error: forgetting to multiply fractions correctly.'},
+  {domain:'Geometry',iready:'Polygons on the coordinate plane',standard:'MA.6.GR.1.1-1.3',desc:'Plot points in all four quadrants; find distances between points sharing a coordinate; classify polygons on the coordinate plane.',priority:'Med',note:'First exposure to all four quadrants (negative coordinates). Strong overlap with MA.6.NSO.4 integers — coordinate work reinforces negatives.'},
+  {domain:'Geometry',iready:'Surface area using nets',standard:'MA.6.GR.2.6',desc:'Use nets to find the surface area of right rectangular prisms and triangular prisms.',priority:'Med',note:'Visual-spatial skill. Students struggle to "unfold" 3D shapes. Use physical net cutouts and online interactives.'},
+  {domain:'Measurement & Data → MA.6.DP',iready:'Statistical questions, dot plots, histograms, box plots',standard:'MA.6.DP.1.1-1.6',desc:'Identify statistical questions; create and interpret dot plots, histograms, and box plots; calculate measures of center (mean, median, mode) and spread (range, IQR, MAD).',priority:'High',note:'Box plots and IQR are NEW in 6th grade. Common confusion: median vs mean vs mode. PM3 frequently asks "which display best represents this data?"'}
+];
+
+function renderStandards() {
+  const crit = STANDARDS.filter(s=>s.priority==='Crit');
+  const gaps = STANDARDS.filter(s=>s.priority==='High');
+  const strengths = STANDARDS.filter(s=>s.priority==='Low');
+
+  document.getElementById('gap-summary').innerHTML = [...crit, ...gaps].map(s=>`
+    <div style="padding:10px 0;border-bottom:1px solid ${s.priority==='Crit'?'#fecaca':'#fecdd3'};display:flex;gap:10px;align-items:flex-start">
+      <span class="std-code" style="${s.priority==='Crit'?'background:#fee2e2;color:#7f1d1d;':''}">${s.standard}</span>
+      <div>
+        <div style="font-weight:700;font-size:.78rem">${s.domain}</div>
+        <div style="font-size:.72rem;color:var(--slate);margin-top:2px">${s.note}</div>
+      </div>
+    </div>`).join('');
+
+  const stengthsList = STANDARDS.filter(s=>s.priority==='Med' || s.priority==='Low');
+  document.getElementById('strength-summary').innerHTML = stengthsList.map(s=>`
+    <div style="padding:10px 0;border-bottom:1px solid #bbf7d0;display:flex;gap:10px;align-items:flex-start">
+      <span class="std-code" style="background:#dcfce7;color:#166534">${s.standard}</span>
+      <div>
+        <div style="font-weight:700;font-size:.78rem">${s.domain}</div>
+        <div style="font-size:.72rem;color:var(--slate);margin-top:2px">${s.note}</div>
+      </div>
+    </div>`).join('');
+
+  const tbl = document.getElementById('standards-table');
+  tbl.innerHTML = `<thead><tr>
+    <th>iReady Domain</th>
+    <th>iReady Sub-skill</th>
+    <th>FL B.E.S.T. Standard</th>
+    <th>Standard Description</th>
+    <th>Priority</th>
+    <th>Notes</th>
+  </tr></thead><tbody>${STANDARDS.map(s=>{
+    const cls = s.priority==='Crit'?'gap-crit':s.priority==='High'?'gap-high':s.priority==='Med'?'gap-med':'gap-low';
+    return `<tr>
+      <td style="font-weight:700">${s.domain}</td>
+      <td style="color:var(--slate)">${s.iready}</td>
+      <td><span class="std-code">${s.standard}</span></td>
+      <td>${s.desc}</td>
+      <td><span class="gap-pill ${cls}">${s.priority}</span></td>
+      <td style="color:var(--slate);font-size:.72rem">${s.note}</td>
+    </tr>`;
+  }).join('')}</tbody>`;
+}
+
+// INDIVIDUAL
+let filteredStudents = [...STUDENTS].sort((a,b)=>a.name.localeCompare(b.name));
+let selectedStudent = null;
+
+function filterStudentList() {
+  const q = document.getElementById('student-search').value.toLowerCase();
+  const room = document.getElementById('room-filter').value;
+  const tier = document.getElementById('tier-filter').value;
+  const classType = document.getElementById('class-filter').value;
+  filteredStudents = STUDENTS.filter(s=>{
+    const matchQ = s.name.toLowerCase().includes(q)||s.first.toLowerCase().includes(q);
+    const matchR = !room||s.homeroom===room;
+    const matchT = !tier||getTier(s)===parseInt(tier);
+    const matchC = !classType||s.class_type===classType;
+    return matchQ&&matchR&&matchT&&matchC;
+  }).sort((a,b)=>a.name.localeCompare(b.name));
+  renderStudentList();
+}
+
+function renderStudentList() {
+  const el = document.getElementById('student-list');
+  document.getElementById('student-count').textContent = `(${filteredStudents.length})`;
+  if (filteredStudents.length === 0) {
+    el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--slate);font-size:.75rem">No students match filters</div>';
+    return;
+  }
+  el.innerHTML = filteredStudents.map(s=>{
+    const t = getTier(s);
+    const tc = {1:'var(--green)',2:'var(--amber)',3:'var(--rose)'}[t];
+    const active = selectedStudent===s.name ? 'background:#f0fdfa;border-color:var(--teal);' : '';
+    const tag = s.class_type==='ACCEL'?' ⭐':'';
+    return `<div onclick="openStudent('${s.name.replace(/'/g,"&#39;")}')" style="padding:9px 12px;border-radius:8px;cursor:pointer;border:1px solid #e2e8f0;display:flex;align-items:center;gap:8px;transition:all .15s;${active}" onmouseover="this.style.background='#f0f9ff'" onmouseout="this.style.background='${selectedStudent===s.name?'#f0fdfa':'white'}'">
+      <div style="width:28px;height:28px;border-radius:50%;background:${hashColor(s.name)};display:flex;align-items:center;justify-content:center;color:white;font-size:.65rem;font-weight:700;flex-shrink:0">${getInitials(s.name)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}${tag}</div>
+        <div style="font-size:.65rem;color:var(--slate)">${s.homeroom} · ${s.placement}</div>
+      </div>
+      <span style="background:${tc}22;color:${tc};padding:1px 7px;border-radius:12px;font-size:.65rem;font-weight:800;flex-shrink:0">T${t}</span>
+    </div>`;
+  }).join('');
+}
+
+function openStudent(name) {
+  const indTab = document.getElementById('tab-individual');
+  if (!indTab.classList.contains('active')) {
+    document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    indTab.classList.add('active');
+    const btns = document.querySelectorAll('.tab-btn');
+    btns.forEach(b=>{ if (b.textContent.includes('Individual')) b.classList.add('active'); });
+  }
+  showStudentProfile(name);
+}
+
+function showStudentProfile(name) {
+  const s = STUDENTS.find(x=>x.name===name);
+  if(!s) return;
+  selectedStudent = name;
+  renderStudentList();
+
+  const t = getTier(s);
+  const tc = {1:'var(--green)',2:'var(--amber)',3:'var(--rose)'}[t];
+  const tLabel = {1:'Tier 1 – On Track',2:'Tier 2 – Strategic Support',3:'Tier 3 – Intensive Support'}[t];
+  const color = hashColor(s.name);
+  const gainColor = s.gain>=25?'var(--green)':s.gain>=10?'var(--sky)':'var(--rose)';
+
+  const domCards = [
+    {title:'Number & Operations',placement:s.no_placement,score:s.no_score,rel:s.no_rel,std:'MA.6.NSO.1–4',color:'#7c3aed'},
+    {title:'Algebra & Algebraic Thinking',placement:s.ar_placement,score:s.ar_score,rel:s.ar_rel,std:'MA.6.AR.1–3',color:'#0369a1'},
+    {title:'Measurement & Data',placement:s.md_placement,score:s.md_score,rel:s.md_rel,std:'MA.6.GR.2 / MA.6.DP',color:'#0d9488'},
+    {title:'Geometry',placement:s.geo_placement,score:s.geo_score,rel:s.geo_rel,std:'MA.6.GR.1–2',color:'#b45309'}
+  ].map(d=>{
+    const borderColor = d.rel==='Mid or Above Grade Level'?'var(--green)':d.rel==='Early On Grade Level'?'var(--amber)':'var(--rose)';
+    return `<div class="domain-pcard" style="border-color:${borderColor}">
+      <div class="dp-title">${d.title}</div>
+      <div class="dp-placement" style="color:${d.color}">${d.placement}</div>
+      <div class="dp-score">Scale: ${d.score} · ${d.rel}</div>
+      <div class="dp-std">${d.std}</div>
+    </div>`;
+  }).join('');
+
+  const belowOrEarly = (p) => isBelowGrade(p) || p === 'Early 6';
+  const studentStds = STANDARDS.filter(std=>{
+    const dom = std.domain.toLowerCase();
+    if (std.priority === 'Crit') return true;
+    if (dom.includes('number')&&belowOrEarly(s.no_placement)) return true;
+    if (dom.includes('algebra')&&belowOrEarly(s.ar_placement)) return true;
+    if (dom.includes('measurement')&&belowOrEarly(s.md_placement)) return true;
+    if (dom.includes('geometry')&&belowOrEarly(s.geo_placement)) return true;
+    return false;
+  }).slice(0,6);
+
+  const stdsHTML = studentStds.length ? studentStds.map(std=>`
+    <div class="std-match-item">
+      <span class="std-code" style="${std.priority==='Crit'?'background:#fee2e2;color:#7f1d1d;':''}">${std.standard}</span>
+      <span style="font-size:.68rem;color:var(--slate);max-width:60%;text-align:right">${std.desc.slice(0,55)}…</span>
+    </div>`).join('') : '<div style="font-size:.75rem;color:var(--slate);padding:8px 0">No critical standards gaps identified — enrichment focus</div>';
+
+  const needsToMidGL = Math.max(0, s.mid_grade_score - s.overall_score);
+  const trajectoryNote = needsToMidGL > 0 ? `Needs +${needsToMidGL} pts to reach Mid On Grade Level (${s.mid_grade_score})` : `At or above Mid On Grade Level benchmark ✓`;
+
+  let fastProjection;
+  if (t === 1) {
+    fastProjection = ['Late 6','Max Score','Grade 7','Grade 8','Grade 9'].includes(s.placement) ? 'Projected <strong>FAST Level 4–5</strong>' : 'Projected <strong>FAST Level 3+</strong>';
+  } else if (t === 2) {
+    fastProjection = 'Borderline — close gap to likely achieve <strong>FAST Level 3</strong>';
+  } else {
+    fastProjection = 'Projected <strong>FAST Level 1–2</strong> without intensive intervention';
+  }
+
+  const classBadge = s.class_type==='ACCEL'?'<span class="profile-chip" style="background:#fef9c3;color:#854d0e">⭐ ACCEL</span>':'';
+
+  const html = `<div class="student-profile" style="display:block">
+    <div class="profile-header">
+      <div class="profile-avatar" style="background:${color}">${getInitials(s.name)}</div>
+      <div style="flex:1">
+        <div class="profile-name">${s.name}${s.class_type==='ACCEL'?' ⭐':''}</div>
+        <div class="profile-meta">Period: ${s.homeroom} · Math Teacher: ${s.teacher} · Grade 6 Math · Quantile: ${s.quantile||'—'}</div>
+        <div class="profile-chips">
+          <span class="profile-chip" style="background:${tc}22;color:${tc}">${tLabel}</span>
+          <span class="profile-chip" style="background:#f0f9ff;color:#0369a1">${s.placement}</span>
+          <span class="profile-chip" style="background:#f5f3ff;color:#6d28d9">${s.percentile}th percentile</span>
+          <span class="profile-chip" style="background:#f1f5f9;color:#475569">Grouping ${s.grouping||'—'} / 5</span>
+          ${classBadge}
+          ${s.read_aloud==='On'?'<span class="profile-chip" style="background:#e0f2fe;color:#0369a1">🔊 Read Aloud</span>':''}
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="profile-metric"><div class="pm-label">Scale Score</div><div class="pm-value" style="color:var(--navy)">${s.overall_score}</div><div class="pm-sub">Spring YTD</div></div>
+      <div class="profile-metric"><div class="pm-label">Baseline</div><div class="pm-value" style="color:var(--slate)">${s.baseline_score}</div><div class="pm-sub">${s.baseline_placement}</div></div>
+      <div class="profile-metric"><div class="pm-label">Gain</div><div class="pm-value" style="color:${gainColor}">${s.gain>0?'+':''}${s.gain}</div><div class="pm-sub">pts growth</div></div>
+      <div class="profile-metric"><div class="pm-label">% Typical</div><div class="pm-value" style="color:${s.pct_typical>=100?'var(--green)':s.pct_typical>=50?'var(--amber)':'var(--rose)'}">${s.pct_typical>0?Math.round(s.pct_typical):0}%</div><div class="pm-sub">of ${s.typical_target} pt target</div></div>
+      <div class="profile-metric"><div class="pm-label">% Stretch</div><div class="pm-value" style="color:${s.pct_stretch>=100?'var(--violet)':'var(--slate)'}">${s.pct_stretch>0?Math.round(s.pct_stretch):0}%</div><div class="pm-sub">of ${s.stretch_target} pt target</div></div>
+      <div class="profile-metric"><div class="pm-label">Duration</div><div class="pm-value" style="color:var(--slate);font-size:1.2rem">${s.duration||'—'} min</div><div class="pm-sub">Diagnostic time</div></div>
+    </div>
+
+    <div class="card-title" style="margin-bottom:12px"><div class="icon" style="background:#dbeafe">📊</div> Domain Performance &amp; FL B.E.S.T. Mapping</div>
+    <div class="domain-profile">${domCards}</div>
+
+    <div class="two-col">
+      <div>
+        <div class="card-title" style="margin-bottom:10px"><div class="icon" style="background:#fef3c7">📋</div> Priority Standards to Target</div>
+        <div class="standards-match">${stdsHTML}</div>
+      </div>
+      <div>
+        <div class="card-title" style="margin-bottom:10px"><div class="icon" style="background:#dcfce7">🎯</div> Growth Toward Targets</div>
+        <div class="growth-bar-row">
+          <div class="gbr-label">Typical Growth</div>
+          <div class="gbr-bar-wrap">
+            <div class="gbr-bg">
+              <div class="gbr-fill" style="width:${Math.min(s.pct_typical||0,100)}%;background:var(--teal)">${Math.round(s.pct_typical||0)}%</div>
+              <div class="gbr-target" style="left:50%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="growth-bar-row">
+          <div class="gbr-label">Stretch Growth</div>
+          <div class="gbr-bar-wrap">
+            <div class="gbr-bg">
+              <div class="gbr-fill" style="width:${Math.min(s.pct_stretch||0,100)}%;background:var(--violet)">${Math.round(s.pct_stretch||0)}%</div>
+              <div class="gbr-target" style="left:50%"></div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:.7rem;color:var(--slate);margin-top:8px">📌 Typical target: +${s.typical_target} pts · Stretch target: +${s.stretch_target} pts · Dark line marks 50% progress</div>
+        <div style="margin-top:14px; padding:10px 12px; background:${s.overall_score >= s.mid_grade_score ? '#f0fdf4' : '#fef3c7'}; border-radius:8px; border-left:4px solid ${s.overall_score >= s.mid_grade_score ? 'var(--green)' : 'var(--amber)'}; font-size:.74rem; line-height:1.5;">
+          <strong>FAST Math PM3 Projection:</strong> ${fastProjection}.<br><strong>Progress:</strong> ${trajectoryNote}.
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  document.getElementById('student-profile-wrap').innerHTML = html;
+}
+
+function renderIndividual() {
+  renderStudentList();
+}
+
+// TIERS
+function renderTiers() {
+  const tier3 = STUDENTS.filter(s=>getTier(s)===3);
+  const tier2 = STUDENTS.filter(s=>getTier(s)===2);
+  const tier1 = STUDENTS.filter(s=>getTier(s)===1);
+
+  function getGaps(s) {
+    const gaps = [];
+    if (isBelowGrade(s.no_placement)) gaps.push('Number/Ops');
+    if (isBelowGrade(s.ar_placement)) gaps.push('Algebra');
+    if (isBelowGrade(s.md_placement)) gaps.push('Meas/Data');
+    if (isBelowGrade(s.geo_placement)) gaps.push('Geometry');
+    if (s.pct_typical<50&&s.pct_typical>0) gaps.push('Low Growth');
+    if (s.gain < 10) gaps.push('Low Gain');
+    return gaps;
+  }
+
+  function renderTierList(students) {
+    return students.map(s=>{
+      const gaps = getGaps(s);
+      const color = hashColor(s.name);
+      const tag = s.class_type==='ACCEL'?' ⭐':'';
+      return `<li class="tier-student" style="cursor:pointer" onclick="openStudent('${s.name.replace(/'/g,"&#39;")}')">
+        <div class="tier-avatar" style="background:${color}">${getInitials(s.name)}</div>
+        <div class="tier-info">
+          <div class="tier-sname">${s.name}${tag}</div>
+          <div class="tier-room">${s.homeroom} · ${s.placement} · Score: ${s.overall_score}</div>
+          ${gaps.length?`<div class="tier-gaps">${gaps.map(g=>`<span class="gap-tag" style="background:#fee2e2;color:#9f1239">${g}</span>`).join('')}</div>`:''}
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-weight:700;font-size:.75rem;color:${s.gain>=25?'var(--green)':s.gain>=10?'var(--amber)':'var(--rose)'}">${s.gain>0?'+':''}${s.gain}</div>
+          <div style="font-size:.62rem;color:var(--slate)">pts</div>
+        </div>
+      </li>`;
+    }).join('');
+  }
+
+  document.getElementById('tier-grid').innerHTML = `
+    <div class="tier-card t3">
+      <div class="tier-head"><div class="tier-num">3</div><div><div class="tier-title">Intensive Support</div><div class="tier-count">${tier3.length} students · Below grade level</div></div></div>
+      <ul class="tier-student-list" style="max-height:480px;overflow-y:auto">${renderTierList(tier3)}</ul>
+    </div>
+    <div class="tier-card t2">
+      <div class="tier-head"><div class="tier-num">2</div><div><div class="tier-title">Strategic Support</div><div class="tier-count">${tier2.length} students · Borderline / watch</div></div></div>
+      <ul class="tier-student-list" style="max-height:480px;overflow-y:auto">${renderTierList(tier2)}</ul>
+    </div>
+    <div class="tier-card t1">
+      <div class="tier-head"><div class="tier-num">1</div><div><div class="tier-title">On Track / Enrichment</div><div class="tier-count">${tier1.length} students · Meeting/exceeding targets</div></div></div>
+      <ul class="tier-student-list" style="max-height:480px;overflow-y:auto">${renderTierList(tier1)}</ul>
+    </div>`;
+
+  const periods = ['P1-Braswell','P2-ACCEL-Braswell','P3-Braswell','P3-ACCEL-Rutledge','P4-Braswell','P6-Braswell'];
+  let roomHTML = `<table class="student-table" style="font-size:.78rem"><thead><tr><th>Period</th><th>Total</th><th>Tier 1</th><th>Tier 2</th><th>Tier 3</th><th>Avg Score</th><th>Avg Gain</th></tr></thead><tbody>`;
+  periods.forEach(r=>{
+    const rs = STUDENTS.filter(s=>s.homeroom===r);
+    if (rs.length === 0) return;
+    const t1c=rs.filter(s=>getTier(s)===1).length, t2c=rs.filter(s=>getTier(s)===2).length, t3c=rs.filter(s=>getTier(s)===3).length;
+    roomHTML += `<tr>
+      <td style="font-weight:700"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${ROOM_COLORS[r]};margin-right:6px;vertical-align:middle"></span>${r}</td>
+      <td>${rs.length}</td>
+      <td style="color:var(--green);font-weight:700">${t1c} (${pct(t1c,rs.length)}%)</td>
+      <td style="color:var(--amber);font-weight:700">${t2c} (${pct(t2c,rs.length)}%)</td>
+      <td style="color:var(--rose);font-weight:700">${t3c} (${pct(t3c,rs.length)}%)</td>
+      <td style="font-weight:700">${avg(rs,'overall_score')}</td>
+      <td style="font-weight:700;color:${avg(rs,'gain')>=25?'var(--green)':'var(--amber)'}">+${avg(rs,'gain')}</td>
+    </tr>`;
+  });
+  roomHTML += '</tbody></table>';
+  document.getElementById('tier-by-room').innerHTML = roomHTML;
+}
+
+// ACTION PLAN
+function renderActionPlan() {
+  const tier3 = STUDENTS.filter(s=>getTier(s)===3);
+  const tier2 = STUDENTS.filter(s=>getTier(s)===2);
+  const tier1 = STUDENTS.filter(s=>getTier(s)===1);
+
+  const plans = [
+    {
+      tier: 3,
+      title: 'Tier 3 — Intensive Intervention (Daily, 30–45 min)',
+      students: tier3,
+      focus: [
+        'MA.6.NSO.2.1–2.3 — Multi-digit decimal +, –, ×, ÷ fluency (5th-grade prerequisite repair)',
+        'MA.6.NSO.4.1–4.2 — Integers, opposites, absolute value (CRITICAL — first exposure)',
+        'MA.6.AR.1.1–1.3 — Ratios, unit rates, percent (TOP PM3 priority — iReady masks this)',
+        'MA.6.AR.2.1–2.4 — Evaluating expressions; identifying equivalent expressions',
+        'MA.6.AR.3.1–3.5 — One-step equations and inequalities',
+        'MA.6.GR.2.1–2.4 — Area of triangles, parallelograms, trapezoids, composite figures',
+        'MA.6.DP.1.1–1.6 — Mean, median, mode, range; reading dot plots and histograms'
+      ],
+      strategies: [
+        'Daily 30-min small group (3–4 students) with classroom teacher or push-in support during WIN/flex',
+        'Decimal-operation fluency drill 10 min/day — base-ten blocks and grid models (CRA progression)',
+        'Pre-teach integers unit: number line walks, two-color counters, real-world contexts (temperature, elevation)',
+        'Ratio tables and double number lines — daily 5-minute warm-ups with real contexts (recipes, mileage)',
+        'Algebra tiles for evaluating expressions and modeling one-step equations',
+        'FAST-formatted item-type exposure 2x/week: multi-select, drag-and-drop, equation editor, coordinate plane plotting',
+        'Area derivation activities: cut parallelograms into rectangles, triangles into half-rectangles',
+        'Conference with low-gain or rush-flagged students — verify engagement and diagnostic validity',
+        'iReady: verify 45+ min/week of assigned lessons (Groupings 1–2)'
+      ],
+      resources: ['iReady assigned lessons (Groupings 1–2)', 'Ready Math Grade 6 toolkit', 'Two-color counters / number lines', 'Algebra tiles (physical or virtual)', 'Number Talks: Fractions/Decimals/Percents', 'FAST item specs (FLDOE)', 'Open Up Resources Grade 6 OER', 'Ratio tables and double number lines (printables)']
+    },
+    {
+      tier: 2,
+      title: 'Tier 2 — Strategic Support (3x/week, 20–30 min)',
+      students: tier2,
+      focus: [
+        'MA.6.AR.1.1–1.3 — Ratios, unit rates, percent (ALL Tier 2 students — PM3 priority)',
+        'MA.6.NSO.4.1–4.2 — Integer operations, absolute value, ordering on number line',
+        'MA.6.AR.2.1–2.4 — Equivalent expressions; distributive property; combining like terms',
+        'MA.6.AR.3.1–3.5 — One-step equations & inequalities; graphing solutions',
+        'MA.6.GR.2.1–2.5 — Area of triangles/quadrilaterals; volume with fractional edges',
+        'MA.6.DP.1.1–1.6 — Box plots, IQR, MAD (NEW for 6th grade)',
+        'MA.6.NSO.3.1–3.5 — GCF, LCM, prime factorization'
+      ],
+      strategies: [
+        'Small group (4–6) 3x/week during WIN/flex or guided math rotations',
+        'FAST-formatted practice problems 2x/week — focus on ratio/rate word problems and integer contexts',
+        'Ratio reasoning daily warm-up — tape diagrams, ratio tables, double number lines',
+        'Integer operations using two-color counters and number-line "walks"',
+        'Error-analysis routine: students explain WHY a wrong answer is wrong using math vocabulary',
+        'Box plot construction unit — build from raw data sets, focus on quartiles and IQR',
+        'iReady: maintain 45+ min/week; use teacher dashboard to monitor lesson completion',
+        'Growth goal conferences: review % progress to typical growth target weekly',
+        'Flag and follow up with low-gain students — verify engagement and rush flags'
+      ],
+      resources: ['iReady assigned lessons (Groupings 3–4)','Ready Math Grade 6 toolkit','Math Playground / Prodigy / Desmos','FAST sample items (FLDOE)','Ratio tables and tape diagram printables','Khan Academy ratios/integers/expressions modules','Illustrative Mathematics Grade 6']
+    },
+    {
+      tier: 1,
+      title: 'Tier 1 — Core Instruction + Enrichment (Daily whole class + extension)',
+      students: tier1,
+      focus: [
+        'MA.6.NSO.1–4 — Full mastery: rational number sense, GCF/LCM, integers, absolute value',
+        'MA.6.AR.1–4 — Ratios/rates/percents, expressions, equations, inequalities, dependent/independent variables',
+        'MA.6.GR.1–2 — Coordinate plane (4 quadrants), area, volume, surface area via nets',
+        'MA.6.DP.1 — Statistical questions, dot plots, histograms, box plots, measures of center/spread',
+        'Cross-strand connections: ratio reasoning ↔ proportional graphs ↔ unit rates'
+      ],
+      strategies: [
+        'Whole-class rigorous Tier 1 instruction with differentiated questioning and tiered tasks',
+        'Math discourse: "Talk moves" — restate, add on, agree/disagree with evidence',
+        'Weekly ratio/percent and integer review even for ACCEL students — iReady\'s blended Algebra score may mask gaps',
+        '3-Act Tasks and open-ended problem solving (Dan Meyer, Robert Kaplinsky)',
+        'iReady: maintain 45+ min/week on-path or enrichment (Grouping 5)',
+        'FAST sample item practice — interface familiarity (drag-drop, multi-select, equation editor, 4-quadrant coordinate plotting)',
+        'Peer tutoring: pair Tier 1 with Tier 2 partners for ratio and integer word problems',
+        'ACCEL enrichment: 7th-grade preview — proportional relationships (MA.7.AR.4), operations with rational numbers (MA.7.NSO.2)',
+        'Coordinate plane challenges: plot polygons in all 4 quadrants, find perimeter/area on the grid'
+      ],
+      resources: ['iReady enrichment lessons (Grouping 5)','Open Middle problems','3-Act Math Tasks (Dan Meyer / Graham Fletcher / Robert Kaplinsky)','Beast Academy / Art of Problem Solving','FAST practice tests (FLDOE)','Desmos middle-school activities','Illustrative Mathematics Grade 6/7']
+    }
+  ];
+
+  document.getElementById('action-plan').innerHTML = plans.map(p=>{
+    const tc = {1:'var(--green)',2:'var(--amber)',3:'var(--rose)'}[p.tier];
+    return `<div class="action-card t${p.tier}">
+      <div class="action-header">
+        <span class="action-tier-badge">Tier ${p.tier}</span>
+        <div class="action-title">${p.title}</div>
+      </div>
+      <div style="margin-bottom:14px">
+        <div class="action-section-title">📌 Priority Students</div>
+        <div class="action-students">${p.students.map(s=>`<span class="student-chip" style="background:${hashColor(s.name)};cursor:pointer" onclick="openStudent('${s.name.replace(/'/g,"&#39;")}')">${s.name}</span>`).join('')}</div>
+        <div style="font-size:.73rem;color:var(--slate);margin-top:6px">Total: ${p.students.length} students</div>
+      </div>
+      <div class="action-body">
+        <div>
+          <div class="action-section-title">🎯 Priority Standards Focus</div>
+          <ul class="action-list">${p.focus.map(f=>`<li>${f}</li>`).join('')}</ul>
+        </div>
+        <div>
+          <div class="action-section-title">🛠 Intervention Strategies</div>
+          <ul class="action-list">${p.strategies.map(s=>`<li>${s}</li>`).join('')}</ul>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid ${tc}33">
+        <div class="action-section-title">📚 Recommended Resources</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${p.resources.map(r=>`<span style="background:${tc}15;color:${tc};padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:600">${r}</span>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// INIT
+renderOverview();
+renderClassView();
+renderStandards();
+renderIndividual();
+renderTiers();
+renderActionPlan();
+</script>
+</body>
+</html>
